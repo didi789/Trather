@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "222379488163",
+    "project_id": "trather-colman",
+    "storage_bucket": "trather-colman.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222379488163:android:f9438beece1e2733dca016",
+        "android_client_info": {
+          "package_name": "com.colman.trather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222379488163-6i80e6hs029s50en70ne329mc38ka1u9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9PBsuQpdp959hpT_9ZF9wVmMhtYKzJpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222379488163-6i80e6hs029s50en70ne329mc38ka1u9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
