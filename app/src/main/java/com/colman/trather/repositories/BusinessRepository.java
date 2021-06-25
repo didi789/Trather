@@ -119,12 +119,7 @@ public class BusinessRepository {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection(Consts.KEY_BUSINESSES).document(businessInfo.getName());
             docRef.update("queueDate", date)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("success", "DocumentSnapshot successfully updated!");
-                        }
-                    })
+                    .addOnSuccessListener(aVoid -> Log.d("success", "DocumentSnapshot successfully updated!"))
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
