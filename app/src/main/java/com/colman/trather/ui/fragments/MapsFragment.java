@@ -1,4 +1,3 @@
-/*
 package com.colman.trather.ui.fragments;
 
 import android.Manifest;
@@ -24,7 +23,7 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Business;
 import com.colman.trather.models.SortLocation;
-import com.colman.trather.movdelviews.BusinessViewModel;
+import com.colman.trather.viewModels.BusinessViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -191,4 +190,4 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
     public void gotoListMode() {
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_mapsFragment_to_main_screen_list);
     }
-}*/
+}

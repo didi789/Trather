@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.colman.trather.BuildConfig;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.movdelviews.SettingsViewModel;
+import com.colman.trather.viewModels.SettingsViewModel;
 import com.colman.trather.services.SharedPref;
 
 public class Setting extends BaseToolbarFragment implements View.OnClickListener {

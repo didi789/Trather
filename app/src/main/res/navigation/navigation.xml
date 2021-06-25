@@ -10,6 +10,7 @@
         android:label="splashScreen"
         tools:layout="@layout/fragment_splash_screen">
         <action
+            android:id="@+id/splash_to_sign_in"
             app:destination="@id/sign_in"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -24,33 +25,6 @@
         <action
             android:id="@+id/action_login"
             app:destination="@id/main_screen_list"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_register"
-            app:destination="@+id/register"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
-    <fragment
-        android:id="@+id/register"
-        android:name="com.colman.trather.ui.fragments.Register"
-        android:label="Register"
-        tools:layout="@layout/fragment_register">
-        <action
-            android:id="@+id/action_register"
-            app:destination="@id/main_screen_list"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@id/action_login"
-            app:destination="@id/sign_in"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"

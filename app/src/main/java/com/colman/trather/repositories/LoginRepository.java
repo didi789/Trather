@@ -1,11 +1,21 @@
 package com.colman.trather.repositories;
 
+import android.content.Intent;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.colman.trather.Consts;
 import com.colman.trather.services.SharedPref;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -56,13 +66,29 @@ public class LoginRepository {
         this.user.setValue(currentUser);
     }
 
-    public void login(String username, String password) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                setLoggedInUser(task.getResult().getUser());
-            } else {
-                setLoggedInUser(null);
-            }
+    public Intent login() {
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+//                 ,new AuthUI.IdpConfig.FacebookBuilder().build(),
+//                  new AuthUI.IdpConfig.TwitterBuilder().build())
+
+        FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
+            saveUserInFirebase(firebaseAuth.getCurrentUser());
+            setLoggedInUser(firebaseAuth.getCurrentUser());
         });
+        return AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build();
+    }
+
+    private void saveUserInFirebase(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            Map<String, Object> docData = new HashMap<>();
+            docData.put(Consts.KEY_FULL_NAME, currentUser.getEmail());
+            docData.put(Consts.KEY_ABOUT, "");
+            docData.put(Consts.KEY_IMG_URL, "");
+
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(Consts.USERS_COLLECTION).document(Objects.requireNonNull(currentUser.getEmail())).set(docData);
+        }
     }
 }

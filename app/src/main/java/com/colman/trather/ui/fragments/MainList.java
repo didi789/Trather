@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.SortLocation;
-import com.colman.trather.movdelviews.BusinessViewModel;
+import com.colman.trather.viewModels.BusinessViewModel;
 import com.colman.trather.ui.adapters.BusinessRecyclerViewAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;

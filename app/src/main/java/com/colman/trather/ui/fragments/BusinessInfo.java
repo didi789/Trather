@@ -23,7 +23,7 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Business;
 import com.colman.trather.models.Review;
-import com.colman.trather.movdelviews.BusinessInfoViewModel;
+import com.colman.trather.viewModels.BusinessInfoViewModel;
 import com.colman.trather.ui.adapters.BusinessRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 

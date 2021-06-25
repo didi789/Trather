@@ -1,4 +1,4 @@
-package com.colman.trather.movdelviews;
+package com.colman.trather.viewModels;
 
 import android.app.Application;
 import android.net.Uri;

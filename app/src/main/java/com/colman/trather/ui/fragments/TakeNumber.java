@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Business;
-import com.colman.trather.movdelviews.TakeNumberViewModel;
+import com.colman.trather.viewModels.TakeNumberViewModel;
 import com.colman.trather.services.Utils;
 import com.colman.trather.ui.adapters.QueueRecyclerViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
