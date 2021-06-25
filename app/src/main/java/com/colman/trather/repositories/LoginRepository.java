@@ -58,9 +58,9 @@ public class LoginRepository {
 
     private void setLoggedInUser(FirebaseUser currentUser) {
         if (currentUser != null) {
-            SharedPref.putString(Consts.CURRENT_USER_KEY, currentUser.getEmail());
+            SharedPref.putString(Consts.CURRENT_USER_KEY, currentUser.getUid());
         } else {
-            SharedPref.putString(Consts.CURRENT_USER_KEY, "");
+            SharedPref.removeKey(Consts.CURRENT_USER_KEY);
         }
 
         this.user.setValue(currentUser);

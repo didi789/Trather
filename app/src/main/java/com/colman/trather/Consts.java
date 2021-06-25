@@ -6,7 +6,6 @@ public class Consts {
     public static final String BUSINESS_COLLECTION = "businesses";
     public static final String KEY_STARS = "stars";
     public static final String KEY_BUSINESSES = "businesses";
-    public static final String KEY_USERS = "users";
     public static final String KEY_NAME = "name";
     public static final String KEY_ABOUT = "about";
     public static final String KEY_IMG_URL = "imgUrl";
@@ -18,6 +17,7 @@ public class Consts {
     public static final String KEY_COMMENT = "comment";
     public static final String USERS_COLLECTION = "users";
     public static final String KEY_FULL_NAME = "fullname";
+    public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
     public static final String KEY_IMG_URL_USER = "image";
     public static final String VIBRATION = "vibration";

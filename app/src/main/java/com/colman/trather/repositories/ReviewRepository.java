@@ -73,9 +73,7 @@ public class ReviewRepository {
             });
         });
 
-        BusinessDatabase.databaseWriteExecutor.execute(() -> {
-            reviewDao.deleteReview(review);
-        });
+        BusinessDatabase.databaseWriteExecutor.execute(() -> reviewDao.deleteReview(review));
     }
 
     public void addReview(Business business, Review review) {
@@ -111,9 +109,9 @@ public class ReviewRepository {
         });
     }
 
-    public void updateAllMyProfileImage(String imageUrl, String emailToReplace) {
+    public void updateAllMyProfileImage(String imageUrl, String authorUid) {
         BusinessDatabase.databaseWriteExecutor.execute(() -> {
-            reviewDao.updateAllMyProfileImage(imageUrl, emailToReplace);
+            reviewDao.updateAllMyProfileImage(imageUrl, authorUid);
         });
     }
 }

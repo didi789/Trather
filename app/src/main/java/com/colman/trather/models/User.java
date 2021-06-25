@@ -7,10 +7,14 @@ import androidx.room.Index;
 
 import java.util.Objects;
 
-@Entity(primaryKeys = {"email"}, indices = {
-        @Index(value = "email", unique = true)
+@Entity(primaryKeys = {"uid"}, indices = {
+        @Index(value = "uid", unique = true)
 })
 public class User {
+
+    @NonNull
+    @ColumnInfo(name = "uid")
+    String uid;
     @NonNull
     @ColumnInfo(name = "email")
     String email;
@@ -21,11 +25,21 @@ public class User {
     @ColumnInfo(name = "fullname")
     String fullname;
 
-    public User(String imageUrl, String bio, String fullname, String email) {
+    public User(String uid, String imageUrl, String bio, String fullname, String email) {
+        this.uid = uid;
         this.imageUrl = imageUrl;
         this.bio = bio;
         this.fullname = fullname;
         this.email = email;
+    }
+
+    @NonNull
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(@NonNull String uid) {
+        this.uid = uid;
     }
 
     public String getImageUrl() {

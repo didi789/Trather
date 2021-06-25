@@ -65,4 +65,9 @@ public class SharedPref {
     public static String getString(String key, String defValue) {
         return sharedPref.getString(key, defValue);
     }
+
+    public static void removeKey(String key) {
+        sharedPref.edit().remove(key).apply();
+    }
+
 }

@@ -23,7 +23,6 @@ public class UserRepository {
     private final LiveData<List<User>> allUsers;
 
     public UserRepository(Application application) {
-        //UserDatabase database = UserDatabase.getDatabase(application);
         BusinessDatabase database = BusinessDatabase.getDatabase(application);
         userDao = database.usersDao();
         allUsers = userDao.getAll();
@@ -38,18 +37,19 @@ public class UserRepository {
         final List<User> usersList = new ArrayList<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference usersColl = db.collection(Consts.KEY_USERS);
+        CollectionReference usersColl = db.collection(Consts.USERS_COLLECTION);
         Task<QuerySnapshot> querySnapshotTask = usersColl.get();
         querySnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null) {
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot doc : documents) {
+                    final String uid = doc.getId();
                     final String fullName = doc.get(Consts.KEY_FULL_NAME, String.class);
-                    final String email = doc.getId();
+                    final String email = doc.get(Consts.KEY_EMAIL, String.class);
                     final String image = doc.get(Consts.KEY_IMG_URL_USER, String.class);
                     final String bio = doc.get(Consts.KEY_BIO, String.class);
 
-                    final User user = new User(image, bio, fullName, email);
+                    final User user = new User(uid, image, bio, fullName, email);
                     usersList.add(user);
                 }
 
@@ -57,15 +57,11 @@ public class UserRepository {
             }
         });
 
-
     }
 
     private void insertToDBUsers(List<User> usersList) {
-        BusinessDatabase.databaseWriteExecutor.execute(() -> {
-            userDao.insertAll(usersList);
-        });
+        BusinessDatabase.databaseWriteExecutor.execute(() -> userDao.insertAll(usersList));
     }
-
 
     public LiveData<User> getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
