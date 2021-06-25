@@ -51,10 +51,7 @@ public class SettingsViewModel extends AndroidViewModel {
             if (user == null) {
                 return;
             }
-
-            final String imageUrl = user.getImageUrl();
-            final String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-            reviewRepository.updateAllMyProfileImage(imageUrl, authorUid);
+            reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
         });
     }
 }

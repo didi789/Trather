@@ -46,7 +46,7 @@ public class UserRepository {
                     final String uid = doc.getId();
                     final String fullName = doc.get(Consts.KEY_FULL_NAME, String.class);
                     final String email = doc.get(Consts.KEY_EMAIL, String.class);
-                    final String image = doc.get(Consts.KEY_IMG_URL_USER, String.class);
+                    final String image = doc.get(Consts.KEY_IMG_URL, String.class);
                     final String bio = doc.get(Consts.KEY_BIO, String.class);
 
                     final User user = new User(uid, image, bio, fullName, email);

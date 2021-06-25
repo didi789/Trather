@@ -27,12 +27,12 @@ import java.util.Objects;
 import static com.colman.trather.Consts.KEY_BIO;
 import static com.colman.trather.Consts.KEY_EMAIL;
 import static com.colman.trather.Consts.KEY_FULL_NAME;
-import static com.colman.trather.Consts.KEY_IMG_URL_USER;
+import static com.colman.trather.Consts.KEY_IMG_URL;
 
 public class SettingsRepository {
     public static final String TAG = "SettingsRepository";
     private final String userUid;
-    private final MutableLiveData<User> myUser = new MutableLiveData<>(null);
+    private final MutableLiveData<User> user = new MutableLiveData<>(null);
     private final MutableLiveData<Boolean> isLoadingSomething = new MutableLiveData<>(false);
     private final CollectionReference usersCollection;
 
@@ -46,12 +46,12 @@ public class SettingsRepository {
         DocumentReference document = usersCollection.document(userUid);
         document.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                String imageUrl = documentSnapshot.getString(KEY_IMG_URL_USER);
+                String imageUrl = documentSnapshot.getString(KEY_IMG_URL);
                 String fullName = documentSnapshot.getString(KEY_FULL_NAME);
                 String email = documentSnapshot.getString(KEY_EMAIL);
                 String bio = documentSnapshot.getString(KEY_BIO);
                 User user = new User(userUid, imageUrl, bio, fullName, email);
-                myUser.setValue(user);
+                this.user.setValue(user);
             } else {
                 Log.e(TAG, "Failed to get user data");
             }
@@ -61,7 +61,7 @@ public class SettingsRepository {
     }
 
     public LiveData<User> getUser() {
-        return myUser;
+        return user;
     }
 
     public MutableLiveData<Boolean> getIsLoadingSomething() {
@@ -107,13 +107,12 @@ public class SettingsRepository {
         documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null) {
                 Map<String, Object> updates = new HashMap<>();
-                updates.put(Consts.KEY_IMG_URL_USER, profileImageUrlNew);
+                updates.put(Consts.KEY_IMG_URL, profileImageUrlNew);
                 document.update(updates);
 
-                User newUser = myUser.getValue();
-                assert newUser != null;
-                newUser.setImageUrl(profileImageUrlNew);
-                myUser.setValue(newUser);
+                User newUser = user.getValue();
+                Objects.requireNonNull(newUser).setImageUrl(profileImageUrlNew);
+                user.setValue(newUser);
             } else {
                 Log.e(TAG, "Failed to update user collection with new image url");
             }

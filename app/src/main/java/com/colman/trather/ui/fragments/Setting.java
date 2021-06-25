@@ -97,7 +97,7 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
                 return;
             }
 
-            email.setText(SharedPref.getString(Consts.CURRENT_USER_KEY, ""));
+            email.setText(user.getEmail());
             bio.setText(user.getBio() == null ? "" : user.getBio());
             fullname.setText(user.getFullname() == null ? "" : user.getFullname());
             final String imageUrl = user.getImageUrl();

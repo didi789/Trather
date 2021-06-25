@@ -83,12 +83,13 @@ public class LoginRepository {
     private void saveUserInFirebase(FirebaseUser currentUser) {
         if (currentUser != null) {
             Map<String, Object> docData = new HashMap<>();
-            docData.put(Consts.KEY_FULL_NAME, currentUser.getEmail());
+            docData.put(Consts.KEY_FULL_NAME, Objects.requireNonNull(currentUser.getEmail()).split("@")[0]);
+            docData.put(Consts.KEY_EMAIL, currentUser.getEmail());
             docData.put(Consts.KEY_ABOUT, "");
             docData.put(Consts.KEY_IMG_URL, "");
 
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(Consts.USERS_COLLECTION).document(Objects.requireNonNull(currentUser.getEmail())).set(docData);
+            db.collection(Consts.USERS_COLLECTION).document(Objects.requireNonNull(currentUser.getUid())).set(docData);
         }
     }
 }
