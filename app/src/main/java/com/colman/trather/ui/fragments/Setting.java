@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -20,17 +21,17 @@ import com.bumptech.glide.Glide;
 import com.colman.trather.BuildConfig;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.viewModels.SettingsViewModel;
 import com.colman.trather.services.SharedPref;
+import com.colman.trather.viewModels.SettingsViewModel;
 
 public class Setting extends BaseToolbarFragment implements View.OnClickListener {
     public static final int PICK_IMAGE = 1;
 
     private SettingsViewModel settingsViewModel;
     private ImageView profileImg;
-    private TextView fullname;
+    private EditText fullName;
     private TextView email;
-    private TextView bio;
+    private EditText bio;
     private ProgressBar progressBar;
     private TextView aboutVersion;
     private SwitchCompat vibration;
@@ -78,7 +79,7 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
         notification = view.findViewById(R.id.notification);
         spinnerLang = view.findViewById(R.id.language_spinner);
         profileImg = view.findViewById(R.id.image);
-        fullname = view.findViewById(R.id.name);
+        fullName = view.findViewById(R.id.full_name);
         bio = view.findViewById(R.id.bio_text);
         email = view.findViewById(R.id.email);
 
@@ -99,7 +100,7 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
 
             email.setText(user.getEmail());
             bio.setText(user.getBio() == null ? "" : user.getBio());
-            fullname.setText(user.getFullname() == null ? "" : user.getFullname());
+            fullName.setText(user.getFullname() == null ? "" : user.getFullname());
             final String imageUrl = user.getImageUrl();
             if (imageUrl != null && !imageUrl.isEmpty())
                 Glide.with(requireActivity()).load(imageUrl).error(R.mipmap.ic_launcher).into(profileImg);
@@ -129,7 +130,7 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
                 break;
 
             case R.id.save_config:
-                settingsViewModel.saveClicked(vibration.isChecked(), sound.isChecked(), notification.isChecked());
+                settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString(), vibration.isChecked(), sound.isChecked(), notification.isChecked());
                 requireActivity().onBackPressed();
                 break;
         }

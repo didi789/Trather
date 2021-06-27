@@ -27,6 +27,9 @@ public interface UserDao {
 
     @Query("SELECT * FROM user where email = :email")
     LiveData<User> getUserByEmail(String email);
+
+    @Query("UPDATE user set fullName = :fullName, bio =:bio where uid = :uid")
+    void updateProfileData(String uid, String fullName, String bio);
 /*
     @Query("UPDATE trip SET trip_queueDate=:queueDate WHERE tripId = :id")
     void updateQueueDate(String queueDate, int id);

@@ -104,7 +104,7 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
     @Override
     public void onItemClick(View view, int position) {
         Bundle bundle = new Bundle();
-        bundle.putInt(Consts.BUSINESS_ID, mAdapter.getItem(position).getTripId());
+        bundle.putInt(Consts.TRIP_ID, mAdapter.getItem(position).getTripId());
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
     }
 

@@ -4,12 +4,12 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.colman.trather.TripDatabase;
 import com.colman.trather.Consts;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.ReviewDao;
-import com.colman.trather.models.Trip;
 import com.colman.trather.models.Review;
-import com.colman.trather.models.Trip;import com.colman.trather.services.SharedPref;
+import com.colman.trather.models.Trip;
+import com.colman.trather.services.SharedPref;
 import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -49,7 +49,7 @@ public class ReviewRepository {
             final String currentUser = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             String tripName = trip.getName().toLowerCase();
-            DocumentReference document = db.collection(Consts.BUSINESS_COLLECTION).document(tripName);
+            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(tripName);
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots != null) {
@@ -81,7 +81,7 @@ public class ReviewRepository {
         executorService.execute(() -> {
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             String tripName = trip.getName();//.toLowerCase();
-            DocumentReference document = db.collection(Consts.BUSINESS_COLLECTION).document(tripName);
+            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(tripName);
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots != null) {

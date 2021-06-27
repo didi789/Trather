@@ -12,6 +12,7 @@ import com.colman.trather.Consts;
 import com.colman.trather.models.User;
 import com.colman.trather.repositories.ReviewRepository;
 import com.colman.trather.repositories.SettingsRepository;
+import com.colman.trather.repositories.UserRepository;
 import com.colman.trather.services.SharedPref;
 
 
@@ -20,14 +21,16 @@ public class SettingsViewModel extends AndroidViewModel {
     private final LiveData<Boolean> isLoading;
     private final SettingsRepository settingsRepository;
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
         settingsRepository = new SettingsRepository();
         userMutableLiveData = settingsRepository.getUser();
-        isLoading = settingsRepository.getIsLoadingSomething();
+        isLoading = settingsRepository.isLoading();
         settingsRepository.loadUser();
         reviewRepository = new ReviewRepository(application);
+        userRepository = new UserRepository(application);
     }
 
     public LiveData<User> getUserMutableLiveData() {
@@ -38,7 +41,17 @@ public class SettingsViewModel extends AndroidViewModel {
         return isLoading;
     }
 
-    public void saveClicked(boolean checked, boolean checked1, boolean checked2) {
+    public void saveClicked(LifecycleOwner viewLifecycleOwner, String fullName, String bio, boolean checked, boolean checked1, boolean checked2) {
+        userMutableLiveData.observe(viewLifecycleOwner, user -> {
+            if (user == null) {
+                return;
+            }
+
+            if (!fullName.equals(user.getFullname()) || !bio.equals(user.getBio())) {
+                userRepository.updateProfileData(user.getUid(), fullName, bio);
+            }
+        });
+
         SharedPref.putBoolean(Consts.VIBRATION, checked);
         SharedPref.putBoolean(Consts.SOUND, checked1);
         SharedPref.putBoolean(Consts.NOTIFICATION, checked2);

@@ -4,8 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.colman.trather.TripDatabase;
 import com.colman.trather.Consts;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.UserDao;
 import com.colman.trather.models.User;
 import com.google.android.gms.tasks.Task;
@@ -65,5 +65,11 @@ public class UserRepository {
 
     public LiveData<User> getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
+    }
+
+    public void updateProfileData(String uid, String fullName, String bio) {
+        TripDatabase.databaseWriteExecutor.execute(() -> {
+            userDao.updateProfileData(uid, fullName, bio);
+        });
     }
 }

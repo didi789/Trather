@@ -182,7 +182,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         Trip trip = (Trip) marker.getTag();
         Toast.makeText(requireActivity(), trip.getAbout(), Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
-        bundle.putInt(Consts.BUSINESS_ID, trip.getTripId());
+        bundle.putInt(Consts.TRIP_ID, trip.getTripId());
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
         return false;
     }

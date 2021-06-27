@@ -56,7 +56,7 @@ public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAda
 
         takeNumberBtn.setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
-            bundle.putInt(Consts.BUSINESS_ID, getArguments().getInt(Consts.BUSINESS_ID));
+            bundle.putInt(Consts.TRIP_ID, getArguments().getInt(Consts.TRIP_ID));
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_take_number, bundle);
         });
 
@@ -112,7 +112,7 @@ public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAda
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final int tripId = getArguments().getInt(Consts.BUSINESS_ID);
+        final int tripId = getArguments().getInt(Consts.TRIP_ID);
         tripInfoViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
             if (tripInfo == null) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_to_list);

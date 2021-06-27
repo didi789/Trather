@@ -52,7 +52,7 @@ public class TripRepository {
         final List<Review> reviewList = new ArrayList<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference tripsColl = db.collection(Consts.KEY_BUSINESSES);
+        CollectionReference tripsColl = db.collection(Consts.KEY_TRIPS);
         Task<QuerySnapshot> querySnapshotTask = tripsColl.get();
         querySnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null) {
@@ -117,7 +117,7 @@ public class TripRepository {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection(Consts.KEY_BUSINESSES).document(tripInfo.getName());
+            DocumentReference docRef = db.collection(Consts.KEY_TRIPS).document(tripInfo.getName());
             docRef.update("queueDate", date)
                     .addOnSuccessListener(aVoid -> Log.d("success", "DocumentSnapshot successfully updated!"))
                     .addOnFailureListener(new OnFailureListener() {
@@ -138,7 +138,7 @@ public class TripRepository {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection(Consts.KEY_BUSINESSES).document(tripInfo.getName());
+            DocumentReference docRef = db.collection(Consts.KEY_TRIPS).document(tripInfo.getName());
             docRef.update("queue", queue)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -164,7 +164,7 @@ public class TripRepository {
         executorService.execute(() ->
         {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection(Consts.KEY_BUSINESSES).document(tripInfo.getName());
+            DocumentReference docRef = db.collection(Consts.KEY_TRIPS).document(tripInfo.getName());
             docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {

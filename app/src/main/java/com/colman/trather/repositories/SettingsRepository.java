@@ -33,7 +33,7 @@ public class SettingsRepository {
     public static final String TAG = "SettingsRepository";
     private final String userUid;
     private final MutableLiveData<User> user = new MutableLiveData<>(null);
-    private final MutableLiveData<Boolean> isLoadingSomething = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final CollectionReference usersCollection;
 
     public SettingsRepository() {
@@ -42,7 +42,7 @@ public class SettingsRepository {
     }
 
     public void loadUser() {
-        isLoadingSomething.setValue(true);
+        isLoading.setValue(true);
         DocumentReference document = usersCollection.document(userUid);
         document.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
@@ -56,7 +56,7 @@ public class SettingsRepository {
                 Log.e(TAG, "Failed to get user data");
             }
 
-            isLoadingSomething.setValue(false);
+            isLoading.setValue(false);
         });
     }
 
@@ -64,19 +64,19 @@ public class SettingsRepository {
         return user;
     }
 
-    public MutableLiveData<Boolean> getIsLoadingSomething() {
-        return isLoadingSomething;
+    public MutableLiveData<Boolean> isLoading() {
+        return isLoading;
     }
 
     public void updateProfileImage(Uri uri) {
-        isLoadingSomething.setValue(true);
+        isLoading.setValue(true);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference riversRef = storageRef.child("images/" + uri.getLastPathSegment());
         UploadTask uploadTask = riversRef.putFile(uri);
 
         uploadTask.addOnFailureListener(exception -> {
-            isLoadingSomething.setValue(false);
+            isLoading.setValue(false);
         }).addOnSuccessListener(taskSnapshot -> {
             final StorageMetadata metadata = taskSnapshot.getMetadata();
             assert metadata != null;
@@ -87,15 +87,15 @@ public class SettingsRepository {
                     if (!TextUtils.isEmpty(profileImageUrlNew)) {
                         updateUserProfilePicture(profileImageUrlNew);
                     } else {
-                        isLoadingSomething.setValue(false);
+                        isLoading.setValue(false);
                         Log.e(TAG, "Failed to get new image uri");
                     }
                 } else {
-                    isLoadingSomething.setValue(false);
+                    isLoading.setValue(false);
                     Log.e(TAG, "Failed to upload new image");
                 }
             }).addOnFailureListener(e -> {
-                isLoadingSomething.setValue(false);
+                isLoading.setValue(false);
                 Log.e(TAG, "Failed to upload new image");
             });
         });
@@ -117,7 +117,7 @@ public class SettingsRepository {
                 Log.e(TAG, "Failed to update user collection with new image url");
             }
 
-            isLoadingSomething.setValue(false);
+            isLoading.setValue(false);
         });
     }
 }

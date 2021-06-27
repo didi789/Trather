@@ -43,7 +43,7 @@ public class TakeNumber extends BaseToolbarFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tripId = getArguments().getInt(Consts.BUSINESS_ID);
+        tripId = getArguments().getInt(Consts.TRIP_ID);
         takeNumberViewModel = new ViewModelProvider(requireActivity()).get(TakeNumberViewModel.class);
     }
 
