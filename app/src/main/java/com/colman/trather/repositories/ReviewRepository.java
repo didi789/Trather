@@ -59,7 +59,7 @@ public class ReviewRepository {
                         for (int i = 0; i < reviewsList.size(); i++) {
                             final Map<String, Object> reviews = (Map<String, Object>) reviewsList.get(i);
                             if (reviews != null) {
-                                String author = (String) reviews.get(Consts.KEY_AUTHOR);
+                                String author = (String) reviews.get(Consts.KEY_AUTHOR_UID);
                                 String comment = (String) reviews.get(Consts.KEY_COMMENT);
                                 if (currentUser.equals(author) && review.getComment().equals(comment)) {
                                     updates.put(Consts.KEY_REVIEWS, FieldValue.arrayRemove(reviewsList.get(i)));
@@ -92,7 +92,7 @@ public class ReviewRepository {
                     }
 
                     Map<String, Object> updates = new HashMap<>();
-                    updates.put(Consts.KEY_AUTHOR, review.getAuthor());
+                    updates.put(Consts.KEY_AUTHOR_UID, review.getAuthorUid());
                     updates.put(Consts.KEY_COMMENT, review.getComment());
                     updates.put(Consts.KEY_STARS, review.getStars());
                     reviewsList.add(updates);
@@ -109,9 +109,9 @@ public class ReviewRepository {
         });
     }
 
-    public void updateAllMyProfileImage(String imageUrl, String authorUid) {
+    public void updateAllMyProfileImage(String imageUrl, String authorName, String authorUid) {
         TripDatabase.databaseWriteExecutor.execute(() -> {
-            reviewDao.updateAllMyProfileImage(imageUrl, authorUid);
+            reviewDao.updateAllMyProfileImage(imageUrl, authorName, authorUid);
         });
     }
 }

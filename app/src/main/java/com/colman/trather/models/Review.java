@@ -17,18 +17,18 @@ public class Review {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public int reviewId;
-    private String author;
+    private String authorUid;
+    private String authorName;
     private String comment;
     private String profileImgUrl;
     private long stars;
     @Ignore()
     private boolean isMe = false;
 
-    public Review(int reviewId, String author, String comment, String profileImgUrl, long stars) {
+    public Review(int reviewId, String authorUid, String comment, long stars) {
         this.reviewId = reviewId;
-        this.author = author;
+        this.authorUid = authorUid;
         this.comment = comment;
-        this.profileImgUrl = profileImgUrl;
         this.stars = stars;
     }
 
@@ -56,12 +56,28 @@ public class Review {
         this.reviewId = reviewId;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAuthorUid() {
+        return authorUid;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthorUid(String authorUid) {
+        this.authorUid = authorUid;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getProfileImgUrl() {
+        return profileImgUrl;
+    }
+
+    public void setProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
     }
 
     public String getComment() {
@@ -80,14 +96,6 @@ public class Review {
         this.stars = stars;
     }
 
-    public String getProfileImgUrl() {
-        return profileImgUrl;
-    }
-
-    public void setProfileImgUrl(String profileImgUrl) {
-        this.profileImgUrl = profileImgUrl;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,13 +104,13 @@ public class Review {
         return id == review.id &&
                 reviewId == review.reviewId &&
                 stars == review.stars &&
-                Objects.equals(author, review.author) &&
+                Objects.equals(authorUid, review.authorUid) &&
                 Objects.equals(comment, review.comment) &&
                 Objects.equals(profileImgUrl, review.profileImgUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reviewId, author, comment, profileImgUrl, stars);
+        return Objects.hash(id, reviewId, authorUid, authorName, comment, profileImgUrl, stars);
     }
 }

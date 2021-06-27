@@ -120,5 +120,27 @@ public class SettingsRepository {
             isLoading.setValue(false);
         });
     }
+
+    public void updateProfileData(String fullName, String bio) {
+        DocumentReference document = usersCollection.document(userUid);
+        Task<DocumentSnapshot> documentSnapshotTask = document.get();
+        documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots != null) {
+                Map<String, Object> updates = new HashMap<>();
+                updates.put(KEY_FULL_NAME, fullName);
+                updates.put(KEY_BIO, bio);
+                document.update(updates);
+
+                User newUser = user.getValue();
+                Objects.requireNonNull(newUser).setFullname(fullName);
+                Objects.requireNonNull(newUser).setBio(bio);
+                user.setValue(newUser);
+            } else {
+                Log.e(TAG, "Failed to update user collection with new image url");
+            }
+
+            isLoading.setValue(false);
+        });
+    }
 }
 

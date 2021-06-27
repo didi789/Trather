@@ -72,11 +72,11 @@ public class TripRepository {
                         for (int i = 0; i < reviewsList.size(); i++) {
                             final Map<String, Object> reviews = (Map<String, Object>) reviewsList.get(i);
                             if (reviews != null) {
-                                String author = (String) reviews.get(Consts.KEY_AUTHOR);
+                                String authorUid = (String) reviews.get(Consts.KEY_AUTHOR_UID);
                                 String comment = (String) reviews.get(Consts.KEY_COMMENT);
                                 long stars = (long) reviews.get(Consts.KEY_STARS);
 
-                                final Review review = new Review(trip.getTripId(), author, comment, null, stars);
+                                final Review review = new Review(trip.getTripId(), authorUid, comment, stars);
                                 reviewList.add(review);
                             }
                         }

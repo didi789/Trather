@@ -1,7 +1,6 @@
 package com.colman.trather.ui.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.colman.trather.TripDatabase;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.ReviewDao;
 import com.colman.trather.models.Review;
 import com.colman.trather.services.SharedPref;
@@ -25,14 +24,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, ReviewsRecyclerViewAdapter.ViewHolder> {
-    private final String currentUserEmail;
+    private final String currentUserUid;
     private ItemDeleteListener deleteButtonClickListener;
     private final Context context;
 
     public ReviewsRecyclerViewAdapter(Context context) {
         super(context);
         this.context = context;
-        currentUserEmail = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
+        currentUserUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
     }
 
     @NonNull
@@ -43,37 +42,40 @@ public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Review review = mData.get(position);
 
         final String profileImgUrl = review.getProfileImgUrl();
         if (!TextUtils.isEmpty(profileImgUrl)) {
+            // Review already loaded
             Glide.with(context).load(profileImgUrl).error(R.mipmap.ic_launcher).into(holder.profile);
+            holder.author.setText(review.getAuthorName());
         } else {
-            Resources res = holder.itemView.getContext().getResources();
-            holder.profile.setImageDrawable(res.getDrawable(R.mipmap.ic_launcher));
-
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Task<DocumentSnapshot> users = db.collection("users").document(review.getAuthor()).get();
+            Task<DocumentSnapshot> users = db.collection(Consts.USERS_COLLECTION).document(review.getAuthorUid()).get();
             users.addOnCompleteListener(user -> {
                 DocumentSnapshot result = user.getResult();
-                String imageUrl = (String) result.get("image");
-                if (!TextUtils.isEmpty(imageUrl)) {
-                    TripDatabase.databaseWriteExecutor.execute(() -> {
-                        TripDatabase database = TripDatabase.getDatabase(holder.author.getContext());
-                        ReviewDao reviewDao = database.reviewDao();
-                        review.setProfileImgUrl(imageUrl);
-                        reviewDao.updateReviewerUrl(review);
-                    });
+                String imageUrl = (String) result.get(Consts.KEY_IMG_URL);
+                String authorName = (String) result.get(Consts.KEY_FULL_NAME);
+
+                review.setAuthorName(authorName);
+                review.setProfileImgUrl(imageUrl);
+
+                TripDatabase.databaseWriteExecutor.execute(() -> {
+                    TripDatabase database = TripDatabase.getDatabase(holder.author.getContext());
+                    ReviewDao reviewDao = database.reviewDao();
+                    reviewDao.updateReview(review);
+                });
+
+                holder.author.setText(authorName);
+                if (!TextUtils.isEmpty(imageUrl))
                     Glide.with(context).load(imageUrl).error(R.mipmap.ic_launcher).into(holder.profile);
-                }
             });
         }
 
-        holder.author.setText(review.getAuthor());
         holder.comment.setText(review.getComment());
         holder.ratingBar.setRating(review.getStars());
-        if (currentUserEmail.equals(review.getAuthor())) {
+        if (currentUserUid.equals(review.getAuthorUid())) {
             holder.deleteBtn.setVisibility(View.VISIBLE);
         } else {
             holder.deleteBtn.setVisibility(View.GONE);

@@ -49,6 +49,7 @@ public class SettingsViewModel extends AndroidViewModel {
 
             if (!fullName.equals(user.getFullname()) || !bio.equals(user.getBio())) {
                 userRepository.updateProfileData(user.getUid(), fullName, bio);
+                settingsRepository.updateProfileData(fullName, bio);
             }
         });
 
@@ -64,7 +65,7 @@ public class SettingsViewModel extends AndroidViewModel {
             if (user == null) {
                 return;
             }
-            reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
+            reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getFullname(), user.getUid());
         });
     }
 }

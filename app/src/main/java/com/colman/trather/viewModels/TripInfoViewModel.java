@@ -54,8 +54,8 @@ public class TripInfoViewModel extends AndroidViewModel {
     }
 
     public void addReview(Trip trip, String review, int stars) {
-        final String currentUserEmail = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-        final Review review1 = new Review(trip.getTripId(), currentUserEmail, review, "", stars);
+        final String currentUserUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
+        final Review review1 = new Review(trip.getTripId(), currentUserUid,  review, stars);
         reviewRepository.addReview(trip, review1);
     }
 }

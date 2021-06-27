@@ -24,7 +24,7 @@ public interface ReviewDao {
     void insertAll(List<Review> reviews);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateReviewerUrl(Review review);
+    void updateReview(Review review);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReview(Review review);
@@ -32,6 +32,6 @@ public interface ReviewDao {
     @Delete
     void deleteReview(Review review);
 
-    @Query("UPDATE reviews set profileImgUrl = :imageUrl where author = :author")
-    void updateAllMyProfileImage(String imageUrl, String author);
+    @Query("UPDATE reviews set profileImgUrl = :imageUrl, authorName = :authorName where authorUid = :authorUid")
+    void updateAllMyProfileImage(String imageUrl, String authorName, String authorUid);
 }
