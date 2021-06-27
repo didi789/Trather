@@ -28,10 +28,10 @@ public interface UserDao {
     @Query("SELECT * FROM user where email = :email")
     LiveData<User> getUserByEmail(String email);
 /*
-    @Query("UPDATE business SET business_queueDate=:queueDate WHERE businessId = :id")
+    @Query("UPDATE trip SET trip_queueDate=:queueDate WHERE tripId = :id")
     void updateQueueDate(String queueDate, int id);
 
-    @Query("UPDATE business SET business_queue=:queue WHERE businessId = :id")
+    @Query("UPDATE trip SET trip_queue=:queue WHERE tripId = :id")
     void updateQueue(String queue, int id);
 
  */

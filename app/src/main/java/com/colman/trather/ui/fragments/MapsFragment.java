@@ -21,9 +21,9 @@ import androidx.navigation.Navigation;
 
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.models.Business;
+import com.colman.trather.models.Trip;
 import com.colman.trather.models.SortLocation;
-import com.colman.trather.viewModels.BusinessViewModel;
+import com.colman.trather.viewModels.TripViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,11 +48,11 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
 
     private FusedLocationProviderClient mFusedLocationClient;
     private Location currentLocation;
-    private BusinessViewModel businessViewModel;
+    private TripViewModel tripViewModel;
     private List<MarkerOptions> markersList;
     private List<Marker> regularMarkerslist;
     private Marker marker;
-    private List<Business> businessList;
+    private List<Trip> tripList;
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @Override
@@ -68,7 +68,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
             Marker tempMarker;
             for (int i = 0; i < markersList.size(); i++) {
                 tempMarker = googleMap.addMarker(markersList.get(i));
-                tempMarker.setTag(businessList.get(i));
+                tempMarker.setTag(tripList.get(i));
                 regularMarkerslist.add(tempMarker);
             }
 
@@ -81,7 +81,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
     public void onCreate(@Nullable Bundle savedInstanceState) {
         //  Log.d("tag","onCreate");
         super.onCreate(savedInstanceState);
-        businessViewModel = new ViewModelProvider(requireActivity()).get(BusinessViewModel.class);
+        tripViewModel = new ViewModelProvider(requireActivity()).get(TripViewModel.class);
     }
 
     @Nullable
@@ -122,20 +122,20 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void markerListFactory(List<Business> businessList) {
-        this.businessList = new ArrayList<>();
-        this.businessList.addAll(businessList);
+    private void markerListFactory(List<Trip> tripList) {
+        this.tripList = new ArrayList<>();
+        this.tripList.addAll(tripList);
         MarkerOptions newMarker;
         LatLng newLatLng;
         markersList = new ArrayList<>();
-        for (int i = 0; i < businessList.size(); i++) {
-            newLatLng = new LatLng(businessList.get(i).getLocationLat(), businessList.get(i).getLocationLon());
+        for (int i = 0; i < tripList.size(); i++) {
+            newLatLng = new LatLng(tripList.get(i).getLocationLat(), tripList.get(i).getLocationLon());
             IconGenerator factory = new IconGenerator(requireActivity());
             //factory.setBackground(Drawable.);
             //factory.setContentView(R.drawable.my_location_icon);
             factory.setColor(Color.CYAN);
             Bitmap icon = factory.makeIcon();
-            newMarker = new MarkerOptions().position(newLatLng).title(businessList.get(i).getName()).snippet(businessList.get(i).getAbout()).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(businessList.get(i).getName())));
+            newMarker = new MarkerOptions().position(newLatLng).title(tripList.get(i).getName()).snippet(tripList.get(i).getAbout()).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(tripList.get(i).getName())));
             markersList.add(newMarker);
         }
     }
@@ -160,10 +160,10 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
             if (location != null) {
                 currentLocation = location;
                 Toast.makeText(getContext(), currentLocation.getLatitude() + "," + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                businessViewModel.getBusinessesLiveData().observe(getViewLifecycleOwner(), businessesList -> {
+                tripViewModel.getTripsLiveData().observe(getViewLifecycleOwner(), tripsList -> {
                     GeoPoint myLocation = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
-                    Collections.sort(businessesList, new SortLocation(myLocation));
-                    requireActivity().runOnUiThread(() -> markerListFactory(businessesList));
+                    Collections.sort(tripsList, new SortLocation(myLocation));
+                    requireActivity().runOnUiThread(() -> markerListFactory(tripsList));
                 });
                 SupportMapFragment mapFragment =
                         (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -179,11 +179,11 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         if (marker.getTitle().equals("I am here"))
             return false;
         Log.d("tag", "marker clicked");
-        Business business = (Business) marker.getTag();
-        Toast.makeText(requireActivity(), business.getAbout(), Toast.LENGTH_SHORT).show();
+        Trip trip = (Trip) marker.getTag();
+        Toast.makeText(requireActivity(), trip.getAbout(), Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
-        bundle.putInt(Consts.BUSINESS_ID, business.getBusinessId());
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.business_info, bundle);
+        bundle.putInt(Consts.BUSINESS_ID, trip.getTripId());
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
         return false;
     }
 

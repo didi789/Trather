@@ -7,9 +7,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.colman.trather.models.Business;
-import com.colman.trather.models.User;
-import com.colman.trather.repositories.BusinessRepository;
+import com.colman.trather.models.Trip;
+import com.colman.trather.models.Trip;import com.colman.trather.models.User;
+import com.colman.trather.repositories.TripRepository;
 import com.colman.trather.repositories.UserRepository;
 
 import java.text.SimpleDateFormat;
@@ -20,17 +20,17 @@ import java.util.List;
 
 public class TakeNumberViewModel extends AndroidViewModel {
 
-    private final LiveData<List<Business>> businessLiveData;
+    private final LiveData<List<Trip>> tripLiveData;
     private final LiveData<List<User>> usersLiveData;
-    private final BusinessRepository businessRepository;
+    private final TripRepository tripRepository;
     private final UserRepository userRepository;
 
 
     public TakeNumberViewModel(@NonNull Application application) {
         super(application);
-        businessRepository = new BusinessRepository(application);
+        tripRepository = new TripRepository(application);
         this.userRepository = new UserRepository(application);
-        businessLiveData = businessRepository.getBusinesses();
+        tripLiveData = tripRepository.getTrips();
         usersLiveData = userRepository.getAllUsers();
     }
 
@@ -39,26 +39,26 @@ public class TakeNumberViewModel extends AndroidViewModel {
                 userRepository.getUserByEmail(email));
     }
 
-    public LiveData<Business> getBusinessByIdLiveData(int businessId) {
+    public LiveData<Trip> getTripByIdLiveData(int tripId) {
 
-        return Transformations.switchMap(businessLiveData, id ->
-                businessRepository.getBusinessById(businessId));
+        return Transformations.switchMap(tripLiveData, id ->
+                tripRepository.getTripById(tripId));
     }
 
-    public LiveData<List<Business>> getBusinessesLiveData() {
-        return businessLiveData;
+    public LiveData<List<Trip>> getTripsLiveData() {
+        return tripLiveData;
     }
 
-    public void updateQueueDate(Business businessInfo, String date) {
-        businessRepository.updateQueueDate(businessInfo, date);
+    public void updateQueueDate(Trip tripInfo, String date) {
+        tripRepository.updateQueueDate(tripInfo, date);
     }
 
-    public void updateQueue(ArrayList<String> queue, Business businessInfo) {
-        businessRepository.updateQueue(queue, businessInfo);
+    public void updateQueue(ArrayList<String> queue, Trip tripInfo) {
+        tripRepository.updateQueue(queue, tripInfo);
     }
 
     //if up to date- return true, else- return false and reset queue.
-    public Boolean checkBusinessQueueDateAndResetIfNeeded(Business businessInfo) {
+    public Boolean checkTripQueueDateAndResetIfNeeded(Trip tripInfo) {
         SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
         Date todayDate = new Date();
         String deviceDate = currentDate.format(todayDate);
@@ -68,11 +68,11 @@ public class TakeNumberViewModel extends AndroidViewModel {
         String deviceMonth = parts[1];
         String deviceYear = parts[2];
 
-        String serverFullDate = businessInfo.getQueueDate();
+        String serverFullDate = tripInfo.getQueueDate();
         if (serverFullDate == null || serverFullDate.equals("")) {
             ArrayList<String> queue = new ArrayList<>();
-            updateQueue(queue, businessInfo);
-            updateQueueDate(businessInfo, deviceDate);
+            updateQueue(queue, tripInfo);
+            updateQueueDate(tripInfo, deviceDate);
             return false;
         }
 
@@ -96,17 +96,17 @@ public class TakeNumberViewModel extends AndroidViewModel {
 
         else {
             ArrayList<String> queue = new ArrayList<>();
-            updateQueue(queue, businessInfo);
-            updateQueueDate(businessInfo, deviceDate);
+            updateQueue(queue, tripInfo);
+            updateQueueDate(tripInfo, deviceDate);
             return false;
         }
     }
 
-    public void refreshBusinessLiveData() {
-        businessRepository.loadBusinesses();
+    public void refreshTripLiveData() {
+        tripRepository.loadTrips();
     }
 
-    public void listenForQueueChanges(Business businessInfo) {
-        businessRepository.listenToQueueChanges(businessInfo);
+    public void listenForQueueChanges(Trip tripInfo) {
+        tripRepository.listenToQueueChanges(tripInfo);
     }
 }

@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.colman.trather.R;
-import com.colman.trather.models.Business;
+import com.colman.trather.models.Trip;
 
-public class BusinessRecyclerViewAdapter extends BaseRecyclerViewAdapter<Business, BusinessRecyclerViewAdapter.ViewHolder> {
+public class TripRecyclerViewAdapter extends BaseRecyclerViewAdapter<Trip, TripRecyclerViewAdapter.ViewHolder> {
 
     private final Context context;
 
-    public BusinessRecyclerViewAdapter(Context context) {
+    public TripRecyclerViewAdapter(Context context) {
         super(context);
         this.context = context;
     }
@@ -31,9 +31,9 @@ public class BusinessRecyclerViewAdapter extends BaseRecyclerViewAdapter<Busines
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Business business = mData.get(position);
-        Glide.with(context).load(business.getImgUrl()).error(R.mipmap.ic_launcher).into(holder.icon);
-        holder.name.setText(business.getName());
+        Trip trip = mData.get(position);
+        Glide.with(context).load(trip.getImgUrl()).error(R.mipmap.ic_launcher).into(holder.icon);
+        holder.name.setText(trip.getName());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

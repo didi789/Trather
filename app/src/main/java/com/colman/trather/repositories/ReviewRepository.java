@@ -4,12 +4,12 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.colman.trather.BusinessDatabase;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.Consts;
 import com.colman.trather.dao.ReviewDao;
-import com.colman.trather.models.Business;
+import com.colman.trather.models.Trip;
 import com.colman.trather.models.Review;
-import com.colman.trather.services.SharedPref;
+import com.colman.trather.models.Trip;import com.colman.trather.services.SharedPref;
 import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -30,7 +30,7 @@ public class ReviewRepository {
     private final LiveData<List<Review>> allReviews;
 
     public ReviewRepository(Application application) {
-        BusinessDatabase database = BusinessDatabase.getDatabase(application);
+        TripDatabase database = TripDatabase.getDatabase(application);
         reviewDao = database.reviewDao();
         allReviews = reviewDao.getAllReviews();
     }
@@ -39,17 +39,17 @@ public class ReviewRepository {
         return allReviews;
     }
 
-    public LiveData<List<Review>> getReviewsById(int businessId) {
-        return reviewDao.getReviewsByBusinessId(businessId);
+    public LiveData<List<Review>> getReviewsById(int tripId) {
+        return reviewDao.getReviewsByTripId(tripId);
     }
 
-    public void deleteReview(Business business, Review review) {
+    public void deleteReview(Trip trip, Review review) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             final String currentUser = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String businessName = business.getName().toLowerCase();
-            DocumentReference document = db.collection(Consts.BUSINESS_COLLECTION).document(businessName);
+            String tripName = trip.getName().toLowerCase();
+            DocumentReference document = db.collection(Consts.BUSINESS_COLLECTION).document(tripName);
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots != null) {
@@ -73,15 +73,15 @@ public class ReviewRepository {
             });
         });
 
-        BusinessDatabase.databaseWriteExecutor.execute(() -> reviewDao.deleteReview(review));
+        TripDatabase.databaseWriteExecutor.execute(() -> reviewDao.deleteReview(review));
     }
 
-    public void addReview(Business business, Review review) {
+    public void addReview(Trip trip, Review review) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String businessName = business.getName();//.toLowerCase();
-            DocumentReference document = db.collection(Consts.BUSINESS_COLLECTION).document(businessName);
+            String tripName = trip.getName();//.toLowerCase();
+            DocumentReference document = db.collection(Consts.BUSINESS_COLLECTION).document(tripName);
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots != null) {
@@ -104,13 +104,13 @@ public class ReviewRepository {
             });
         });
 
-        BusinessDatabase.databaseWriteExecutor.execute(() -> {
+        TripDatabase.databaseWriteExecutor.execute(() -> {
             reviewDao.insertReview(review);
         });
     }
 
     public void updateAllMyProfileImage(String imageUrl, String authorUid) {
-        BusinessDatabase.databaseWriteExecutor.execute(() -> {
+        TripDatabase.databaseWriteExecutor.execute(() -> {
             reviewDao.updateAllMyProfileImage(imageUrl, authorUid);
         });
     }

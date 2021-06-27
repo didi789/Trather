@@ -27,9 +27,9 @@
     <string name="vibration">Vibration</string>
     <string name="sound">Sound</string>
     <string name="notifications">Notifications</string>
-    <string name="business_info">Info</string>
-    <string name="map_list">Business List</string>
-    <string name="map">Business Map</string>
+    <string name="trip_info">Info</string>
+    <string name="list">Trips List</string>
+    <string name="map">Trips Map</string>
     <string name="settings">Settings</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -38,5 +38,5 @@
     <string name="add_me_to_queue">add me to queue</string>
     <string name="remove_me_from_queue">remove me from queue</string>
     <string name="showing_queue_for">Showing queue for:</string>
-    <string name="business_name">business name</string>
+    <string name="trip_name">trip name</string>
 </resources>

@@ -11,18 +11,18 @@ import com.colman.trather.repositories.TripRepository;
 
 import java.util.List;
 
-public class MapViewModel extends AndroidViewModel {
+public class TripViewModel extends AndroidViewModel {
     private final LiveData<List<Trip>> tripListMutableLiveData;
-    private final TripRepository tripRepository;
+    private final TripRepository tripsRepository;
 
-    public MapViewModel(@NonNull Application application) {
+    public TripViewModel(@NonNull Application application) {
         super(application);
-        tripRepository = new TripRepository(application);
-        tripListMutableLiveData = tripRepository.getTrips();
+        tripsRepository = new TripRepository(application);
+        tripListMutableLiveData = tripsRepository.getTrips();
     }
 
     public LiveData<List<Trip>> getTripsLiveData() {
         return tripListMutableLiveData;
     }
-
 }
+

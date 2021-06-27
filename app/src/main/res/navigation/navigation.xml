@@ -36,8 +36,8 @@
         android:label="MainScreenList"
         tools:layout="@layout/fragment_main_list">
         <action
-            android:id="@+id/list_to_business_info"
-            app:destination="@id/business_info"
+            android:id="@+id/list_to_trip_info"
+            app:destination="@id/trip_info"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -54,12 +54,12 @@
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/business_info"
-        android:name="com.colman.trather.ui.fragments.BusinessInfo"
-        android:label="BusinessInfo"
-        tools:layout="@layout/fragment_business_info">
+        android:id="@+id/trip_info"
+        android:name="com.colman.trather.ui.fragments.TripInfo"
+        android:label="TripInfo"
+        tools:layout="@layout/fragment_trip_info">
         <argument
-            android:name="business_id"
+            android:name="trip_id"
             android:defaultValue="-1"
             app:argType="integer" />
         <action
@@ -77,7 +77,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/business_info_to_settings"
+            android:id="@+id/trip_info_to_settings"
             app:destination="@id/settings_screen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -91,11 +91,11 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_take_number">
         <argument
-            android:name="business_id"
+            android:name="trip_id"
             android:defaultValue="-1" />
         <action
-            android:id="@+id/action_back_business_info"
-            app:destination="@id/business_info"
+            android:id="@+id/action_back_trip_info"
+            app:destination="@id/trip_info"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -121,8 +121,8 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_mapsFragment_to_business_info"
-            app:destination="@id/business_info"
+            android:id="@+id/action_mapsFragment_to_trip_info"
+            app:destination="@id/trip_info"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -155,8 +155,8 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_settings_to_business_info"
-            app:destination="@id/business_info"
+            android:id="@+id/action_settings_to_trip_info"
+            app:destination="@id/trip_info"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"

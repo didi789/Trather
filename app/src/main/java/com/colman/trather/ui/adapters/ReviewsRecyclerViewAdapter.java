@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.colman.trather.BusinessDatabase;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.dao.ReviewDao;
@@ -59,8 +59,8 @@ public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, 
                 DocumentSnapshot result = user.getResult();
                 String imageUrl = (String) result.get("image");
                 if (!TextUtils.isEmpty(imageUrl)) {
-                    BusinessDatabase.databaseWriteExecutor.execute(() -> {
-                        BusinessDatabase database = BusinessDatabase.getDatabase(holder.author.getContext());
+                    TripDatabase.databaseWriteExecutor.execute(() -> {
+                        TripDatabase database = TripDatabase.getDatabase(holder.author.getContext());
                         ReviewDao reviewDao = database.reviewDao();
                         review.setProfileImgUrl(imageUrl);
                         reviewDao.updateReviewerUrl(review);

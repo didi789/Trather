@@ -9,45 +9,45 @@ import com.colman.trather.services.Utils;
 import java.util.ArrayList;
 import java.util.Objects;
 
-@Entity(primaryKeys = {"business_location_lat", "business_location_lon", "businessId"}, indices = {
-        @Index(value = "businessId", unique = true)
+@Entity(primaryKeys = {"trip_location_lat", "trip_location_lon", "tripId"}, indices = {
+        @Index(value = "tripId", unique = true)
 })
-public class Business {
-    public int businessId;
-    @ColumnInfo(name = "business_location_lat")
+public class Trip {
+    public int tripId;
+    @ColumnInfo(name = "trip_location_lat")
     private double locationLat;
-    @ColumnInfo(name = "business_location_lon")
+    @ColumnInfo(name = "trip_location_lon")
     private double locationLon;
-    @ColumnInfo(name = "business_name")
+    @ColumnInfo(name = "trip_name")
     private String name;
-    @ColumnInfo(name = "business_info")
+    @ColumnInfo(name = "trip_info")
     private String about;
-    @ColumnInfo(name = "business_image_url")
+    @ColumnInfo(name = "trip_image_url")
     private String imgUrl;
-    @ColumnInfo(name = "business_queue")
+    @ColumnInfo(name = "trip_queue")
     private String queue;
-    @ColumnInfo(name = "business_queueDate")
+    @ColumnInfo(name = "trip_queueDate")
     private String queueDate;
 
 
 
-    public Business(String name, String about, String imgUrl, double locationLat, double locationLon,String queue,String queueDate) {
+    public Trip(String name, String about, String imgUrl, double locationLat, double locationLon,String queue,String queueDate) {
         this.name = name;
         this.about = about;
         this.imgUrl = imgUrl;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
-        this.businessId = hashCode();
+        this.tripId = hashCode();
         this.queue = queue;
         this.queueDate = queueDate;
     }
-    public Business(String name, String about, String imgUrl, double locationLat, double locationLon, ArrayList<String> queue, String queueDate) {
+    public Trip(String name, String about, String imgUrl, double locationLat, double locationLon, ArrayList<String> queue, String queueDate) {
         this.name = name;
         this.about = about;
         this.imgUrl = imgUrl;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
-        this.businessId = hashCode();
+        this.tripId = hashCode();
         if (queue != null)
             this.queue = Utils.fromArrayList(queue);
         else
@@ -87,12 +87,12 @@ public class Business {
         return locationLon;
     }
 
-    public int getBusinessId() {
-        return businessId;
+    public int getTripId() {
+        return tripId;
     }
 
-    public void setBusinessId(int businessId) {
-        this.businessId = businessId;
+    public void setTripId(int tripId) {
+        this.tripId = tripId;
     }
 
     public void setLocationLat(double locationLat) {
@@ -123,18 +123,18 @@ public class Business {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Business business = (Business) o;
-        return businessId == business.businessId &&
-                Double.compare(business.locationLat, locationLat) == 0 &&
-                Double.compare(business.locationLon, locationLon) == 0 &&
-                Objects.equals(name, business.name) &&
-                Objects.equals(about, business.about) &&
-                Objects.equals(imgUrl, business.imgUrl);
+        Trip trip = (Trip) o;
+        return tripId == trip.tripId &&
+                Double.compare(trip.locationLat, locationLat) == 0 &&
+                Double.compare(trip.locationLon, locationLon) == 0 &&
+                Objects.equals(name, trip.name) &&
+                Objects.equals(about, trip.about) &&
+                Objects.equals(imgUrl, trip.imgUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(businessId, name, about, imgUrl, locationLat, locationLon);
+        return Objects.hash(tripId, name, about, imgUrl, locationLat, locationLon);
     }
 
 

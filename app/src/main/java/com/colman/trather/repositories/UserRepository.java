@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.colman.trather.BusinessDatabase;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.Consts;
 import com.colman.trather.dao.UserDao;
 import com.colman.trather.models.User;
@@ -23,7 +23,7 @@ public class UserRepository {
     private final LiveData<List<User>> allUsers;
 
     public UserRepository(Application application) {
-        BusinessDatabase database = BusinessDatabase.getDatabase(application);
+        TripDatabase database = TripDatabase.getDatabase(application);
         userDao = database.usersDao();
         allUsers = userDao.getAll();
         loadUsers();
@@ -60,7 +60,7 @@ public class UserRepository {
     }
 
     private void insertToDBUsers(List<User> usersList) {
-        BusinessDatabase.databaseWriteExecutor.execute(() -> userDao.insertAll(usersList));
+        TripDatabase.databaseWriteExecutor.execute(() -> userDao.insertAll(usersList));
     }
 
     public LiveData<User> getUserByEmail(String email) {

@@ -21,30 +21,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.models.Business;
+import com.colman.trather.models.Trip;
 import com.colman.trather.models.Review;
-import com.colman.trather.viewModels.BusinessInfoViewModel;
-import com.colman.trather.ui.adapters.BusinessRecyclerViewAdapter;
+import com.colman.trather.viewModels.TripInfoViewModel;
+import com.colman.trather.ui.adapters.TripRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 
-public class BusinessInfo extends BaseToolbarFragment implements BusinessRecyclerViewAdapter.ItemClickListener, BusinessRecyclerViewAdapter.ItemDeleteListener, View.OnClickListener {
-    private BusinessInfoViewModel businessInfoViewModel;
+public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAdapter.ItemClickListener, TripRecyclerViewAdapter.ItemDeleteListener, View.OnClickListener {
+    private TripInfoViewModel tripInfoViewModel;
     private TextView title;
     private TextView address;
     private TextView about;
     private ImageView image;
     private ReviewsRecyclerViewAdapter mAdapter;
-    private Business businessInfo = null;
+    private Trip tripInfo = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        businessInfoViewModel = new ViewModelProvider(requireActivity()).get(BusinessInfoViewModel.class);
+        tripInfoViewModel = new ViewModelProvider(requireActivity()).get(TripInfoViewModel.class);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
@@ -72,7 +72,7 @@ public class BusinessInfo extends BaseToolbarFragment implements BusinessRecycle
             dialogViewLayout.findViewById(R.id.btn_yes).setOnClickListener(v1 -> {
                 final String review = reviewEditText.getText().toString();
                 final int numStars = (int) ratingBar.getRating();
-                businessInfoViewModel.addReview(businessInfo, review, numStars);
+                tripInfoViewModel.addReview(tripInfo, review, numStars);
                 alertDialog.dismiss();
             });
 
@@ -95,39 +95,39 @@ public class BusinessInfo extends BaseToolbarFragment implements BusinessRecycle
 
     @Override
     protected int getTitleResourceId() {
-        return R.string.business_info;
+        return R.string.trip_info;
     }
 
     @Override
     protected int getActionId() {
-        return R.id.business_info_to_settings;
+        return R.id.trip_info_to_settings;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_business_info;
+        return R.layout.fragment_trip_info;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final int businessId = getArguments().getInt(Consts.BUSINESS_ID);
-        businessInfoViewModel.getBusinessByIdLiveData(businessId).observe(getViewLifecycleOwner(), businessInfo -> {
-            if (businessInfo == null) {
+        final int tripId = getArguments().getInt(Consts.BUSINESS_ID);
+        tripInfoViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
+            if (tripInfo == null) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_to_list);
             }
 
-            this.businessInfo = businessInfo;
-            title.setText(businessInfo.getName());
-            about.setText(businessInfo.getAbout());
-            double locationLat = businessInfo.getLocationLat();
-            double locationLon = businessInfo.getLocationLon();
+            this.tripInfo = tripInfo;
+            title.setText(tripInfo.getName());
+            about.setText(tripInfo.getAbout());
+            double locationLat = tripInfo.getLocationLat();
+            double locationLon = tripInfo.getLocationLon();
             address.setText(getString(R.string.address_text, Double.toString(locationLat), Double.toString(locationLon)));
-            Glide.with(requireActivity()).load(businessInfo.getImgUrl()).error(R.mipmap.ic_launcher).into(image);
+            Glide.with(requireActivity()).load(tripInfo.getImgUrl()).error(R.mipmap.ic_launcher).into(image);
         });
 
-        businessInfoViewModel.getReviewsByBusinessIdLiveData(businessId).observe(getViewLifecycleOwner(), reviewList -> {
+        tripInfoViewModel.getReviewsByTripIdLiveData(tripId).observe(getViewLifecycleOwner(), reviewList -> {
             mAdapter.setItems(reviewList);
         });
     }
@@ -139,7 +139,7 @@ public class BusinessInfo extends BaseToolbarFragment implements BusinessRecycle
     @Override
     public void onItemDeleteClick(View view, int position) {
         final Review review = mAdapter.getItem(position);
-        businessInfoViewModel.deleteReview(review);
+        tripInfoViewModel.deleteReview(review);
     }
 
     @Override

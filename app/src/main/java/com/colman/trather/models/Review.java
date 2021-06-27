@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity(tableName = "reviews", foreignKeys = {@ForeignKey(
-        entity = Business.class,
+        entity = Trip.class,
         childColumns = "reviewId",
-        parentColumns = "businessId",
+        parentColumns = "tripId",
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE)})
 public class Review {

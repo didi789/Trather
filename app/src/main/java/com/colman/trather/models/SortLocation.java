@@ -4,7 +4,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Comparator;
 
-public class SortLocation implements Comparator<Business> {
+public class SortLocation implements Comparator<Trip> {
     private final GeoPoint mCurrent;
 
     public SortLocation(GeoPoint current) {
@@ -12,7 +12,7 @@ public class SortLocation implements Comparator<Business> {
     }
 
     @Override
-    public int compare(Business place1, Business place2) {
+    public int compare(Trip place1, Trip place2) {
         double lat1 = place1.getLocationLat();
         double lon1 = place1.getLocationLon();
         double lat2 = place2.getLocationLat();
@@ -26,10 +26,9 @@ public class SortLocation implements Comparator<Business> {
         double radius = 6378137;   // approximate Earth radius, *in meters*
         double deltaLat = toLat - fromLat;
         double deltaLon = toLon - fromLon;
-        double angle = 2 * Math.asin(Math.sqrt(
-                Math.pow(Math.sin(deltaLat / 2), 2) +
-                        Math.cos(fromLat) * Math.cos(toLat) *
-                                Math.pow(Math.sin(deltaLon / 2), 2)));
+
+        double angle = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(fromLat) * Math.cos(toLat) * Math.pow(Math.sin(deltaLon / 2), 2)));
+
         return radius * angle;
     }
 }

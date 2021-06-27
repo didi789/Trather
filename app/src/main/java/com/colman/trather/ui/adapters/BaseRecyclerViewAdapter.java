@@ -29,8 +29,8 @@ public abstract class BaseRecyclerViewAdapter<Data, ViewHolder extends RecyclerV
         return mData.get(id);
     }
 
-    public void setItems(List<Data> businessList) {
-        this.mData = businessList;
+    public void setItems(List<Data> tripList) {
+        this.mData = tripList;
         notifyDataSetChanged();
     }
 

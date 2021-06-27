@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.models.Business;
+import com.colman.trather.models.Trip;
 import com.colman.trather.viewModels.TakeNumberViewModel;
 import com.colman.trather.services.Utils;
 import com.colman.trather.ui.adapters.QueueRecyclerViewAdapter;
@@ -33,24 +33,24 @@ public class TakeNumber extends BaseToolbarFragment {
     RecyclerView.LayoutManager layoutManager;
     QueueRecyclerViewAdapter adapter;
     ArrayList<String> queue;
-    Business business;
+    Trip trip;
     String userEmail = "", fullName = "";
     Button deleteMtNameButton, addMyNameButton;
     private TakeNumberViewModel takeNumberViewModel;
-    private TextView businessName;
-    private int businessId;
+    private TextView tripName;
+    private int tripId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        businessId = getArguments().getInt(Consts.BUSINESS_ID);
+        tripId = getArguments().getInt(Consts.BUSINESS_ID);
         takeNumberViewModel = new ViewModelProvider(requireActivity()).get(TakeNumberViewModel.class);
     }
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        businessName = view.findViewById(R.id.businessName);
+        tripName = view.findViewById(R.id.tripName);
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(this.requireActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -70,8 +70,8 @@ public class TakeNumber extends BaseToolbarFragment {
                     for (int i = 0; i < queue.size(); i++)
                         if (queue.get(i).equals(userEmail)) {
                             queue.remove(i);
-                            takeNumberViewModel.updateQueue(queue, business);
-                            // Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_business_info);
+                            takeNumberViewModel.updateQueue(queue, trip);
+                            // Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_trip_info);
                         }
             }
         });
@@ -81,7 +81,7 @@ public class TakeNumber extends BaseToolbarFragment {
             public void onClick(View view) {
                 if (!queue.contains(userEmail)) {
                     queue.add(userEmail);
-                    takeNumberViewModel.updateQueue(queue, business);
+                    takeNumberViewModel.updateQueue(queue, trip);
                 }
             }
         });
@@ -92,13 +92,13 @@ public class TakeNumber extends BaseToolbarFragment {
         /*
         takeNumberViewModel.getUserByEmailLiveData(userEmail).observe(getViewLifecycleOwner(),user -> {
             if (user == null) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_business_info);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_trip_info);
             Toast.makeText(requireActivity(),user.getFullname(),Toast.LENGTH_LONG).show();
             }
         });
         */
 
-        getBusinessAndSetRecyclerView();
+        getTripAndSetRecyclerView();
         return view;
     }
 
@@ -106,7 +106,7 @@ public class TakeNumber extends BaseToolbarFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toast.makeText(requireActivity(), "business id is:" + businessId, Toast.LENGTH_LONG).show();
+        Toast.makeText(requireActivity(), "trip id is:" + tripId, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -135,23 +135,23 @@ public class TakeNumber extends BaseToolbarFragment {
         return null;
     }
 
-    private void getBusinessAndSetRecyclerView() {
-        takeNumberViewModel.getBusinessByIdLiveData(businessId).observe(getViewLifecycleOwner(), businessInfo -> {
-            if (businessInfo == null) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_business_info);
+    private void getTripAndSetRecyclerView() {
+        takeNumberViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
+            if (tripInfo == null) {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_trip_info);
             }
             //if  queue day is up-to-date - return true.
-            takeNumberViewModel.checkBusinessQueueDateAndResetIfNeeded(businessInfo);
-            businessName.setText(businessInfo.getName());
+            takeNumberViewModel.checkTripQueueDateAndResetIfNeeded(tripInfo);
+            tripName.setText(tripInfo.getName());
             queue = new ArrayList<String>();
-            String tempQueue = businessInfo.getQueue();
+            String tempQueue = tripInfo.getQueue();
             queue = Utils.fromString(tempQueue);
-            business = businessInfo;
+            trip = tripInfo;
             adapter = new QueueRecyclerViewAdapter(queue, userEmail);
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter);
             //listen for changes in queue
-            takeNumberViewModel.listenForQueueChanges(businessInfo);
+            takeNumberViewModel.listenForQueueChanges(tripInfo);
         });
     }
 

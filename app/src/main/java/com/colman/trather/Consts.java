@@ -1,11 +1,11 @@
 package com.colman.trather;
 
 public class Consts {
-    public static final String BUSINESS_ID = "business_id";
+    public static final String BUSINESS_ID = "trip_id";
     public static final String CURRENT_USER_KEY = "currentUser";
-    public static final String BUSINESS_COLLECTION = "businesses";
+    public static final String BUSINESS_COLLECTION = "trips";
     public static final String KEY_STARS = "stars";
-    public static final String KEY_BUSINESSES = "businesses";
+    public static final String KEY_BUSINESSES = "trips";
     public static final String KEY_NAME = "name";
     public static final String KEY_ABOUT = "about";
     public static final String KEY_IMG_URL = "image";
