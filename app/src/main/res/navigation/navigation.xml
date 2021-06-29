@@ -42,8 +42,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
         <action
-            android:id="@+id/action_main_screen_list_to_mapsFragment"
+            android:id="@+id/list_to_add_trip"
+            app:destination="@id/add_trip"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/list_to_mapsFragment"
             app:destination="@id/mapsFragment" />
         <action
             android:id="@+id/list_to_settings"
@@ -61,14 +69,14 @@
         <argument
             android:name="trip_id"
             android:defaultValue="-1"
-            app:argType="integer" />
-        <action
+            app:argType="string" />
+<!--        <action
             android:id="@+id/action_take_number"
             app:destination="@id/take_number"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right" />-->
         <action
             android:id="@+id/action_back_to_list"
             app:destination="@id/main_screen_list"
@@ -86,6 +94,36 @@
     </fragment>
 
     <fragment
+        android:id="@+id/add_trip"
+        android:name="com.colman.trather.ui.fragments.AddTrip"
+        android:label="TripInfo"
+        tools:layout="@layout/fragment_add_trip">
+        <action
+            android:id="@+id/action_back_to_list"
+            app:destination="@id/main_screen_list"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/add_trip_to_settings"
+            app:destination="@id/settings_screen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_pick_location"
+            app:destination="@id/mapsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+<!--    <fragment
         android:id="@+id/take_number"
         android:name="com.colman.trather.ui.fragments.TakeNumber"
         android:label="fragment_register"
@@ -107,7 +145,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
+    </fragment>-->
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.colman.trather.ui.fragments.MapsFragment"
