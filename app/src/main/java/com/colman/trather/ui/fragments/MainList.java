@@ -57,8 +57,11 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
         mAdapter.setClickListener(this);
         recyclerView.setAdapter(mAdapter);
 
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.map_button);
-        floatingActionButton.setOnClickListener(v -> gotoMapMode());
+        FloatingActionButton mapButton = view.findViewById(R.id.map_button);
+        mapButton.setOnClickListener(v -> gotoMapMode());
+
+        FloatingActionButton addTripButton = view.findViewById(R.id.add_trip_button);
+        addTripButton.setOnClickListener(v -> goToAddTrip());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
         return view;
@@ -104,11 +107,15 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
     @Override
     public void onItemClick(View view, int position) {
         Bundle bundle = new Bundle();
-        bundle.putInt(Consts.TRIP_ID, mAdapter.getItem(position).getTripId());
+        bundle.putString(Consts.TRIP_ID, mAdapter.getItem(position).getTripId());
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
     }
 
     public void gotoMapMode() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_main_screen_list_to_mapsFragment);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.list_to_mapsFragment);
+    }
+
+    private void goToAddTrip() {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.list_to_add_trip);
     }
 }

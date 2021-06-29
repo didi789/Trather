@@ -21,8 +21,9 @@ import androidx.navigation.Navigation;
 
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.models.Trip;
 import com.colman.trather.models.SortLocation;
+import com.colman.trather.models.Trip;
+import com.colman.trather.viewModels.AddTripViewModel;
 import com.colman.trather.viewModels.TripViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,40 +41,41 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMarkerClickListener {
+public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
     private static final int REQUEST_CODE = 101;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private Location currentLocation;
     private TripViewModel tripViewModel;
+    private AddTripViewModel addTripViewModel;
     private List<MarkerOptions> markersList;
     private List<Marker> regularMarkerslist;
-    private Marker marker;
     private List<Trip> tripList;
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            googleMap.setOnMarkerClickListener(MapsFragment.this::onMarkerClick);
+            googleMap.setOnMarkerClickListener(MapsFragment.this);
+            googleMap.setOnMapClickListener(MapsFragment.this);
 
-            MarkerOptions myLocation;
-            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            myLocation = new MarkerOptions().position(latLng).title("I am here").icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon));
-            marker = googleMap.addMarker(myLocation);
+            if (currentLocation != null) {
+                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                MarkerOptions myLocation = new MarkerOptions().position(latLng).title("I am here").icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon));
+                googleMap.addMarker(myLocation);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+            }
 
             regularMarkerslist = new ArrayList<>();
             Marker tempMarker;
             for (int i = 0; i < markersList.size(); i++) {
                 tempMarker = googleMap.addMarker(markersList.get(i));
-                tempMarker.setTag(tripList.get(i));
+                Objects.requireNonNull(tempMarker).setTag(tripList.get(i));
                 regularMarkerslist.add(tempMarker);
             }
-
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         }
     };
 
@@ -82,6 +84,9 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         //  Log.d("tag","onCreate");
         super.onCreate(savedInstanceState);
         tripViewModel = new ViewModelProvider(requireActivity()).get(TripViewModel.class);
+
+        if (getArguments() != null && getArguments().containsKey(Consts.PICK_LOCATION))
+            addTripViewModel = new ViewModelProvider(requireActivity()).get(AddTripViewModel.class);
     }
 
     @Nullable
@@ -135,7 +140,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
             //factory.setContentView(R.drawable.my_location_icon);
             factory.setColor(Color.CYAN);
             Bitmap icon = factory.makeIcon();
-            newMarker = new MarkerOptions().position(newLatLng).title(tripList.get(i).getName()).snippet(tripList.get(i).getAbout()).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(tripList.get(i).getName())));
+            newMarker = new MarkerOptions().position(newLatLng).title(tripList.get(i).getTitle()).snippet(tripList.get(i).getAbout().substring(0, 10).trim() + getString(R.string.dots)).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(tripList.get(i).getTitle())));
             markersList.add(newMarker);
         }
     }
@@ -157,37 +162,46 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         }
         Task<Location> task = mFusedLocationClient.getLastLocation();
         task.addOnSuccessListener(location -> {
-            if (location != null) {
-                currentLocation = location;
-                Toast.makeText(getContext(), currentLocation.getLatitude() + "," + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                tripViewModel.getTripsLiveData().observe(getViewLifecycleOwner(), tripsList -> {
+            tripViewModel.getTripsLiveData().observe(getViewLifecycleOwner(), tripsList -> {
+                if (location != null) {
+                    currentLocation = location;
+                    Toast.makeText(getContext(), currentLocation.getLatitude() + "," + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     GeoPoint myLocation = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
-                    Collections.sort(tripsList, new SortLocation(myLocation));
-                    requireActivity().runOnUiThread(() -> markerListFactory(tripsList));
-                });
-                SupportMapFragment mapFragment =
-                        (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                if (mapFragment != null) {
-                    mapFragment.getMapAsync(callback);
+                    tripsList.sort(new SortLocation(myLocation));
                 }
+
+                requireActivity().runOnUiThread(() -> markerListFactory(tripsList));
+            });
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(callback);
             }
         });
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (marker.getTitle().equals("I am here"))
+        if (Objects.equals(marker.getTitle(), "I am here"))
             return false;
         Log.d("tag", "marker clicked");
         Trip trip = (Trip) marker.getTag();
-        Toast.makeText(requireActivity(), trip.getAbout(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), Objects.requireNonNull(trip).getAbout(), Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
-        bundle.putInt(Consts.TRIP_ID, trip.getTripId());
+        bundle.putString(Consts.TRIP_ID, trip.getTripId());
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
         return false;
     }
 
     public void gotoListMode() {
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_mapsFragment_to_main_screen_list);
+    }
+
+    @Override
+    public void onMapClick(@NonNull LatLng point) {
+        if (addTripViewModel != null) {
+            addTripViewModel.selectLocation(new GeoPoint(point.latitude, point.longitude));
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
+        }
     }
 }

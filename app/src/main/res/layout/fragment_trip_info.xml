@@ -56,17 +56,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/address" />
 
-    <Button
-        android:id="@+id/takeNumberButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="6dp"
-        android:padding="16dp"
-        android:text="@string/take_a_number"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/about" />
-
     <View
         android:id="@+id/space"
         android:layout_width="0dp"
@@ -75,7 +64,7 @@
         android:background="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/takeNumberButton" />
+        app:layout_constraintTop_toBottomOf="@id/about" />
 
     <TextView
         android:id="@+id/title_reviews"
