@@ -53,7 +53,7 @@ public class TripInfoViewModel extends AndroidViewModel {
     }
 
     public void deleteReview(Review review) {
-        tripRepository.getTripById(review.getReviewId()).observeForever(trip -> reviewRepository.deleteReview(trip, review));
+        reviewRepository.deleteReview(review);
     }
 
     public void addReview(Trip trip, String review, int stars) {

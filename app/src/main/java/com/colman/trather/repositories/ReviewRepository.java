@@ -8,7 +8,6 @@ import com.colman.trather.Consts;
 import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.ReviewDao;
 import com.colman.trather.models.Review;
-import com.colman.trather.models.Trip;
 import com.colman.trather.services.SharedPref;
 import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.Task;
@@ -43,13 +42,12 @@ public class ReviewRepository {
         return reviewDao.getReviewsByTripId(tripId);
     }
 
-    public void deleteReview(Trip trip, Review review) {
+    public void deleteReview(Review review) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             final String currentUser = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String tripName = trip.getTitle().toLowerCase();
-            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(tripName);
+            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(review.getTripId());
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots != null) {

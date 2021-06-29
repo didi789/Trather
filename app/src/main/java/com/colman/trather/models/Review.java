@@ -42,6 +42,11 @@ public class Review {
         this.stars = stars;
     }
 
+    @NonNull
+    public String getTripId() {
+        return tripId;
+    }
+
     public String getReviewId() {
         return reviewId;
     }
