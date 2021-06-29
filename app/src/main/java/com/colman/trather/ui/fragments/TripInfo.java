@@ -1,6 +1,8 @@
 package com.colman.trather.ui.fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +77,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             alertDialog.show();
         });
 
+        address.setOnClickListener(this::startNavigation);
         RecyclerView recyclerViewReview = view.findViewById(R.id.reviews_recyclerview);
         recyclerViewReview.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new ReviewsRecyclerViewAdapter(getContext());
@@ -132,5 +135,10 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
     public void onItemDeleteClick(View view, int position) {
         final Review review = mAdapter.getItem(position);
         tripInfoViewModel.deleteReview(review);
+    }
+
+    private void startNavigation(View v) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr=" + tripInfo.getLocationLat() + "," + tripInfo.getLocationLon()));
+        startActivity(intent);
     }
 }
