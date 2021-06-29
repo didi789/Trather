@@ -1,82 +1,60 @@
 package com.colman.trather.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 
-import com.colman.trather.services.Utils;
+import com.google.firebase.firestore.GeoPoint;
 
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
-@Entity(primaryKeys = {"trip_location_lat", "trip_location_lon", "tripId"}, indices = {
+@Entity(primaryKeys = {"tripId"}, indices = {
         @Index(value = "tripId", unique = true)
 })
 public class Trip {
-    public int tripId;
+    @NonNull
+    public final String tripId;
     @ColumnInfo(name = "trip_location_lat")
-    private double locationLat;
+    private final double locationLat;
     @ColumnInfo(name = "trip_location_lon")
-    private double locationLon;
-    @ColumnInfo(name = "trip_name")
-    private String name;
+    private final double locationLon;
+    @ColumnInfo(name = "trip_title")
+    private final String title;
     @ColumnInfo(name = "trip_info")
-    private String about;
+    private final String about;
     @ColumnInfo(name = "trip_image_url")
     private String imgUrl;
-    @ColumnInfo(name = "trip_queue")
-    private String queue;
-    @ColumnInfo(name = "trip_queueDate")
-    private String queueDate;
+    @ColumnInfo(name = "rating")
+    private final double rating;
+    @ColumnInfo(name = "level")
+    private final double level;
+    @ColumnInfo(name = "water")
+    private final boolean water;
 
+    public Trip(GeoPoint location, String title, String about, double level, boolean water) {
+        this(UUID.randomUUID().toString(), location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, about, null, 0, level, water);
+    }
 
-
-    public Trip(String name, String about, String imgUrl, double locationLat, double locationLon,String queue,String queueDate) {
-        this.name = name;
-        this.about = about;
-        this.imgUrl = imgUrl;
+    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String about, String imgUrl, double rating, double level, boolean water) {
+        this.tripId = tripId;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
-        this.tripId = hashCode();
-        this.queue = queue;
-        this.queueDate = queueDate;
-    }
-    public Trip(String name, String about, String imgUrl, double locationLat, double locationLon, ArrayList<String> queue, String queueDate) {
-        this.name = name;
+        this.title = title;
         this.about = about;
         this.imgUrl = imgUrl;
-        this.locationLat = locationLat;
-        this.locationLon = locationLon;
-        this.tripId = hashCode();
-        if (queue != null)
-            this.queue = Utils.fromArrayList(queue);
-        else
-            this.queue = null;
-        this.queueDate = queueDate.toString();
+        this.rating = rating;
+        this.level = level;
+        this.water = water;
     }
 
-    public String getName() {
-        return name;
+    public String getTripId() {
+        return tripId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imgUrl = imageUrl;
     }
 
     public double getLocationLat() {
@@ -87,36 +65,28 @@ public class Trip {
         return locationLon;
     }
 
-    public int getTripId() {
-        return tripId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTripId(int tripId) {
-        this.tripId = tripId;
+    public String getAbout() {
+        return about;
     }
 
-    public void setLocationLat(double locationLat) {
-        this.locationLat = locationLat;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setLocationLon(double locationLon) {
-        this.locationLon = locationLon;
+    public double getRating() {
+        return rating;
     }
 
-    public String getQueue() {
-        return queue;
+    public double getLevel() {
+        return level;
     }
 
-    public void setQueue(String queue) {
-        this.queue = queue;
-    }
-
-    public String getQueueDate() {
-        return queueDate;
-    }
-
-    public void setQueueDate(String queueDate) {
-        this.queueDate = queueDate;
+    public boolean isWater() {
+        return water;
     }
 
     @Override
@@ -127,17 +97,14 @@ public class Trip {
         return tripId == trip.tripId &&
                 Double.compare(trip.locationLat, locationLat) == 0 &&
                 Double.compare(trip.locationLon, locationLon) == 0 &&
-                Objects.equals(name, trip.name) &&
+                Objects.equals(trip, trip.title) &&
                 Objects.equals(about, trip.about) &&
                 Objects.equals(imgUrl, trip.imgUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tripId, name, about, imgUrl, locationLat, locationLon);
+        return Objects.hash(tripId, title, about, imgUrl, locationLat, locationLon);
     }
-
-
-
 }
 

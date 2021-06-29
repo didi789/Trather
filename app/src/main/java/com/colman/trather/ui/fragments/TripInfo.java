@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,13 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.models.Trip;
 import com.colman.trather.models.Review;
-import com.colman.trather.viewModels.TripInfoViewModel;
-import com.colman.trather.ui.adapters.TripRecyclerViewAdapter;
+import com.colman.trather.models.Trip;
+import com.colman.trather.ui.adapters.BaseRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
+import com.colman.trather.viewModels.TripInfoViewModel;
 
-public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAdapter.ItemClickListener, TripRecyclerViewAdapter.ItemDeleteListener, View.OnClickListener {
+public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAdapter.ItemClickListener, BaseRecyclerViewAdapter.ItemDeleteListener {
     private TripInfoViewModel tripInfoViewModel;
     private TextView title;
     private TextView address;
@@ -51,14 +50,7 @@ public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAda
         address = view.findViewById(R.id.address);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
-        Button takeNumberBtn = view.findViewById(R.id.takeNumberButton);
         ImageView addReview = view.findViewById(R.id.add_review);
-
-        takeNumberBtn.setOnClickListener(view1 -> {
-            Bundle bundle = new Bundle();
-            bundle.putInt(Consts.TRIP_ID, getArguments().getInt(Consts.TRIP_ID));
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_take_number, bundle);
-        });
 
         addReview.setOnClickListener(v -> {
             final LayoutInflater factory = LayoutInflater.from(getContext());
@@ -112,14 +104,14 @@ public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAda
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final int tripId = getArguments().getInt(Consts.TRIP_ID);
+        final String tripId = getArguments().getString(Consts.TRIP_ID);
         tripInfoViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
             if (tripInfo == null) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_to_list);
             }
 
             this.tripInfo = tripInfo;
-            title.setText(tripInfo.getName());
+            title.setText(tripInfo.getTitle());
             about.setText(tripInfo.getAbout());
             double locationLat = tripInfo.getLocationLat();
             double locationLon = tripInfo.getLocationLon();
@@ -140,15 +132,5 @@ public class TripInfo extends BaseToolbarFragment implements TripRecyclerViewAda
     public void onItemDeleteClick(View view, int position) {
         final Review review = mAdapter.getItem(position);
         tripInfoViewModel.deleteReview(review);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.take_number:
-                break;
-            default:
-                break;
-        }
     }
 }

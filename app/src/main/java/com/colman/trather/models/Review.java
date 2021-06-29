@@ -1,58 +1,52 @@
 package com.colman.trather.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
-@Entity(tableName = "reviews", foreignKeys = {@ForeignKey(
+@Entity(primaryKeys = {"reviewId"}, tableName = "reviews", foreignKeys = {@ForeignKey(
         entity = Trip.class,
-        childColumns = "reviewId",
+        childColumns = "tripId",
         parentColumns = "tripId",
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE)})
 public class Review {
-    @PrimaryKey(autoGenerate = true)
-    public int id;
-    public int reviewId;
+    @NonNull
+    public String reviewId;
+    @NonNull
+    public String tripId;
     private String authorUid;
     private String authorName;
     private String comment;
     private String profileImgUrl;
     private long stars;
-    @Ignore()
-    private boolean isMe = false;
 
-    public Review(int reviewId, String authorUid, String comment, long stars) {
+    @Ignore
+    public Review(@NonNull String tripId, @NonNull String reviewId, String authorName, String authorUid, String comment, long stars) {
+        this.tripId = tripId;
+        this.reviewId = reviewId;
+        this.authorName = authorName;
+        this.authorUid = authorUid;
+        this.comment = comment;
+        this.stars = stars;
+    }
+
+    public Review(@NonNull String tripId, @NonNull String reviewId, String authorUid, String comment, long stars) {
+        this.tripId = tripId;
         this.reviewId = reviewId;
         this.authorUid = authorUid;
         this.comment = comment;
         this.stars = stars;
     }
 
-    public boolean isMe() {
-        return isMe;
-    }
-
-    public void setMe(boolean me) {
-        isMe = me;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getReviewId() {
+    public String getReviewId() {
         return reviewId;
     }
 
-    public void setReviewId(int reviewId) {
+    public void setReviewId(String reviewId) {
         this.reviewId = reviewId;
     }
 
@@ -101,8 +95,7 @@ public class Review {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
-        return id == review.id &&
-                reviewId == review.reviewId &&
+        return reviewId == review.reviewId &&
                 stars == review.stars &&
                 Objects.equals(authorUid, review.authorUid) &&
                 Objects.equals(comment, review.comment) &&
@@ -111,6 +104,6 @@ public class Review {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reviewId, authorUid, authorName, comment, profileImgUrl, stars);
+        return Objects.hash(reviewId, authorUid, authorName, comment, profileImgUrl, stars);
     }
 }

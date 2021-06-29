@@ -11,21 +11,24 @@ import com.colman.trather.Consts;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
 import com.colman.trather.repositories.ReviewRepository;
+import com.colman.trather.repositories.SettingsRepository;
 import com.colman.trather.repositories.TripRepository;
 import com.colman.trather.services.SharedPref;
 
 import java.util.List;
+import java.util.UUID;
 
 public class TripInfoViewModel extends AndroidViewModel {
     private final LiveData<List<Review>> reviewsLiveData;
     private final LiveData<List<Trip>> tripLiveData;
     private final TripRepository tripRepository;
     private final ReviewRepository reviewRepository;
-
+    private final SettingsRepository settingsRepository;
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
         tripRepository = new TripRepository(application);
         reviewRepository = new ReviewRepository(application);
+        settingsRepository = new SettingsRepository();
         reviewsLiveData = reviewRepository.getReviewsLiveData();
         tripLiveData = tripRepository.getTrips();
     }
@@ -38,12 +41,12 @@ public class TripInfoViewModel extends AndroidViewModel {
         return tripLiveData;
     }
 
-    public LiveData<Trip> getTripByIdLiveData(int tripId) {
+    public LiveData<Trip> getTripByIdLiveData(String tripId) {
         return Transformations.switchMap(tripLiveData, id ->
                 tripRepository.getTripById(tripId));
     }
 
-    public LiveData<List<Review>> getReviewsByTripIdLiveData(int tripId) {
+    public LiveData<List<Review>> getReviewsByTripIdLiveData(String tripId) {
         return Transformations.switchMap(reviewsLiveData, reviewList ->
                 reviewRepository.getReviewsById(tripId)
         );
@@ -55,8 +58,12 @@ public class TripInfoViewModel extends AndroidViewModel {
 
     public void addReview(Trip trip, String review, int stars) {
         final String currentUserUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-        final Review review1 = new Review(trip.getTripId(), currentUserUid,  review, stars);
-        reviewRepository.addReview(trip, review1);
+        String fullName = "";
+        if (settingsRepository.getUser().getValue() != null)
+            fullName = settingsRepository.getUser().getValue().getFullname();
+
+        final Review r = new Review(trip.getTripId(), UUID.randomUUID().toString(), fullName, currentUserUid, review, stars);
+        reviewRepository.addReview(r);
     }
 }
 

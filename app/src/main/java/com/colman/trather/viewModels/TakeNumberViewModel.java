@@ -1,3 +1,4 @@
+/*
 package com.colman.trather.viewModels;
 
 import android.app.Application;
@@ -47,10 +48,6 @@ public class TakeNumberViewModel extends AndroidViewModel {
 
     public LiveData<List<Trip>> getTripsLiveData() {
         return tripLiveData;
-    }
-
-    public void updateQueueDate(Trip tripInfo, String date) {
-        tripRepository.updateQueueDate(tripInfo, date);
     }
 
     public void updateQueue(ArrayList<String> queue, Trip tripInfo) {
@@ -110,3 +107,4 @@ public class TakeNumberViewModel extends AndroidViewModel {
         tripRepository.listenToQueueChanges(tripInfo);
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.colman.trather.ui.fragments;
 
 import android.os.Bundle;
@@ -11,21 +12,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Trip;
-import com.colman.trather.viewModels.TakeNumberViewModel;
-import com.colman.trather.services.Utils;
 import com.colman.trather.ui.adapters.QueueRecyclerViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+
+//import com.colman.trather.viewModels.TakeNumberViewModel;
 
 public class TakeNumber extends BaseToolbarFragment {
 
@@ -36,7 +35,7 @@ public class TakeNumber extends BaseToolbarFragment {
     Trip trip;
     String userEmail = "", fullName = "";
     Button deleteMtNameButton, addMyNameButton;
-    private TakeNumberViewModel takeNumberViewModel;
+//    private TakeNumberViewModel takeNumberViewModel;
     private TextView tripName;
     private int tripId;
 
@@ -44,7 +43,7 @@ public class TakeNumber extends BaseToolbarFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tripId = getArguments().getInt(Consts.TRIP_ID);
-        takeNumberViewModel = new ViewModelProvider(requireActivity()).get(TakeNumberViewModel.class);
+//        takeNumberViewModel = new ViewModelProvider(requireActivity()).get(TakeNumberViewModel.class);
     }
 
 
@@ -70,7 +69,7 @@ public class TakeNumber extends BaseToolbarFragment {
                     for (int i = 0; i < queue.size(); i++)
                         if (queue.get(i).equals(userEmail)) {
                             queue.remove(i);
-                            takeNumberViewModel.updateQueue(queue, trip);
+//                            takeNumberViewModel.updateQueue(queue, trip);
                             // Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_trip_info);
                         }
             }
@@ -81,7 +80,7 @@ public class TakeNumber extends BaseToolbarFragment {
             public void onClick(View view) {
                 if (!queue.contains(userEmail)) {
                     queue.add(userEmail);
-                    takeNumberViewModel.updateQueue(queue, trip);
+//                    takeNumberViewModel.updateQueue(queue, trip);
                 }
             }
         });
@@ -89,14 +88,16 @@ public class TakeNumber extends BaseToolbarFragment {
         userEmail = getUserEmail();
 
         //אין לי מושג למה לא מצליח למשוך את השם המלא של היוזר, צריך לבדוק.
-        /*
+        */
+/*
         takeNumberViewModel.getUserByEmailLiveData(userEmail).observe(getViewLifecycleOwner(),user -> {
             if (user == null) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_trip_info);
             Toast.makeText(requireActivity(),user.getFullname(),Toast.LENGTH_LONG).show();
             }
         });
-        */
+        *//*
+
 
         getTripAndSetRecyclerView();
         return view;
@@ -136,7 +137,8 @@ public class TakeNumber extends BaseToolbarFragment {
     }
 
     private void getTripAndSetRecyclerView() {
-        takeNumberViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
+*/
+/*        takeNumberViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
             if (tripInfo == null) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_trip_info);
             }
@@ -152,7 +154,9 @@ public class TakeNumber extends BaseToolbarFragment {
             recyclerView.setAdapter(adapter);
             //listen for changes in queue
             takeNumberViewModel.listenForQueueChanges(tripInfo);
-        });
+        });*//*
+
     }
 
 }
+*/
