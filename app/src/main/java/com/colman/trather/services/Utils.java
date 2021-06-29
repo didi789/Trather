@@ -3,9 +3,11 @@ package com.colman.trather.services;
 import androidx.room.TypeConverter;
 
 import com.google.common.reflect.TypeToken;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Utils {
@@ -21,4 +23,8 @@ public class Utils {
             String json = gson.toJson(list);
             return json;
         }
+
+    public static String getLocationText(GeoPoint point) {
+        return String.format("(%s,%s)", new DecimalFormat("#.##").format(point.getLatitude()), new DecimalFormat("#.##").format(point.getLongitude()));
+    }
 }
