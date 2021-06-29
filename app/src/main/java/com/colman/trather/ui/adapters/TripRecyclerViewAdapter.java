@@ -30,27 +30,27 @@ public class TripRecyclerViewAdapter extends BaseRecyclerViewAdapter<Trip, TripR
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(TripRecyclerViewAdapter.ViewHolder holder, int position) {
         Trip trip = mData.get(position);
         Glide.with(context).load(trip.getImgUrl()).error(R.mipmap.ic_launcher).into(holder.icon);
-        holder.name.setText(trip.getName());
+        holder.title.setText(trip.getTitle());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView icon;
-        TextView name;
+        TextView title;
 
         ViewHolder(View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.icon);
-            name = itemView.findViewById(R.id.name);
+            title = itemView.findViewById(R.id.title);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mClickListener != null) {
-                mClickListener.onItemClick(view, getAdapterPosition());
+                mClickListener.onItemClick(view, getBindingAdapterPosition());
             }
         }
     }
