@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.TripDatabase;
-import com.colman.trather.dao.ReviewDao;
 import com.colman.trather.models.Review;
 import com.colman.trather.services.SharedPref;
 import com.google.android.gms.tasks.Task;
@@ -61,12 +59,6 @@ public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, 
                 review.setAuthorName(authorName);
                 review.setProfileImgUrl(imageUrl);
 
-                TripDatabase.databaseWriteExecutor.execute(() -> {
-                    TripDatabase database = TripDatabase.getDatabase(holder.author.getContext());
-                    ReviewDao reviewDao = database.reviewDao();
-                    reviewDao.updateReview(review);
-                });
-
                 holder.author.setText(authorName);
                 if (!TextUtils.isEmpty(imageUrl))
                     Glide.with(context).load(imageUrl).error(R.mipmap.ic_launcher).into(holder.profile);
@@ -108,7 +100,7 @@ public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, 
         @Override
         public void onClick(View view) {
             if (mClickListener != null) {
-                mClickListener.onItemClick(view, getAdapterPosition());
+                mClickListener.onItemClick(view, getBindingAdapterPosition());
             }
         }
     }

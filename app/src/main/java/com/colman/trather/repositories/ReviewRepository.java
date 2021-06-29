@@ -39,7 +39,7 @@ public class ReviewRepository {
         return allReviews;
     }
 
-    public LiveData<List<Review>> getReviewsById(int tripId) {
+    public LiveData<List<Review>> getReviewsById(String tripId) {
         return reviewDao.getReviewsByTripId(tripId);
     }
 
@@ -48,7 +48,7 @@ public class ReviewRepository {
         executorService.execute(() -> {
             final String currentUser = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String tripName = trip.getName().toLowerCase();
+            String tripName = trip.getTitle().toLowerCase();
             DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(tripName);
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
@@ -76,12 +76,11 @@ public class ReviewRepository {
         TripDatabase.databaseWriteExecutor.execute(() -> reviewDao.deleteReview(review));
     }
 
-    public void addReview(Trip trip, Review review) {
+    public void addReview(Review review) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String tripName = trip.getName();//.toLowerCase();
-            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(tripName);
+            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(review.tripId);
             Task<DocumentSnapshot> documentSnapshotTask = document.get();
             documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots != null) {
@@ -92,6 +91,7 @@ public class ReviewRepository {
                     }
 
                     Map<String, Object> updates = new HashMap<>();
+                    updates.put(Consts.KEY_REVIEW_ID, review.getReviewId());
                     updates.put(Consts.KEY_AUTHOR_UID, review.getAuthorUid());
                     updates.put(Consts.KEY_COMMENT, review.getComment());
                     updates.put(Consts.KEY_STARS, review.getStars());
@@ -104,15 +104,11 @@ public class ReviewRepository {
             });
         });
 
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            reviewDao.insertReview(review);
-        });
+        TripDatabase.databaseWriteExecutor.execute(() -> reviewDao.insertReview(review));
     }
 
     public void updateAllMyProfileImage(String imageUrl, String authorName, String authorUid) {
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            reviewDao.updateAllMyProfileImage(imageUrl, authorName, authorUid);
-        });
+        TripDatabase.databaseWriteExecutor.execute(() -> reviewDao.updateAllMyProfileImage(imageUrl, authorName, authorUid));
     }
 }
 
