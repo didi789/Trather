@@ -24,6 +24,12 @@ import com.colman.trather.viewModels.LoginViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends Fragment {
+    ActivityResultLauncher<Intent> signInResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                }
+            });
     private LoginViewModel loginViewModel;
 
     @Override
@@ -70,13 +76,6 @@ public class Login extends Fragment {
 
         return view;
     }
-
-    ActivityResultLauncher<Intent> signInResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                }
-            });
 
     private void updateUiWithUser(FirebaseUser firebaseUser) {
         String welcome = getString(R.string.welcome) + firebaseUser.getEmail();
