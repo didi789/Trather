@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Trather</string>
 
-    <string name="subtitle">Stop waiting…</string>
+    <string name="subtitle">Travel together!</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_fullname">Fullname</string>

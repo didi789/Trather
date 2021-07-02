@@ -56,7 +56,7 @@ public class TripInfoViewModel extends AndroidViewModel {
         reviewRepository.deleteReview(review);
     }
 
-    public void addReview(Trip trip, String review, int stars) {
+    public void addReview(Trip trip, String review, float stars) {
         final String currentUserUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
         String fullName = "";
         if (settingsRepository.getUser().getValue() != null)

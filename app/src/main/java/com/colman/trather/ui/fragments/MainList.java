@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,15 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tripViewModel = new ViewModelProvider(requireActivity()).get(TripViewModel.class);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        };
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Nullable
@@ -94,11 +104,11 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
 
             final FragmentActivity activity = requireActivity();
             mFusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
-                if (location == null) {
+                if (location != null) {
                     GeoPoint mMyLocation = new GeoPoint(32.6, 32.6);
                     tripList.sort(new SortLocation(mMyLocation));
-                    activity.runOnUiThread(() -> mAdapter.setItems(tripList));
                 }
+                activity.runOnUiThread(() -> mAdapter.setItems(tripList));
             }).addOnFailureListener(e -> activity.runOnUiThread(() -> mAdapter.setItems(tripList))
             ).addOnCanceledListener(() -> activity.runOnUiThread(() -> mAdapter.setItems(tripList)));
         });

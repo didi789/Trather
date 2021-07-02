@@ -13,8 +13,6 @@ import com.colman.trather.dao.TripDao;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
 import com.google.android.gms.common.util.CollectionUtils;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -78,7 +76,7 @@ public class TripRepository {
                                 String authorUid = (String) reviews.get(Consts.KEY_AUTHOR_UID);
                                 String comment = (String) reviews.get(Consts.KEY_COMMENT);
                                 String reviewId = (String) reviews.get(Consts.KEY_REVIEW_ID);
-                                long stars = (long) reviews.get(Consts.KEY_STARS);
+                                float stars = ((Double) reviews.get(Consts.KEY_STARS)).floatValue();
                                 tripStars += stars;
                                 final Review review = new Review(doc.getId(), reviewId, authorUid, comment, stars);
                                 reviewList.add(review);
@@ -115,9 +113,7 @@ public class TripRepository {
     }
 
     public void deleteTrip(Trip trip) {
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            tripDao.delete(trip);
-        });
+        TripDatabase.databaseWriteExecutor.execute(() -> tripDao.delete(trip));
     }
 
 /*    public void updateQueueDate(Trip tripInfo, String date) {
@@ -181,12 +177,12 @@ public class TripRepository {
     public void addTrip(Trip trip, Uri imageUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference riversRef = storageRef.child("trips/" + imageUri.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(imageUri);
+        StorageReference riversRef = storageRef.child(Consts.TRIP_COLLECTION + "/" + imageUri.getLastPathSegment());
+                UploadTask uploadTask = riversRef.putFile(imageUri);
 
-        uploadTask.addOnFailureListener((OnFailureListener) exception -> {
+        uploadTask.addOnFailureListener(exception -> {
 //            isLoadingSomething.setValue(false);
-        }).addOnSuccessListener((OnSuccessListener<UploadTask.TaskSnapshot>) taskSnapshot -> {
+        }).addOnSuccessListener(taskSnapshot -> {
             final StorageMetadata metadata = taskSnapshot.getMetadata();
             assert metadata != null;
             final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();

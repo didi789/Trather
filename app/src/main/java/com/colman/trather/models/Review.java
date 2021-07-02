@@ -22,10 +22,10 @@ public class Review {
     private String authorName;
     private String comment;
     private String profileImgUrl;
-    private long stars;
+    private float stars;
 
     @Ignore
-    public Review(@NonNull String tripId, @NonNull String reviewId, String authorName, String authorUid, String comment, long stars) {
+    public Review(@NonNull String tripId, @NonNull String reviewId, String authorName, String authorUid, String comment, float stars) {
         this.tripId = tripId;
         this.reviewId = reviewId;
         this.authorName = authorName;
@@ -34,7 +34,7 @@ public class Review {
         this.stars = stars;
     }
 
-    public Review(@NonNull String tripId, @NonNull String reviewId, String authorUid, String comment, long stars) {
+    public Review(@NonNull String tripId, @NonNull String reviewId, String authorUid, String comment, float stars) {
         this.tripId = tripId;
         this.reviewId = reviewId;
         this.authorUid = authorUid;
@@ -87,11 +87,11 @@ public class Review {
         this.comment = comment;
     }
 
-    public long getStars() {
+    public float getStars() {
         return stars;
     }
 
-    public void setStars(long stars) {
+    public void setStars(float stars) {
         this.stars = stars;
     }
 

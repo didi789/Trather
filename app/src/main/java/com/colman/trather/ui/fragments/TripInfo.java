@@ -65,14 +65,11 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
 
             dialogViewLayout.findViewById(R.id.btn_yes).setOnClickListener(v1 -> {
                 final String review = reviewEditText.getText().toString();
-                final int numStars = (int) ratingBar.getRating();
-                tripInfoViewModel.addReview(tripInfo, review, numStars);
+                tripInfoViewModel.addReview(tripInfo, review, ratingBar.getRating());
                 alertDialog.dismiss();
             });
 
-            dialogViewLayout.findViewById(R.id.btn_no).setOnClickListener(v1 -> {
-                alertDialog.dismiss();
-            });
+            dialogViewLayout.findViewById(R.id.btn_no).setOnClickListener(v1 -> alertDialog.dismiss());
 
             alertDialog.show();
         });
