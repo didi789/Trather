@@ -48,4 +48,6 @@
     <string name="invalid_trip_about">Invalid trip about</string>
     <string name="invalid_trip_image">Invalid trip image</string>
     <string name="dots">…</string>
+    <string name="user_info">User Info</string>
+    <string name="logout">Log out</string>
 </resources>

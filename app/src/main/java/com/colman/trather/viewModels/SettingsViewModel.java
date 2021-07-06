@@ -66,6 +66,7 @@ public class SettingsViewModel extends AndroidViewModel {
                 return;
             }
             reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getFullname(), user.getUid());
+            userRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
         });
     }
 }

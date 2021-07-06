@@ -24,6 +24,8 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
+import com.colman.trather.models.User;
+import com.colman.trather.services.SharedPref;
 import com.colman.trather.ui.adapters.BaseRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 import com.colman.trather.viewModels.TripInfoViewModel;
@@ -33,9 +35,11 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
     private TextView title;
     private TextView address;
     private TextView about;
+    private TextView authorName;
     private ImageView image;
     private ReviewsRecyclerViewAdapter mAdapter;
     private Trip tripInfo = null;
+    private User author;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
 
         title = view.findViewById(R.id.title);
         address = view.findViewById(R.id.address);
+        authorName = view.findViewById(R.id.author);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
         ImageView addReview = view.findViewById(R.id.add_review);
@@ -73,7 +78,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
 
             alertDialog.show();
         });
-
+        authorName.setOnClickListener(v -> goToUserInfo(tripInfo.getAuthorUid()));
         address.setOnClickListener(this::startNavigation);
         RecyclerView recyclerViewReview = view.findViewById(R.id.reviews_recyclerview);
         recyclerViewReview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -84,6 +89,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
 
         return view;
     }
+
 
     @Override
     protected int getTitleResourceId() {
@@ -117,21 +123,41 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             double locationLon = tripInfo.getLocationLon();
             address.setText(getString(R.string.address_text, Double.toString(locationLat), Double.toString(locationLon)));
             Glide.with(requireActivity()).load(tripInfo.getImgUrl()).error(R.mipmap.ic_launcher).into(image);
+
+            tripInfoViewModel.getUserByUid(tripInfo.getAuthorUid()).observe(getViewLifecycleOwner(), user -> {
+                if (user == null) {
+                    return;
+                }
+
+                this.author = user;
+                authorName.setText(user.getFullname());
+            });
         });
 
-        tripInfoViewModel.getReviewsByTripIdLiveData(tripId).observe(getViewLifecycleOwner(), reviewList -> {
-            mAdapter.setItems(reviewList);
-        });
+        tripInfoViewModel.getReviewsByTripIdLiveData(tripId).observe(getViewLifecycleOwner(), reviewList -> mAdapter.setItems(reviewList));
     }
 
     @Override
     public void onItemClick(View view, int position) {
+        final Review review = mAdapter.getItem(position);
+        goToUserInfo(review.getAuthorUid());
     }
 
     @Override
     public void onItemDeleteClick(View view, int position) {
         final Review review = mAdapter.getItem(position);
         tripInfoViewModel.deleteReview(review);
+    }
+
+
+    private void goToUserInfo(String uid) {
+        if (uid.equals(SharedPref.getString(Consts.CURRENT_USER_KEY, ""))) {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(getActionId());
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString(Consts.KEY_AUTHOR_UID, uid);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.user_info_screen, bundle);
+        }
     }
 
     private void startNavigation(View v) {

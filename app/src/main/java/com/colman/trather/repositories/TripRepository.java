@@ -59,6 +59,7 @@ public class TripRepository {
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot doc : documents) {
                     final String name = doc.getString(Consts.KEY_TITLE);
+                    final String authorUid = doc.getString(Consts.KEY_AUTHOR_UID);
                     final String about = doc.getString(Consts.KEY_ABOUT);
                     final String imgUrl = doc.getString(Consts.KEY_IMG_URL);
                     final double level = doc.getDouble(Consts.KEY_LEVEL);
@@ -73,12 +74,12 @@ public class TripRepository {
                         for (int i = 0; i < reviewsList.size(); i++) {
                             final Map<String, Object> reviews = (Map<String, Object>) reviewsList.get(i);
                             if (reviews != null) {
-                                String authorUid = (String) reviews.get(Consts.KEY_AUTHOR_UID);
+                                String commentAuthorUid = (String) reviews.get(Consts.KEY_AUTHOR_UID);
                                 String comment = (String) reviews.get(Consts.KEY_COMMENT);
                                 String reviewId = (String) reviews.get(Consts.KEY_REVIEW_ID);
                                 float stars = ((Double) reviews.get(Consts.KEY_STARS)).floatValue();
                                 tripStars += stars;
-                                final Review review = new Review(doc.getId(), reviewId, authorUid, comment, stars);
+                                final Review review = new Review(doc.getId(), reviewId, commentAuthorUid, comment, stars);
                                 reviewList.add(review);
                             }
                         }
@@ -86,7 +87,7 @@ public class TripRepository {
                         tripRating = tripStars / reviewsList.size();
                     }
 
-                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, about, imgUrl, tripRating, level, water);
+                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, about, authorUid, imgUrl, tripRating, level, water);
 
                     tripList.add(trip);
 
@@ -146,6 +147,7 @@ public class TripRepository {
                     Map<String, Object> newTrip = new HashMap<>();
 
                     newTrip.put(Consts.KEY_TITLE, trip.getTitle());
+                    newTrip.put(Consts.KEY_AUTHOR_UID, trip.getAuthorUid());
                     newTrip.put(Consts.KEY_ABOUT, trip.getAbout());
                     newTrip.put(Consts.KEY_IMG_URL, trip.getImgUrl());
                     newTrip.put(Consts.KEY_LEVEL, trip.getLevel());

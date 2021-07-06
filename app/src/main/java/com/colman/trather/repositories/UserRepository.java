@@ -47,6 +47,7 @@ public class UserRepository {
                     final String fullName = doc.get(Consts.KEY_FULL_NAME, String.class);
                     final String email = doc.get(Consts.KEY_EMAIL, String.class);
                     final String image = doc.get(Consts.KEY_IMG_URL, String.class);
+
                     final String bio = doc.get(Consts.KEY_BIO, String.class);
 
                     final User user = new User(uid, image, bio, fullName, email);
@@ -63,13 +64,17 @@ public class UserRepository {
         TripDatabase.databaseWriteExecutor.execute(() -> userDao.insertAll(usersList));
     }
 
-    public LiveData<User> getUserByEmail(String email) {
-        return userDao.getUserByEmail(email);
+    public LiveData<User> getUserByUid(String uid) {
+        return userDao.getUserByUid(uid);
     }
 
     public void updateProfileData(String uid, String fullName, String bio) {
         TripDatabase.databaseWriteExecutor.execute(() -> {
             userDao.updateProfileData(uid, fullName, bio);
         });
+    }
+
+    public void updateAllMyProfileImage(String imageUrl, String authorUid) {
+        TripDatabase.databaseWriteExecutor.execute(() -> userDao.updateAllMyProfileImage(imageUrl, authorUid));
     }
 }

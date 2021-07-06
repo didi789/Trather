@@ -25,9 +25,12 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<User> mUsersList);
 
-    @Query("SELECT * FROM user where email = :email")
-    LiveData<User> getUserByEmail(String email);
-
     @Query("UPDATE user set fullName = :fullName, bio =:bio where uid = :uid")
     void updateProfileData(String uid, String fullName, String bio);
+
+    @Query("SELECT * FROM user where uid = :uid")
+    LiveData<User> getUserByUid(String uid);
+
+    @Query("UPDATE user set imageUrl = :imageUrl where uid = :authorUid")
+    void updateAllMyProfileImage(String imageUrl, String authorUid);
 }

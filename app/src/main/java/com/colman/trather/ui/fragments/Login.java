@@ -61,9 +61,7 @@ public class Login extends Fragment {
         loginViewModel.getCurrentUser().observe(getViewLifecycleOwner(), firebaseUser -> {
             loadingProgressBar.setVisibility(View.GONE);
 
-            if (firebaseUser == null) {
-                showLoginFailed(getString(R.string.failed_to_login));
-            } else {
+            if (firebaseUser != null) {
                 updateUiWithUser(firebaseUser);
             }
         });

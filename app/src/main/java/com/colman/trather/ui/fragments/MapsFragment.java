@@ -140,7 +140,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
             //factory.setContentView(R.drawable.my_location_icon);
             factory.setColor(Color.CYAN);
             Bitmap icon = factory.makeIcon();
-            newMarker = new MarkerOptions().position(newLatLng).title(tripList.get(i).getTitle()).snippet(tripList.get(i).getAbout().substring(0, 10).trim() + getString(R.string.dots)).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(tripList.get(i).getTitle())));
+            newMarker = new MarkerOptions().position(newLatLng).title(tripList.get(i).getTitle()).snippet(tripList.get(i).getAbout().length() > 10 ? tripList.get(i).getAbout().substring(0, 10).trim() : tripList.get(i).getAbout() + getString(R.string.dots)).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(tripList.get(i).getTitle())));
             markersList.add(newMarker);
         }
     }

@@ -10,9 +10,11 @@ import androidx.lifecycle.Transformations;
 import com.colman.trather.Consts;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
+import com.colman.trather.models.User;
 import com.colman.trather.repositories.ReviewRepository;
 import com.colman.trather.repositories.SettingsRepository;
 import com.colman.trather.repositories.TripRepository;
+import com.colman.trather.repositories.UserRepository;
 import com.colman.trather.services.SharedPref;
 
 import java.util.List;
@@ -24,10 +26,12 @@ public class TripInfoViewModel extends AndroidViewModel {
     private final TripRepository tripRepository;
     private final ReviewRepository reviewRepository;
     private final SettingsRepository settingsRepository;
+    private final UserRepository userRepository;
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
         tripRepository = new TripRepository(application);
         reviewRepository = new ReviewRepository(application);
+        userRepository = new UserRepository(application);
         settingsRepository = new SettingsRepository();
         reviewsLiveData = reviewRepository.getReviewsLiveData();
         tripLiveData = tripRepository.getTrips();
@@ -46,10 +50,15 @@ public class TripInfoViewModel extends AndroidViewModel {
                 tripRepository.getTripById(tripId));
     }
 
+
     public LiveData<List<Review>> getReviewsByTripIdLiveData(String tripId) {
         return Transformations.switchMap(reviewsLiveData, reviewList ->
                 reviewRepository.getReviewsById(tripId)
         );
+    }
+
+    public LiveData<User> getUserByUid(String uid) {
+        return userRepository.getUserByUid(uid);
     }
 
     public void deleteReview(Review review) {

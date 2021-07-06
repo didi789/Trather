@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Trip;
+import com.colman.trather.services.SharedPref;
 import com.colman.trather.services.Utils;
 import com.colman.trather.viewModels.AddTripViewModel;
 import com.google.firebase.firestore.GeoPoint;
@@ -73,7 +74,8 @@ public class AddTrip extends BaseToolbarFragment {
         });
 
         saveTrip.setOnClickListener(v -> {
-            Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), levelPicker.getValue(), isWater.isChecked());
+            String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
+            Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, levelPicker.getValue(), isWater.isChecked());
             addTripViewModel.addTrip(trip, imageUri);
         });
 

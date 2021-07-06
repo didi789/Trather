@@ -70,13 +70,14 @@
             android:name="trip_id"
             android:defaultValue="-1"
             app:argType="string" />
-<!--        <action
-            android:id="@+id/action_take_number"
-            app:destination="@id/take_number"
+
+        <action
+            android:id="@+id/action_trip_info_to_user_infp"
+            app:destination="@id/user_info_screen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />-->
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_back_to_list"
             app:destination="@id/main_screen_list"
@@ -199,6 +200,19 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_settings_to_log_out"
+            app:destination="@id/splash_screen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/user_info_screen"
+        android:name="com.colman.trather.ui.fragments.UserInfo"
+        android:label="user_info"
+        tools:layout="@layout/fragment_user_info"></fragment>
 
 </navigation>

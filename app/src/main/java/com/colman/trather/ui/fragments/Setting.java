@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.colman.trather.BuildConfig;
@@ -23,6 +24,7 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.services.SharedPref;
 import com.colman.trather.viewModels.SettingsViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Setting extends BaseToolbarFragment implements View.OnClickListener {
     public static final int PICK_IMAGE = 1;
@@ -74,6 +76,8 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
         progressBar = view.findViewById(R.id.progressbar);
         aboutVersion = view.findViewById(R.id.about_version);
         Button saveBtn = view.findViewById(R.id.save_config);
+        Button logoutBtn = view.findViewById(R.id.logout);
+
         vibration = view.findViewById(R.id.vibration);
         sound = view.findViewById(R.id.sound);
         notification = view.findViewById(R.id.notification);
@@ -84,6 +88,7 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
         email = view.findViewById(R.id.email);
 
         saveBtn.setOnClickListener(this);
+        logoutBtn.setOnClickListener(this);
         profileImg.setOnClickListener(this);
 
         return view;
@@ -128,12 +133,21 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
             case R.id.image:
                 chooseNewPicture();
                 break;
+            case R.id.logout:
+                logout();
+                break;
 
             case R.id.save_config:
                 settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString(), vibration.isChecked(), sound.isChecked(), notification.isChecked());
                 requireActivity().onBackPressed();
                 break;
         }
+    }
+
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        SharedPref.removeKey(Consts.CURRENT_USER_KEY);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.splash_screen);
     }
 
     private void chooseNewPicture() {

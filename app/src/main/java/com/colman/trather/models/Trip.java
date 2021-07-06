@@ -24,6 +24,8 @@ public class Trip {
     private final String title;
     @ColumnInfo(name = "trip_info")
     private final String about;
+    @ColumnInfo(name = "author_uid")
+    private final String authorUid;
     @ColumnInfo(name = "trip_image_url")
     private String imgUrl;
     @ColumnInfo(name = "rating")
@@ -33,16 +35,17 @@ public class Trip {
     @ColumnInfo(name = "water")
     private final boolean water;
 
-    public Trip(GeoPoint location, String title, String about, double level, boolean water) {
-        this(UUID.randomUUID().toString(), location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, about, null, 0, level, water);
+    public Trip(GeoPoint location, String title, String about, String authorUid, double level, boolean water) {
+        this(UUID.randomUUID().toString(), location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, about, authorUid, null, 0, level, water);
     }
 
-    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String about, String imgUrl, double rating, double level, boolean water) {
+    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String about, String authorUid, String imgUrl, double rating, double level, boolean water) {
         this.tripId = tripId;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
         this.title = title;
         this.about = about;
+        this.authorUid = authorUid;
         this.imgUrl = imgUrl;
         this.rating = rating;
         this.level = level;
@@ -51,6 +54,10 @@ public class Trip {
 
     public String getTripId() {
         return tripId;
+    }
+
+    public String getAuthorUid() {
+        return authorUid;
     }
 
     public void setImageUrl(String imageUrl) {

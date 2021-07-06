@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.colman.trather.Consts;
 import com.colman.trather.services.SharedPref;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -51,11 +53,6 @@ public class LoginRepository {
         return user;
     }
 
-    public void logout() {
-        FirebaseAuth.getInstance().signOut();
-        this.user.setValue(null);
-    }
-
     private void setLoggedInUser(FirebaseUser currentUser) {
         if (currentUser != null) {
             SharedPref.putString(Consts.CURRENT_USER_KEY, currentUser.getUid());
@@ -82,14 +79,22 @@ public class LoginRepository {
 
     private void saveUserInFirebase(FirebaseUser currentUser) {
         if (currentUser != null) {
-            Map<String, Object> docData = new HashMap<>();
-            docData.put(Consts.KEY_FULL_NAME, Objects.requireNonNull(currentUser.getEmail()).split("@")[0]);
-            docData.put(Consts.KEY_EMAIL, currentUser.getEmail());
-            docData.put(Consts.KEY_ABOUT, "");
-            docData.put(Consts.KEY_IMG_URL, "");
-
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(Consts.USERS_COLLECTION).document(Objects.requireNonNull(currentUser.getUid())).set(docData);
+
+            Task<DocumentSnapshot> users = db.collection(Consts.USERS_COLLECTION).document(currentUser.getUid()).get();
+            users.addOnCompleteListener(user -> {
+                DocumentSnapshot result = user.getResult();
+
+                Map<String, Object> docData = new HashMap<>();
+
+                if (!result.exists()) {
+                    docData.put(Consts.KEY_BIO, "");
+                    docData.put(Consts.KEY_IMG_URL, "");
+                    docData.put(Consts.KEY_FULL_NAME, Objects.requireNonNull(currentUser.getEmail()).split("@")[0]);
+                    docData.put(Consts.KEY_EMAIL, currentUser.getEmail());
+                    db.collection(Consts.USERS_COLLECTION).document(Objects.requireNonNull(currentUser.getUid())).set(docData);
+                }
+            });
         }
     }
 }
