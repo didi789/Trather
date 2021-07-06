@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 
 import com.colman.trather.Consts;
 import com.colman.trather.models.User;
+import com.colman.trather.repositories.LoginRepository;
 import com.colman.trather.repositories.ReviewRepository;
 import com.colman.trather.repositories.SettingsRepository;
 import com.colman.trather.repositories.UserRepository;
@@ -22,6 +23,7 @@ public class SettingsViewModel extends AndroidViewModel {
     private final SettingsRepository settingsRepository;
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final LoginRepository loginRepository;
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
@@ -31,6 +33,7 @@ public class SettingsViewModel extends AndroidViewModel {
         settingsRepository.loadUser();
         reviewRepository = new ReviewRepository(application);
         userRepository = new UserRepository(application);
+        loginRepository = LoginRepository.getInstance();
     }
 
     public LiveData<User> getUserMutableLiveData() {
@@ -68,6 +71,10 @@ public class SettingsViewModel extends AndroidViewModel {
             reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getFullname(), user.getUid());
             userRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
         });
+    }
+
+    public void logout() {
+        loginRepository.logout();
     }
 }
 

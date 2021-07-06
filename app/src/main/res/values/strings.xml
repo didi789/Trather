@@ -16,7 +16,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="invalid_name">Full name must be a-z only</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="address_text">Location is: %1$s , %2$s</string>
+    <string name="address_text">Location is: %1$s</string>
     <string name="reviews_title">Reviews</string>
     <string name="failed_to_login">Email or password is incorrect. try again</string>
     <string name="register_failed">Register failed. please try again</string>

@@ -97,4 +97,10 @@ public class LoginRepository {
             });
         }
     }
+
+    public void logout() {
+        SharedPref.removeKey(Consts.CURRENT_USER_KEY);
+        FirebaseAuth.getInstance().signOut();
+        this.user.setValue(null);
+    }
 }

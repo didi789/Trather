@@ -24,7 +24,6 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.services.SharedPref;
 import com.colman.trather.viewModels.SettingsViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class Setting extends BaseToolbarFragment implements View.OnClickListener {
     public static final int PICK_IMAGE = 1;
@@ -145,8 +144,7 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
     }
 
     public void logout() {
-        FirebaseAuth.getInstance().signOut();
-        SharedPref.removeKey(Consts.CURRENT_USER_KEY);
+        settingsViewModel.logout();
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.splash_screen);
     }
 

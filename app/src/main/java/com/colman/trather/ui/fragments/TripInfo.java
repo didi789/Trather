@@ -26,9 +26,11 @@ import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
 import com.colman.trather.models.User;
 import com.colman.trather.services.SharedPref;
+import com.colman.trather.services.Utils;
 import com.colman.trather.ui.adapters.BaseRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 import com.colman.trather.viewModels.TripInfoViewModel;
+import com.google.firebase.firestore.GeoPoint;
 
 public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAdapter.ItemClickListener, BaseRecyclerViewAdapter.ItemDeleteListener {
     private TripInfoViewModel tripInfoViewModel;
@@ -121,7 +123,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             about.setText(tripInfo.getAbout());
             double locationLat = tripInfo.getLocationLat();
             double locationLon = tripInfo.getLocationLon();
-            address.setText(getString(R.string.address_text, Double.toString(locationLat), Double.toString(locationLon)));
+            address.setText(getString(R.string.address_text, Utils.getLocationText(new GeoPoint(locationLat, locationLon))));
             Glide.with(requireActivity()).load(tripInfo.getImgUrl()).error(R.mipmap.ic_launcher).into(image);
 
             tripInfoViewModel.getUserByUid(tripInfo.getAuthorUid()).observe(getViewLifecycleOwner(), user -> {
