@@ -30,12 +30,4 @@ public interface UserDao {
 
     @Query("UPDATE user set fullName = :fullName, bio =:bio where uid = :uid")
     void updateProfileData(String uid, String fullName, String bio);
-/*
-    @Query("UPDATE trip SET trip_queueDate=:queueDate WHERE tripId = :id")
-    void updateQueueDate(String queueDate, int id);
-
-    @Query("UPDATE trip SET trip_queue=:queue WHERE tripId = :id")
-    void updateQueue(String queue, int id);
-
- */
 }

@@ -13,8 +13,6 @@ public class Consts {
     public static final String KEY_WATER = "water";
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_REVIEWS = "reviews";
-    public static final String KEY_QUEUE = "queue";
-    public static final String KEY_QUEUEDATE = "queueDate";
     public static final String KEY_AUTHOR_UID = "authorUid";
     public static final String KEY_COMMENT = "comment";
     public static final String KEY_REVIEW_ID = "reviewId";

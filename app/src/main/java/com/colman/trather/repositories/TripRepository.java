@@ -116,54 +116,6 @@ public class TripRepository {
         TripDatabase.databaseWriteExecutor.execute(() -> tripDao.delete(trip));
     }
 
-/*    public void updateQueueDate(Trip tripInfo, String date) {
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            tripDao.updateQueueDate(date, tripInfo.getTripId());
-        });
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection(Consts.KEY_TRIPS).document(tripInfo.getName());
-            docRef.update("queueDate", date)
-                    .addOnSuccessListener(aVoid -> Log.d("success", "DocumentSnapshot successfully updated!"))
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("failed", "Error updating document", e);
-                        }
-                    });
-
-        });
-    }*/
-
-/*
-    public void updateQueue(ArrayList<String> queue, Trip tripInfo) {
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            tripDao.updateQueue(Utils.fromArrayList(queue), tripInfo.getTripId());
-        });
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection(Consts.KEY_TRIPS).document(tripInfo.getName());
-            docRef.update("queue", queue)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("success", "DocumentSnapshot successfully updated!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("failed", "Error updating document", e);
-                        }
-                    });
-        });
-    }
-*/
-
     public void listenToQueueChanges(Trip tripInfo) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() ->

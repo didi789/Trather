@@ -35,9 +35,6 @@
     <string name="no">No</string>
     <string name="add_review">Add New Review</string>
     <string name="enter_review">Enter text:</string>
-    <string name="add_me_to_queue">add me to queue</string>
-    <string name="remove_me_from_queue">remove me from queue</string>
-    <string name="showing_queue_for">Showing queue for:</string>
     <string name="trip_name">trip name</string>
     <string name="about">about</string>
     <string name="address">address</string>
