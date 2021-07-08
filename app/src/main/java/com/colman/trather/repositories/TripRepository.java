@@ -10,12 +10,12 @@ import com.colman.trather.Consts;
 import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.ReviewDao;
 import com.colman.trather.dao.TripDao;
+import com.colman.trather.models.AddTripState;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
 import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TripRepository {
     private final TripDao tripDao;
@@ -117,24 +115,13 @@ public class TripRepository {
         TripDatabase.databaseWriteExecutor.execute(() -> tripDao.delete(trip));
     }
 
-    public void listenToQueueChanges(Trip tripInfo) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() ->
-        {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection(Consts.KEY_TRIPS).document(tripInfo.getTripId());
-            docRef.addSnapshotListener((value, error) -> loadTrips());
-        });
-    }
-
-    public void addTrip(Trip trip, Uri imageUri) {
+    public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference riversRef = storageRef.child(Consts.TRIP_COLLECTION + "/" + imageUri.getLastPathSegment());
-                UploadTask uploadTask = riversRef.putFile(imageUri);
+        UploadTask uploadTask = riversRef.putFile(imageUri);
 
         uploadTask.addOnFailureListener(exception -> {
-//            isLoadingSomething.setValue(false);
         }).addOnSuccessListener(taskSnapshot -> {
             final StorageMetadata metadata = taskSnapshot.getMetadata();
             assert metadata != null;
@@ -154,16 +141,16 @@ public class TripRepository {
                     newTrip.put(Consts.KEY_WATER, trip.isWater());
                     newTrip.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
 
-                    db.collection(Consts.TRIP_COLLECTION).add(newTrip).addOnCompleteListener(task1 -> {
-
+                    TripDatabase.databaseWriteExecutor.execute(() -> {
+                        tripDao.insertTrip(trip);
+                        listener.callback(true);
                     });
+                    db.collection(Consts.TRIP_COLLECTION).add(newTrip);
                 } else {
-/*                    isLoadingSomething.setValue(false);
-                    Log.e(TAG, "Failed to upload new image");*/
+                    listener.callback(false);
                 }
             }).addOnFailureListener(e -> {
-/*                isLoadingSomething.setValue(false);
-                Log.e(TAG, "Failed to upload new image");*/
+                listener.callback(false);
             });
         });
     }

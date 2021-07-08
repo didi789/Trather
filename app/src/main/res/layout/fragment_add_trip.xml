@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,13 +14,13 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/ic_baseline_image_search_24"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <EditText
         android:id="@+id/title"
@@ -29,6 +28,8 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:hint="@string/trip_title"
+        android:layout_marginTop="5dp"
+        android:background="@color/bg_tint"
         android:padding="16dp"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -52,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:hint="@string/about"
+        android:background="@color/bg_tint"
         android:padding="16dp"
         android:text=""
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textStyle="bold"
             android:padding="16dp"
             android:text="@string/trip_difficult_level" />
 
@@ -103,6 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="@string/trip_contains_water" />
     </LinearLayout>
 
@@ -112,7 +116,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="6dp"
         android:padding="16dp"
-        android:text="@string/save"
+        android:text="@string/add"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/waterLL" />

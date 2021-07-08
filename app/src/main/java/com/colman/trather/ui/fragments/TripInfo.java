@@ -24,7 +24,6 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
-import com.colman.trather.models.User;
 import com.colman.trather.services.SharedPref;
 import com.colman.trather.services.Utils;
 import com.colman.trather.ui.adapters.BaseRecyclerViewAdapter;
@@ -36,12 +35,12 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
     private TripInfoViewModel tripInfoViewModel;
     private TextView title;
     private TextView address;
+    private ImageView navigate;
     private TextView about;
     private TextView authorName;
     private ImageView image;
     private ReviewsRecyclerViewAdapter mAdapter;
     private Trip tripInfo = null;
-    private User author;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +54,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
+        navigate = view.findViewById(R.id.navigate);
         address = view.findViewById(R.id.address);
         authorName = view.findViewById(R.id.author);
         about = view.findViewById(R.id.about);
@@ -81,6 +81,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             alertDialog.show();
         });
         authorName.setOnClickListener(v -> goToUserInfo(tripInfo.getAuthorUid()));
+        navigate.setOnClickListener(this::startNavigation);
         address.setOnClickListener(this::startNavigation);
         RecyclerView recyclerViewReview = view.findViewById(R.id.reviews_recyclerview);
         recyclerViewReview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -123,7 +124,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             about.setText(tripInfo.getAbout());
             double locationLat = tripInfo.getLocationLat();
             double locationLon = tripInfo.getLocationLon();
-            address.setText(getString(R.string.address_text, Utils.getLocationText(new GeoPoint(locationLat, locationLon))));
+            address.setText(Utils.getLocationText(new GeoPoint(locationLat, locationLon)));
             Glide.with(requireActivity()).load(tripInfo.getImgUrl()).error(R.mipmap.ic_launcher).into(image);
 
             tripInfoViewModel.getUserByUid(tripInfo.getAuthorUid()).observe(getViewLifecycleOwner(), user -> {
@@ -131,7 +132,6 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
                     return;
                 }
 
-                this.author = user;
                 authorName.setText(user.getFullname());
             });
         });

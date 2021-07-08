@@ -28,13 +28,14 @@ public class AddTripViewModel extends AndroidViewModel {
         tripRepository = new TripRepository(application);
     }
 
-    public void addTrip(Trip trip, Uri imageUri) {
+    public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
         if (validateTrip(trip, imageUri))
-            tripRepository.addTrip(trip, imageUri);
+            tripRepository.addTrip(trip, imageUri, listener);
     }
 
     public void selectLocation(GeoPoint point) {
         selectedTripLocation.setValue(point);
+        addTripState.setValue(new AddTripState(null, null, null, null));
     }
 
     public LiveData<GeoPoint> getSelectedLocation() {
@@ -50,8 +51,10 @@ public class AddTripViewModel extends AndroidViewModel {
             addTripState.setValue(new AddTripState(null, null, R.string.about, null));
         else if (imageUri == null)
             addTripState.setValue(new AddTripState(null, null, null, R.string.invalid_trip_image));
-        else
+        else {
+            addTripState.setValue(new AddTripState(null, null, null, null));
             return true;
+        }
 
         return false;
     }

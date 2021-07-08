@@ -16,13 +16,12 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="invalid_name">Full name must be a-z only</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="address_text">Location is: %1$s</string>
     <string name="reviews_title">Reviews</string>
     <string name="failed_to_login">Email or password is incorrect. try again</string>
     <string name="register_failed">Register failed. please try again</string>
     <string name="go_to_register">Create new account?</string>
     <string name="about_version_1_s">About: version %1$s</string>
-    <string name="save">Save</string>
+    <string name="add">Add</string>
     <string name="vibration">Vibration</string>
     <string name="sound">Sound</string>
     <string name="notifications">Notifications</string>
@@ -50,4 +49,6 @@
     <string name="dots">…</string>
     <string name="user_info">User Info</string>
     <string name="logout">Log out</string>
+    <string name="save">save</string>
+    <string name="error_while_adding_trip">Error while adding trip</string>
 </resources>

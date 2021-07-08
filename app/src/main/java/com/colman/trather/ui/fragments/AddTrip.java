@@ -76,7 +76,12 @@ public class AddTrip extends BaseToolbarFragment {
         saveTrip.setOnClickListener(v -> {
             String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
             Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, levelPicker.getValue(), isWater.isChecked());
-            addTripViewModel.addTrip(trip, imageUri);
+            addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
+                if (added)
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
+                else
+                    Toast.makeText(getContext(), getString(R.string.error_while_adding_trip), Toast.LENGTH_SHORT).show();
+            }));
         });
 
         addTripViewModel.getSelectedLocation().observe(getViewLifecycleOwner(), point -> {
@@ -135,7 +140,7 @@ public class AddTrip extends BaseToolbarFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
+        if (requestCode == PICK_IMAGE && data != null) {
             imageUri = data.getData();
             Glide.with(requireActivity()).load(imageUri).into(image);
         }

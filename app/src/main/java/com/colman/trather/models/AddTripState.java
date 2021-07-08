@@ -43,4 +43,9 @@ public class AddTripState {
     public Integer getImageError() {
         return imageError;
     }
+
+    public interface AddTripListener {
+        void callback(boolean added);
+
+    }
 }

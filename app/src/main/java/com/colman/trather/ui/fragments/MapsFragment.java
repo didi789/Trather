@@ -165,7 +165,6 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
             tripViewModel.getTripsLiveData().observe(getViewLifecycleOwner(), tripsList -> {
                 if (location != null) {
                     currentLocation = location;
-                    Toast.makeText(getContext(), currentLocation.getLatitude() + "," + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     GeoPoint myLocation = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
                     tripsList.sort(new SortLocation(myLocation));
                 }

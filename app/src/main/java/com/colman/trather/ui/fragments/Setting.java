@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,7 +37,6 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
     private SwitchCompat vibration;
     private SwitchCompat sound;
     private SwitchCompat notification;
-    private Spinner spinnerLang;
 
     @Override
     protected boolean shouldAddSettingIcon() {
@@ -80,7 +78,6 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
         vibration = view.findViewById(R.id.vibration);
         sound = view.findViewById(R.id.sound);
         notification = view.findViewById(R.id.notification);
-        spinnerLang = view.findViewById(R.id.language_spinner);
         profileImg = view.findViewById(R.id.image);
         fullName = view.findViewById(R.id.full_name);
         bio = view.findViewById(R.id.bio_text);
@@ -158,10 +155,8 @@ public class Setting extends BaseToolbarFragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
-            if (data != null) {
-                settingsViewModel.updateProfileImage(getViewLifecycleOwner(), data.getData());
-            }
+        if (requestCode == PICK_IMAGE && data != null) {
+            settingsViewModel.updateProfileImage(getViewLifecycleOwner(), data.getData());
         }
     }
 }
