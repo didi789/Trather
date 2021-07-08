@@ -13,9 +13,13 @@ import com.bumptech.glide.Glide;
 import com.colman.trather.R;
 import com.colman.trather.models.Trip;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TripRecyclerViewAdapter extends BaseRecyclerViewAdapter<Trip, TripRecyclerViewAdapter.ViewHolder> {
 
     private final Context context;
+    private List<Trip> allTripList;
 
     public TripRecyclerViewAdapter(Context context) {
         super(context);
@@ -27,6 +31,17 @@ public class TripRecyclerViewAdapter extends BaseRecyclerViewAdapter<Trip, TripR
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_row, parent, false);
         return new ViewHolder(view);
+    }
+
+
+    @Override
+    public void setItems(List<Trip> tripList) {
+        this.allTripList = tripList;
+        super.setItems(tripList);
+    }
+
+    public void applyFilter(String filter) {
+        super.setItems(allTripList.stream().filter(trip -> trip.filter(filter)).collect(Collectors.toList()));
     }
 
     @Override

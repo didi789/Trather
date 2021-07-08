@@ -101,10 +101,10 @@ public class Trip {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Trip trip = (Trip) o;
-        return tripId == trip.tripId &&
+        return tripId.equals(trip.tripId) &&
                 Double.compare(trip.locationLat, locationLat) == 0 &&
                 Double.compare(trip.locationLon, locationLon) == 0 &&
-                Objects.equals(trip, trip.title) &&
+                Objects.equals(title, trip.title) &&
                 Objects.equals(about, trip.about) &&
                 Objects.equals(imgUrl, trip.imgUrl);
     }
@@ -112,6 +112,10 @@ public class Trip {
     @Override
     public int hashCode() {
         return Objects.hash(tripId, title, about, imgUrl, locationLat, locationLon);
+    }
+
+    public boolean filter(String s) {
+        return this.title.contains(s);
     }
 }
 

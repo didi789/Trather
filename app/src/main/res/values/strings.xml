@@ -51,4 +51,6 @@
     <string name="logout">Log out</string>
     <string name="save">save</string>
     <string name="error_while_adding_trip">Error while adding trip</string>
+    <string name="search">Search</string>
+    <string name="setting">Setting</string>
 </resources>

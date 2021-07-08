@@ -76,7 +76,7 @@ public class Login extends Fragment {
     }
 
     private void updateUiWithUser(FirebaseUser firebaseUser) {
-        String welcome = getString(R.string.welcome) + firebaseUser.getEmail();
+        String welcome = getString(R.string.welcome) + firebaseUser.getDisplayName();
         Toast.makeText(getContext(), welcome, Toast.LENGTH_LONG).show();
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.main_screen_list);
     }

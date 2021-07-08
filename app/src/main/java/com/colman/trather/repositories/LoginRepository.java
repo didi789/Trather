@@ -90,7 +90,8 @@ public class LoginRepository {
                 if (!result.exists()) {
                     docData.put(Consts.KEY_BIO, "");
                     docData.put(Consts.KEY_IMG_URL, "");
-                    docData.put(Consts.KEY_FULL_NAME, Objects.requireNonNull(currentUser.getEmail()).split("@")[0]);
+
+                    docData.put(Consts.KEY_FULL_NAME, (currentUser.getDisplayName() != null && currentUser.getDisplayName().length() > 0) ? currentUser.getDisplayName() : Objects.requireNonNull(currentUser.getEmail()).split("@")[0]);
                     docData.put(Consts.KEY_EMAIL, currentUser.getEmail());
                     db.collection(Consts.USERS_COLLECTION).document(Objects.requireNonNull(currentUser.getUid())).set(docData);
                 }
