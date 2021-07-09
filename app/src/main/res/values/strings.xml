@@ -53,4 +53,6 @@
     <string name="error_while_adding_trip">Error while adding trip</string>
     <string name="search">Search</string>
     <string name="setting">Setting</string>
+    <string name="trip_no_water">doesn\'t contains water</string>
+    <string name="trip_water">contains water</string>
 </resources>

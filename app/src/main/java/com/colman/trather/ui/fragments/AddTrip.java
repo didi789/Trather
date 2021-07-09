@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,12 +34,15 @@ public class AddTrip extends BaseToolbarFragment {
     private AddTripViewModel addTripViewModel;
     private EditText title;
     private Button address;
-    private Button saveTrip;
+    private Button addTrip;
     private EditText about;
     private ImageView image;
+    private ImageView imageError;
+    private ImageView waterImage;
     private CheckBox isWater;
     private NumberPicker levelPicker;
     private GeoPoint location;
+    private ProgressBar addTripPB;
 
     private Uri imageUri;
 
@@ -57,9 +61,12 @@ public class AddTrip extends BaseToolbarFragment {
         address = view.findViewById(R.id.address);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
+        imageError = view.findViewById(R.id.imageError);
         isWater = view.findViewById(R.id.water);
+        waterImage = view.findViewById(R.id.waterImage);
         levelPicker = view.findViewById(R.id.level);
-        saveTrip = view.findViewById(R.id.saveTrip);
+        addTrip = view.findViewById(R.id.addTrip);
+        addTripPB = view.findViewById(R.id.addTripPB);
 
         levelPicker.setMinValue(1);
         levelPicker.setMaxValue(10);
@@ -67,16 +74,22 @@ public class AddTrip extends BaseToolbarFragment {
 
         image.setOnClickListener(v -> pickImageForTrip());
 
+        isWater.setOnCheckedChangeListener((buttonView, isChecked) -> waterImage.setImageResource(isChecked ? R.drawable.yes_water : R.drawable.no_water));
+        waterImage.setOnClickListener(v -> isWater.setChecked(!isWater.isChecked()));
         address.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putBoolean(Consts.PICK_LOCATION, true);
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_pick_location, bundle);
         });
 
-        saveTrip.setOnClickListener(v -> {
+        addTrip.setOnClickListener(v -> {
+            addTripPB.setVisibility(View.VISIBLE);
+            addTrip.setEnabled(false);
             String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
             Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, levelPicker.getValue(), isWater.isChecked());
             addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
+                addTrip.setEnabled(true);
+                addTripPB.setVisibility(View.GONE);
                 if (added)
                     Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
                 else
@@ -102,9 +115,7 @@ public class AddTrip extends BaseToolbarFragment {
             if (state.getAboutError() != null) {
                 about.setError(getString(state.getAboutError()));
             }
-            if (state.getImageError() != null) {
-                Toast.makeText(requireActivity(), getString(state.getImageError()), Toast.LENGTH_SHORT).show();
-            }
+            imageError.setVisibility(state.getImageError() != null ? View.VISIBLE : View.INVISIBLE);
         });
 
         return view;
@@ -142,6 +153,7 @@ public class AddTrip extends BaseToolbarFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && data != null) {
             imageUri = data.getData();
+            imageError.setVisibility(View.GONE);
             Glide.with(requireActivity()).load(imageUri).into(image);
         }
     }

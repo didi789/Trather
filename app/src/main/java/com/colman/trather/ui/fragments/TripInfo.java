@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
     private TextView title;
     private TextView address;
     private ImageView navigate;
+    private ImageView water;
     private TextView about;
     private TextView authorName;
     private ImageView image;
@@ -55,6 +57,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
 
         title = view.findViewById(R.id.title);
         navigate = view.findViewById(R.id.navigate);
+        water = view.findViewById(R.id.water);
         address = view.findViewById(R.id.address);
         authorName = view.findViewById(R.id.author);
         about = view.findViewById(R.id.about);
@@ -122,6 +125,8 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             this.tripInfo = tripInfo;
             title.setText(tripInfo.getTitle());
             about.setText(tripInfo.getAbout());
+            water.setImageResource(tripInfo.isWater() ? R.drawable.yes_water : R.drawable.no_water);
+            water.setOnClickListener(v -> Toast.makeText(requireActivity(), tripInfo.getTitle() + " " + (tripInfo.isWater() ? getString(R.string.trip_water) : getString(R.string.trip_no_water)), Toast.LENGTH_SHORT).show());
             double locationLat = tripInfo.getLocationLat();
             double locationLon = tripInfo.getLocationLon();
             address.setText(Utils.getLocationText(new GeoPoint(locationLat, locationLon)));

@@ -31,6 +31,8 @@ public class AddTripViewModel extends AndroidViewModel {
     public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
         if (validateTrip(trip, imageUri))
             tripRepository.addTrip(trip, imageUri, listener);
+        else
+            listener.callback(false);
     }
 
     public void selectLocation(GeoPoint point) {
