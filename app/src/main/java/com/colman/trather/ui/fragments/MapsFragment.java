@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
 
             if (currentLocation != null) {
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                MarkerOptions myLocation = new MarkerOptions().position(latLng).title("I am here").icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon));
+                MarkerOptions myLocation = new MarkerOptions().position(latLng).title(getString(R.string.i_am_here)).icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon));
                 googleMap.addMarker(myLocation);
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
@@ -181,9 +180,8 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (Objects.equals(marker.getTitle(), "I am here"))
+        if (Objects.equals(marker.getTitle(), getString(R.string.i_am_here)) || (addTripViewModel != null))
             return false;
-        Log.d("tag", "marker clicked");
         Trip trip = (Trip) marker.getTag();
         Toast.makeText(requireActivity(), Objects.requireNonNull(trip).getAbout(), Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle();
