@@ -115,7 +115,7 @@ public class Trip {
     }
 
     public boolean filter(String s) {
-        return this.title.contains(s);
+        return this.title.toLowerCase().contains(s.toLowerCase());
     }
 }
 
