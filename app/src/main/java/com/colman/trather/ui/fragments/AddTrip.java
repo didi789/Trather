@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -26,6 +25,7 @@ import com.colman.trather.models.Trip;
 import com.colman.trather.services.SharedPref;
 import com.colman.trather.services.Utils;
 import com.colman.trather.viewModels.AddTripViewModel;
+import com.google.android.material.slider.Slider;
 import com.google.firebase.firestore.GeoPoint;
 
 public class AddTrip extends BaseToolbarFragment {
@@ -40,8 +40,8 @@ public class AddTrip extends BaseToolbarFragment {
     private ImageView imageError;
     private ImageView waterImage;
     private CheckBox isWater;
-    private NumberPicker levelPicker;
     private GeoPoint location;
+    private Slider level;
     private ProgressBar addTripPB;
 
     private Uri imageUri;
@@ -64,14 +64,9 @@ public class AddTrip extends BaseToolbarFragment {
         imageError = view.findViewById(R.id.imageError);
         isWater = view.findViewById(R.id.water);
         waterImage = view.findViewById(R.id.waterImage);
-        levelPicker = view.findViewById(R.id.level);
         addTrip = view.findViewById(R.id.addTrip);
         addTripPB = view.findViewById(R.id.addTripPB);
-
-        levelPicker.setMinValue(1);
-        levelPicker.setMaxValue(10);
-        levelPicker.setValue(5);
-
+        level = view.findViewById(R.id.level);
         image.setOnClickListener(v -> pickImageForTrip());
 
         isWater.setOnCheckedChangeListener((buttonView, isChecked) -> waterImage.setImageResource(isChecked ? R.drawable.yes_water : R.drawable.no_water));
@@ -86,7 +81,7 @@ public class AddTrip extends BaseToolbarFragment {
             addTripPB.setVisibility(View.VISIBLE);
             addTrip.setEnabled(false);
             String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-            Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, levelPicker.getValue(), isWater.isChecked());
+            Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
             addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
                 addTrip.setEnabled(true);
                 addTripPB.setVisibility(View.GONE);
