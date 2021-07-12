@@ -13,10 +13,10 @@ import java.util.List;
 
 @Dao
 public interface TripDao {
-    @Query("SELECT * FROM trip")
+    @Query("SELECT * FROM trips")
     LiveData<List<Trip>> getAll();
 
-    @Query("SELECT * FROM trip where tripId = :tripId")
+    @Query("SELECT * FROM trips where tripId = :tripId")
     LiveData<Trip> getTripById(String tripId);
 
     @Delete

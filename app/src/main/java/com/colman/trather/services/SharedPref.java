@@ -46,10 +46,6 @@ public class SharedPref {
         return sharedPref.getBoolean(key, defValue);
     }
 
-    public static boolean showAds() {
-        return false;//getBoolean("SSA", true);
-    }
-
     public static void putLong(String key, long value) {
         sharedPref.edit().putLong(key, value).apply();
     }

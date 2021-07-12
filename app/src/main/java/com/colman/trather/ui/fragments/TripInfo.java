@@ -98,7 +98,6 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
         return view;
     }
 
-
     @Override
     protected int getTitleResourceId() {
         return R.string.trip_info;
@@ -128,22 +127,7 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
             title.setText(tripInfo.getTitle());
             about.setText(tripInfo.getAbout());
 
-            double level = tripInfo.getLevel();
-
-            if (level < 3) {
-                difficulty.setImageResource(R.drawable.diff_1_2);
-            } else if (level < 5)
-                difficulty.setImageResource(R.drawable.diff_3_4);
-            else if (level < 6)
-                difficulty.setImageResource(R.drawable.diff_5);
-            else if (level < 7)
-                difficulty.setImageResource(R.drawable.diff_6);
-            else if (level < 9)
-                difficulty.setImageResource(R.drawable.diff_7_8);
-            else if (level < 10)
-                difficulty.setImageResource(R.drawable.diff_9);
-            else
-                difficulty.setImageResource(R.drawable.diff_10);
+            initDifficulty();
 
             water.setImageResource(tripInfo.isWater() ? R.drawable.yes_water : R.drawable.no_water);
             water.setOnClickListener(v -> Toast.makeText(requireActivity(), tripInfo.getTitle() + " " + (tripInfo.isWater() ? getString(R.string.trip_water) : getString(R.string.trip_no_water)), Toast.LENGTH_SHORT).show());
@@ -162,6 +146,25 @@ public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAda
         });
 
         tripInfoViewModel.getReviewsByTripIdLiveData(tripId).observe(getViewLifecycleOwner(), reviewList -> mAdapter.setItems(reviewList));
+    }
+
+    private void initDifficulty() {
+        double level = tripInfo.getLevel();
+
+        if (level < 3) {
+            difficulty.setImageResource(R.drawable.diff_1_2);
+        } else if (level < 5)
+            difficulty.setImageResource(R.drawable.diff_3_4);
+        else if (level < 6)
+            difficulty.setImageResource(R.drawable.diff_5);
+        else if (level < 7)
+            difficulty.setImageResource(R.drawable.diff_6);
+        else if (level < 9)
+            difficulty.setImageResource(R.drawable.diff_7_8);
+        else if (level < 10)
+            difficulty.setImageResource(R.drawable.diff_9);
+        else
+            difficulty.setImageResource(R.drawable.diff_10);
     }
 
     @Override

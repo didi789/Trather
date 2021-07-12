@@ -7,7 +7,7 @@ import androidx.room.Index;
 
 import java.util.Objects;
 
-@Entity(primaryKeys = {"uid"}, indices = {
+@Entity(primaryKeys = {"uid"}, tableName = "users", indices = {
         @Index(value = "uid", unique = true)
 })
 public class User {

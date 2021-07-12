@@ -7,9 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.MapsFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <fragment
             android:id="@+id/map"
@@ -39,8 +36,5 @@
             android:src="@drawable/ic__list"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/map" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

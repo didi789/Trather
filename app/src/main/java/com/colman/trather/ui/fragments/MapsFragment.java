@@ -2,7 +2,6 @@ package com.colman.trather.ui.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -51,7 +50,6 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
     private TripViewModel tripViewModel;
     private AddTripViewModel addTripViewModel;
     private List<MarkerOptions> markersList;
-    private List<Marker> regularMarkerslist;
     private List<Trip> tripList;
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -68,19 +66,15 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
             }
 
-            regularMarkerslist = new ArrayList<>();
-            Marker tempMarker;
             for (int i = 0; i < markersList.size(); i++) {
-                tempMarker = googleMap.addMarker(markersList.get(i));
+                Marker tempMarker = googleMap.addMarker(markersList.get(i));
                 Objects.requireNonNull(tempMarker).setTag(tripList.get(i));
-                regularMarkerslist.add(tempMarker);
             }
         }
     };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        //  Log.d("tag","onCreate");
         super.onCreate(savedInstanceState);
         tripViewModel = new ViewModelProvider(requireActivity()).get(TripViewModel.class);
 
@@ -100,8 +94,14 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         fetchLastLocationAndFillMarkers();
+
         FloatingActionButton toList = view.findViewById(R.id.gotoList);
-        toList.setOnClickListener(view1 -> gotoListMode());
+        if (addTripViewModel == null) {
+            toList.setOnClickListener(view1 -> gotoListMode());
+        } else {
+            toList.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
@@ -135,10 +135,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         for (int i = 0; i < tripList.size(); i++) {
             newLatLng = new LatLng(tripList.get(i).getLocationLat(), tripList.get(i).getLocationLon());
             IconGenerator factory = new IconGenerator(requireActivity());
-            //factory.setBackground(Drawable.);
-            //factory.setContentView(R.drawable.my_location_icon);
             factory.setColor(Color.CYAN);
-            Bitmap icon = factory.makeIcon();
             newMarker = new MarkerOptions().position(newLatLng).title(tripList.get(i).getTitle()).snippet(tripList.get(i).getAbout().length() > 10 ? tripList.get(i).getAbout().substring(0, 10).trim() : tripList.get(i).getAbout() + getString(R.string.dots)).icon(BitmapDescriptorFactory.fromBitmap(factory.makeIcon(tripList.get(i).getTitle())));
             markersList.add(newMarker);
         }

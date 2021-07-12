@@ -1,7 +1,5 @@
 package com.colman.trather.ui.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,12 +20,7 @@ import com.colman.trather.viewModels.LoginViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends Fragment {
-    ActivityResultLauncher<Intent> signInResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                }
-            });
+
     private LoginViewModel loginViewModel;
 
     @Override
@@ -67,7 +58,7 @@ public class Login extends Fragment {
         });
 
         loginButton.setOnClickListener(v -> {
-            signInResultLauncher.launch(loginViewModel.login());
+            startActivity(loginViewModel.login());
 
             loadingProgressBar.setVisibility(View.VISIBLE);
         });
@@ -79,9 +70,5 @@ public class Login extends Fragment {
         String welcome = getString(R.string.welcome) + firebaseUser.getDisplayName();
         Toast.makeText(getContext(), welcome, Toast.LENGTH_LONG).show();
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.main_screen_list);
-    }
-
-    private void showLoginFailed(String errorString) {
-        Toast.makeText(getContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 }

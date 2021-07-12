@@ -13,11 +13,8 @@ import java.util.List;
 
 @Dao
 public interface UserDao {
-    @Query("SELECT * FROM user")
+    @Query("SELECT * FROM users")
     LiveData<List<User>> getAll();
-
-    @Query("SELECT * FROM user where email = :nemail")
-    LiveData<User> getUserByMail(String nemail);
 
     @Delete
     void delete(User user);
@@ -25,12 +22,12 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<User> mUsersList);
 
-    @Query("UPDATE user set fullName = :fullName, bio =:bio where uid = :uid")
+    @Query("UPDATE users set fullName = :fullName, bio =:bio where uid = :uid")
     void updateProfileData(String uid, String fullName, String bio);
 
-    @Query("SELECT * FROM user where uid = :uid")
+    @Query("SELECT * FROM users where uid = :uid")
     LiveData<User> getUserByUid(String uid);
 
-    @Query("UPDATE user set imageUrl = :imageUrl where uid = :authorUid")
+    @Query("UPDATE users set imageUrl = :imageUrl where uid = :authorUid")
     void updateAllMyProfileImage(String imageUrl, String authorUid);
 }

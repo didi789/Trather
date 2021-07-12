@@ -1,25 +1,9 @@
 <resources>
     <string name="app_name">Trather</string>
-
     <string name="subtitle">Travel together!</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_fullname">Fullname</string>
-    <string name="prompt_password">Password</string>
-    <string name="rules">By clicking sign up, you agree to our terms of services and that you read our privacy policy</string>
     <string name="action_sign_in">Sign in</string>
-    <string name="action_register">Register</string>
-    <string name="go_to_login">Already have a user? Login</string>
-    <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome! "</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="invalid_name">Full name must be a-z only</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="reviews_title">Reviews</string>
-    <string name="failed_to_login">Email or password is incorrect. try again</string>
-    <string name="register_failed">Register failed. please try again</string>
-    <string name="go_to_register">Create new account?</string>
     <string name="about_version_1_s">About: version %1$s</string>
     <string name="add">Add</string>
     <string name="vibration">Vibration</string>
@@ -34,9 +18,7 @@
     <string name="no">No</string>
     <string name="add_review">Add New Review</string>
     <string name="enter_review">Enter text:</string>
-    <string name="trip_name">trip name</string>
     <string name="about">about</string>
-    <string name="address">address</string>
     <string name="trip_title">Trip Title</string>
     <string name="trip_difficult_level">Trip difficult level:</string>
     <string name="trip_contains_water">Trip contains water</string>
@@ -44,7 +26,6 @@
 
     <string name="invalid_trip_title">Invalid trip title</string>
     <string name="invalid_trip_location">Invalid trip location</string>
-    <string name="invalid_trip_about">Invalid trip about</string>
     <string name="invalid_trip_image">Invalid trip image</string>
     <string name="dots">…</string>
     <string name="user_info">User Info</string>
@@ -56,4 +37,5 @@
     <string name="trip_no_water">doesn\'t contains water</string>
     <string name="trip_water">contains water</string>
     <string name="i_am_here">I am here</string>
+    <string name="welcome_to_trather">Welcome to Trather</string>
 </resources>

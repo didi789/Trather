@@ -10,7 +10,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity(primaryKeys = {"tripId"}, indices = {
+@Entity(primaryKeys = {"tripId"}, tableName = "trips", indices = {
         @Index(value = "tripId", unique = true)
 })
 public class Trip {
