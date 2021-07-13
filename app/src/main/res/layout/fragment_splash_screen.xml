@@ -32,9 +32,9 @@
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
-
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <FrameLayout
         android:layout_width="150dp"
@@ -58,5 +58,4 @@
             android:layout_height="match_parent"
             android:layout_gravity="center" />
     </FrameLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

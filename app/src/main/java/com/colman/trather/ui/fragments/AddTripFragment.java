@@ -28,7 +28,7 @@ import com.colman.trather.viewModels.AddTripViewModel;
 import com.google.android.material.slider.Slider;
 import com.google.firebase.firestore.GeoPoint;
 
-public class AddTrip extends BaseToolbarFragment {
+public class AddTripFragment extends BaseToolbarFragment {
     public static final int PICK_IMAGE = 1;
 
     private AddTripViewModel addTripViewModel;

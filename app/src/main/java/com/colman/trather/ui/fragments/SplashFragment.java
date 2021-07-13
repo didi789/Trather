@@ -16,7 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.colman.trather.R;
 
-public class Splash extends Fragment {
+public class SplashFragment extends Fragment {
     public static final int DELAY_MILLIS = 3000;
 
     @Override

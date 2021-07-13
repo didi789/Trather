@@ -32,7 +32,7 @@ import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 import com.colman.trather.viewModels.TripInfoViewModel;
 import com.google.firebase.firestore.GeoPoint;
 
-public class TripInfo extends BaseToolbarFragment implements BaseRecyclerViewAdapter.ItemClickListener, BaseRecyclerViewAdapter.ItemDeleteListener {
+public class TripInfoFragment extends BaseToolbarFragment implements BaseRecyclerViewAdapter.ItemClickListener, BaseRecyclerViewAdapter.ItemDeleteListener {
     private TripInfoViewModel tripInfoViewModel;
     private TextView title;
     private TextView address;

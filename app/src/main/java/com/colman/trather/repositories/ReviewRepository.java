@@ -28,7 +28,17 @@ public class ReviewRepository {
     private final ReviewDao reviewDao;
     private final LiveData<List<Review>> allReviews;
 
-    public ReviewRepository(Application application) {
+    private static ReviewRepository mInstance;
+
+    public static ReviewRepository getInstance(Application application) {
+        if (mInstance == null) {
+            mInstance = new ReviewRepository(application);
+        }
+
+        return mInstance;
+    }
+
+    private ReviewRepository(Application application) {
         TripDatabase database = TripDatabase.getDatabase(application);
         reviewDao = database.reviewDao();
         allReviews = reviewDao.getAllReviews();

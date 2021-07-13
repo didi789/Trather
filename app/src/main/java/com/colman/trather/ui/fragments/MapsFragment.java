@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMarkerClickListener {
     private static final int REQUEST_CODE = 101;
 
     private FusedLocationProviderClient mFusedLocationClient;
@@ -56,14 +56,22 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         @Override
         public void onMapReady(GoogleMap googleMap) {
             googleMap.setOnMarkerClickListener(MapsFragment.this);
-            googleMap.setOnMapClickListener(MapsFragment.this);
+            googleMap.setOnMapClickListener(latLng -> {
+                if (addTripViewModel != null) {
+                    addTripViewModel.selectLocation(new GeoPoint(latLng.latitude, latLng.longitude));
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
+                }
+            });
 
             if (currentLocation != null) {
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                MarkerOptions myLocation = new MarkerOptions().position(latLng).title(getString(R.string.i_am_here)).icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_icon));
-                googleMap.addMarker(myLocation);
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+                if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                }
             }
 
             for (int i = 0; i < markersList.size(); i++) {
@@ -177,7 +185,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (Objects.equals(marker.getTitle(), getString(R.string.i_am_here)) || (addTripViewModel != null))
+        if (addTripViewModel != null)
             return false;
         Trip trip = (Trip) marker.getTag();
         Toast.makeText(requireActivity(), Objects.requireNonNull(trip).getAbout(), Toast.LENGTH_SHORT).show();
@@ -189,13 +197,5 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
 
     public void gotoListMode() {
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_mapsFragment_to_main_screen_list);
-    }
-
-    @Override
-    public void onMapClick(@NonNull LatLng point) {
-        if (addTripViewModel != null) {
-            addTripViewModel.selectLocation(new GeoPoint(point.latitude, point.longitude));
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
-        }
     }
 }

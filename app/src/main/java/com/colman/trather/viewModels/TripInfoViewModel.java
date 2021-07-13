@@ -29,9 +29,9 @@ public class TripInfoViewModel extends AndroidViewModel {
     private final UserRepository userRepository;
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
-        tripRepository = new TripRepository(application);
-        reviewRepository = new ReviewRepository(application);
-        userRepository = new UserRepository(application);
+        tripRepository = TripRepository.getInstance(application);
+        reviewRepository = ReviewRepository.getInstance(application);
+        userRepository = UserRepository.getInstance(application);
         settingsRepository = new SettingsRepository();
         reviewsLiveData = reviewRepository.getReviewsLiveData();
         tripLiveData = tripRepository.getTrips();

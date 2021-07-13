@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/splash_screen"
-        android:name="com.colman.trather.ui.fragments.Splash"
+        android:name="com.colman.trather.ui.fragments.SplashFragment"
         android:label="splashScreen"
         tools:layout="@layout/fragment_splash_screen">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/sign_in"
-        android:name="com.colman.trather.ui.fragments.Login"
+        android:name="com.colman.trather.ui.fragments.LoginFragment"
         android:label="SignIn"
         tools:layout="@layout/fragment_login">
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/main_screen_list"
-        android:name="com.colman.trather.ui.fragments.MainList"
+        android:name="com.colman.trather.ui.fragments.MainListFragment"
         android:label="MainScreenList"
         tools:layout="@layout/fragment_main_list">
         <action
@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/trip_info"
-        android:name="com.colman.trather.ui.fragments.TripInfo"
+        android:name="com.colman.trather.ui.fragments.TripInfoFragment"
         android:label="TripInfo"
         tools:layout="@layout/fragment_trip_info">
         <argument
@@ -96,7 +96,7 @@
 
     <fragment
         android:id="@+id/add_trip"
-        android:name="com.colman.trather.ui.fragments.AddTrip"
+        android:name="com.colman.trather.ui.fragments.AddTripFragment"
         android:label="TripInfo"
         tools:layout="@layout/fragment_add_trip">
         <action
@@ -176,7 +176,7 @@
     </fragment>
     <fragment
         android:id="@+id/settings_screen"
-        android:name="com.colman.trather.ui.fragments.Setting"
+        android:name="com.colman.trather.ui.fragments.SettingFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
         <action
@@ -211,7 +211,7 @@
 
     <fragment
         android:id="@+id/user_info_screen"
-        android:name="com.colman.trather.ui.fragments.UserInfo"
+        android:name="com.colman.trather.ui.fragments.UserInfoFragment"
         android:label="user_info"
         tools:layout="@layout/fragment_user_info"></fragment>
 

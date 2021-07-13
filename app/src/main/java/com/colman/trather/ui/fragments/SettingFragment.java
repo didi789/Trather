@@ -24,7 +24,7 @@ import com.colman.trather.R;
 import com.colman.trather.services.SharedPref;
 import com.colman.trather.viewModels.SettingsViewModel;
 
-public class Setting extends BaseToolbarFragment implements View.OnClickListener {
+public class SettingFragment extends BaseToolbarFragment implements View.OnClickListener {
     public static final int PICK_IMAGE = 1;
 
     private SettingsViewModel settingsViewModel;

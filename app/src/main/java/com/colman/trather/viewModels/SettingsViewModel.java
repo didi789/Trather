@@ -31,8 +31,8 @@ public class SettingsViewModel extends AndroidViewModel {
         userMutableLiveData = settingsRepository.getUser();
         isLoading = settingsRepository.isLoading();
         settingsRepository.loadUser();
-        reviewRepository = new ReviewRepository(application);
-        userRepository = new UserRepository(application);
+        reviewRepository = ReviewRepository.getInstance(application);
+        userRepository = UserRepository.getInstance(application);
         loginRepository = LoginRepository.getInstance();
     }
 

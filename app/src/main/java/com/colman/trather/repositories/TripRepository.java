@@ -36,7 +36,17 @@ public class TripRepository {
     private final ReviewDao reviewDao;
     private final LiveData<List<Trip>> allTrips;
 
-    public TripRepository(Application application) {
+    private static TripRepository mInstance;
+
+    public static TripRepository getInstance(Application application) {
+        if (mInstance == null) {
+            mInstance = new TripRepository(application);
+        }
+
+        return mInstance;
+    }
+
+    private TripRepository(Application application) {
         TripDatabase database = TripDatabase.getDatabase(application);
         tripDao = database.tripDao();
         reviewDao = database.reviewDao();
@@ -105,6 +115,10 @@ public class TripRepository {
 
     public LiveData<List<Trip>> getTrips() {
         return allTrips;
+    }
+
+    public void reloadTrips() {
+        this.loadTrips();
     }
 
     public LiveData<Trip> getTripById(String tripId) {

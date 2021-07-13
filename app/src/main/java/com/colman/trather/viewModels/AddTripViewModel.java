@@ -25,7 +25,7 @@ public class AddTripViewModel extends AndroidViewModel {
 
     public AddTripViewModel(@NonNull Application application) {
         super(application);
-        tripRepository = new TripRepository(application);
+        tripRepository = TripRepository.getInstance(application);
     }
 
     public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {

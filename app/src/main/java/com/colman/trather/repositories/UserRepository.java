@@ -21,8 +21,17 @@ import java.util.List;
 public class UserRepository {
     private final UserDao userDao;
     private final LiveData<List<User>> allUsers;
+    private static UserRepository mInstance;
 
-    public UserRepository(Application application) {
+    public static UserRepository getInstance(Application application) {
+        if (mInstance == null) {
+            mInstance = new UserRepository(application);
+        }
+
+        return mInstance;
+    }
+
+    private UserRepository(Application application) {
         TripDatabase database = TripDatabase.getDatabase(application);
         userDao = database.usersDao();
         allUsers = userDao.getAll();

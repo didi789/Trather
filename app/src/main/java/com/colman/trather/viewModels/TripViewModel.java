@@ -17,12 +17,16 @@ public class TripViewModel extends AndroidViewModel {
 
     public TripViewModel(@NonNull Application application) {
         super(application);
-        tripsRepository = new TripRepository(application);
+        tripsRepository = TripRepository.getInstance(application);
         tripListMutableLiveData = tripsRepository.getTrips();
     }
 
     public LiveData<List<Trip>> getTripsLiveData() {
         return tripListMutableLiveData;
+    }
+
+    public void reloadTrips() {
+        tripsRepository.reloadTrips();
     }
 }
 

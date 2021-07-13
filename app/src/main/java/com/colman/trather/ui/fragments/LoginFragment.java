@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -17,9 +16,8 @@ import androidx.navigation.Navigation;
 
 import com.colman.trather.R;
 import com.colman.trather.viewModels.LoginViewModel;
-import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends Fragment {
+public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
 
@@ -53,7 +51,7 @@ public class Login extends Fragment {
             loadingProgressBar.setVisibility(View.GONE);
 
             if (firebaseUser != null) {
-                updateUiWithUser(firebaseUser);
+                goToMain();
             }
         });
 
@@ -66,9 +64,7 @@ public class Login extends Fragment {
         return view;
     }
 
-    private void updateUiWithUser(FirebaseUser firebaseUser) {
-        String welcome = getString(R.string.welcome) + firebaseUser.getDisplayName();
-        Toast.makeText(getContext(), welcome, Toast.LENGTH_LONG).show();
+    private void goToMain() {
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.main_screen_list);
     }
 }

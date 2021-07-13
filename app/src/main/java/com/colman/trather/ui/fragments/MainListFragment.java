@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.colman.trather.Consts;
 import com.colman.trather.R;
@@ -35,11 +36,11 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Objects;
 
-public class MainList extends BaseToolbarFragment implements TripRecyclerViewAdapter.ItemClickListener {
+public class MainListFragment extends BaseToolbarFragment implements TripRecyclerViewAdapter.ItemClickListener {
     private TripRecyclerViewAdapter mAdapter;
     private FusedLocationProviderClient mFusedLocationClient;
     private TripViewModel tripViewModel;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,11 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
         FloatingActionButton addTripButton = view.findViewById(R.id.add_trip_button);
         addTripButton.setOnClickListener(v -> goToAddTrip());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> tripViewModel.reloadTrips());
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
 
         return view;
     }
@@ -133,6 +139,7 @@ public class MainList extends BaseToolbarFragment implements TripRecyclerViewAda
         super.onViewCreated(view, savedInstanceState);
 
         tripViewModel.getTripsLiveData().observe(getViewLifecycleOwner(), tripList -> {
+            swipeRefreshLayout.setRefreshing(false);
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;

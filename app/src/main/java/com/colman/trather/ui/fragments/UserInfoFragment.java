@@ -16,7 +16,7 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.viewModels.UserInfoViewModel;
 
-public class UserInfo extends BaseToolbarFragment {
+public class UserInfoFragment extends BaseToolbarFragment {
 
     private UserInfoViewModel userInfoViewModel;
     private ImageView profileImg;

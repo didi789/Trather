@@ -15,7 +15,7 @@ public class UserInfoViewModel extends AndroidViewModel {
 
     public UserInfoViewModel(@NonNull Application application) {
         super(application);
-        userRepository = new UserRepository(application);
+        userRepository = UserRepository.getInstance(application);
     }
 
     public LiveData<User> getUserByUid(String uid) {
