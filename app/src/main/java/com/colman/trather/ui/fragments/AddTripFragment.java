@@ -33,6 +33,7 @@ public class AddTripFragment extends BaseToolbarFragment {
 
     private AddTripViewModel addTripViewModel;
     private EditText title;
+    private EditText tripSiteUrl;
     private Button address;
     private Button addTrip;
     private EditText about;
@@ -58,6 +59,7 @@ public class AddTripFragment extends BaseToolbarFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
+        tripSiteUrl = view.findViewById(R.id.tripSiteUrl);
         address = view.findViewById(R.id.address);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
