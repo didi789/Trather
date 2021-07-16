@@ -68,9 +68,7 @@
         tools:layout="@layout/fragment_trip_info">
         <argument
             android:name="trip_id"
-            android:defaultValue="-1"
             app:argType="string" />
-
         <action
             android:id="@+id/action_trip_info_to_user_infp"
             app:destination="@id/user_info_screen"
@@ -152,6 +150,9 @@
         android:name="com.colman.trather.ui.fragments.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps">
+        <argument
+            android:name="pickLocation"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_mapsFragment_to_main_screen_list"
             app:destination="@id/main_screen_list"
@@ -213,6 +214,11 @@
         android:id="@+id/user_info_screen"
         android:name="com.colman.trather.ui.fragments.UserInfoFragment"
         android:label="user_info"
-        tools:layout="@layout/fragment_user_info"></fragment>
+        tools:layout="@layout/fragment_user_info">
+        <argument
+            android:name="authorUid"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

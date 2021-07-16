@@ -4,18 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Objects;
-import java.util.UUID;
 
-@Entity(primaryKeys = {"tripId"}, tableName = "trips", indices = {
+@Entity(tableName = "trips", indices = {
         @Index(value = "tripId", unique = true)
 })
 public class Trip {
+    @PrimaryKey
     @NonNull
-    public final String tripId;
+    public String tripId;
     @ColumnInfo(name = "trip_location_lat")
     private final double locationLat;
     @ColumnInfo(name = "trip_location_lon")
@@ -38,7 +39,7 @@ public class Trip {
     private final boolean water;
 
     public Trip(GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double level, boolean water) {
-        this(UUID.randomUUID().toString(), location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water);
+        this(null, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water);
     }
 
     public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl, double rating, double level, boolean water) {
@@ -53,6 +54,10 @@ public class Trip {
         this.rating = rating;
         this.level = level;
         this.water = water;
+    }
+
+    public void setTripId(@NonNull String tripId) {
+        this.tripId = tripId;
     }
 
     public String getTripId() {

@@ -1,6 +1,6 @@
 package com.colman.trather.ui.fragments;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +31,8 @@ import com.colman.trather.ui.adapters.BaseRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 import com.colman.trather.viewModels.TripInfoViewModel;
 import com.google.firebase.firestore.GeoPoint;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class TripInfoFragment extends BaseToolbarFragment implements BaseRecyclerViewAdapter.ItemClickListener, BaseRecyclerViewAdapter.ItemDeleteListener {
     private TripInfoViewModel tripInfoViewModel;
@@ -69,23 +71,22 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         ImageView addReview = view.findViewById(R.id.add_review);
 
         addReview.setOnClickListener(v -> {
-            final LayoutInflater factory = LayoutInflater.from(getContext());
-            final View dialogViewLayout = factory.inflate(R.layout.custom_dialog, null);
-            final AppCompatRatingBar ratingBar = dialogViewLayout.findViewById(R.id.ratingBar);
-            final EditText reviewEditText = dialogViewLayout.findViewById(R.id.review_text);
+            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.add_review_dialog, null);
+            AppCompatRatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+            final EditText reviewEditText = dialogView.findViewById(R.id.review_text);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-            alertDialog.setView(dialogViewLayout);
+            new SweetAlertDialog(requireContext(), SweetAlertDialog.NORMAL_TYPE)
+                    .setTitleText(getString(R.string.add_review))
+                    .setCancelButton(getString(R.string.dialog_cancel), Dialog::dismiss)
+                    .setConfirmButton(getString(R.string.add), sweetAlertDialog -> {
+                        final String review = reviewEditText.getText().toString();
+                        if (!review.isEmpty()) {
+                            tripInfoViewModel.addReview(tripInfo, review, ratingBar.getRating());
+                            sweetAlertDialog.dismissWithAnimation();
+                        }
+                    })
+                    .setCustomView(dialogView).show();
 
-            dialogViewLayout.findViewById(R.id.btn_yes).setOnClickListener(v1 -> {
-                final String review = reviewEditText.getText().toString();
-                tripInfoViewModel.addReview(tripInfo, review, ratingBar.getRating());
-                alertDialog.dismiss();
-            });
-
-            dialogViewLayout.findViewById(R.id.btn_no).setOnClickListener(v1 -> alertDialog.dismiss());
-
-            alertDialog.show();
         });
         authorName.setOnClickListener(v -> goToUserInfo(tripInfo.getAuthorUid()));
         navigate.setOnClickListener(this::startNavigation);
@@ -119,7 +120,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final String tripId = getArguments().getString(Consts.TRIP_ID);
+        final String tripId = TripInfoFragmentArgs.fromBundle(getArguments()).getTripId();
         tripInfoViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
             if (tripInfo == null) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_to_list);

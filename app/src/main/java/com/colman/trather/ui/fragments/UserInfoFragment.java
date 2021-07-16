@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.viewModels.UserInfoViewModel;
 
@@ -68,7 +67,7 @@ public class UserInfoFragment extends BaseToolbarFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        userInfoViewModel.getUserByUid(getArguments().getString(Consts.KEY_AUTHOR_UID)).observe(getViewLifecycleOwner(), user -> {
+        userInfoViewModel.getUserByUid(UserInfoFragmentArgs.fromBundle(getArguments()).getAuthorUid()).observe(getViewLifecycleOwner(), user -> {
             if (user == null) {
                 return;
             }

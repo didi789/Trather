@@ -112,6 +112,9 @@ public class AddTripFragment extends BaseToolbarFragment {
             if (state.getAboutError() != null) {
                 about.setError(getString(state.getAboutError()));
             }
+            if (state.getSiteUrlError() != null)
+                tripSiteUrl.setError(getString(state.getSiteUrlError()));
+
             imageError.setVisibility(state.getImageError() != null ? View.VISIBLE : View.INVISIBLE);
         });
 

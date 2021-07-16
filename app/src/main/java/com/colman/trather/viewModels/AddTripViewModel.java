@@ -56,7 +56,7 @@ public class AddTripViewModel extends AndroidViewModel {
         } else if(!android.util.Patterns.WEB_URL.matcher(trip.getTripSiteUrl()).matches() ||
                   trip.getTripSiteUrl() == null ||
                   trip.getTripSiteUrl().equals("")) {
-            addTripState.setValue(new AddTripState(null, R.string.trip_site_url, null, null,null));
+            addTripState.setValue(new AddTripState(null, R.string.invalid_trip_site_url, null, null,null));
         } else {
             addTripState.setValue(new AddTripState(null, null, null,null, null));
             return true;
