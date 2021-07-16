@@ -23,6 +23,7 @@ public abstract class TripDatabase extends RoomDatabase {
     private static volatile TripDatabase INSTANCE;
 
     // Trip
+    // Trip 2a
     public static TripDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (TripDatabase.class) {
