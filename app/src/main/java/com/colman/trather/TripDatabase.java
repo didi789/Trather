@@ -24,6 +24,7 @@ public abstract class TripDatabase extends RoomDatabase {
 
     // Trip
     // Trip 2a
+    // tripe 3
     public static TripDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (TripDatabase.class) {
