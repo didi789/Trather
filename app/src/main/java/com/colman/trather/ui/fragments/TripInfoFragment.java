@@ -35,6 +35,7 @@ import com.google.firebase.firestore.GeoPoint;
 public class TripInfoFragment extends BaseToolbarFragment implements BaseRecyclerViewAdapter.ItemClickListener, BaseRecyclerViewAdapter.ItemDeleteListener {
     private TripInfoViewModel tripInfoViewModel;
     private TextView title;
+    private TextView siteUrl;
     private TextView address;
     private ImageView navigate;
     private ImageView water;
@@ -57,6 +58,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
+        siteUrl = view.findViewById(R.id.tripSiteUrl);
         navigate = view.findViewById(R.id.navigate);
         water = view.findViewById(R.id.water);
         address = view.findViewById(R.id.address);
@@ -125,6 +127,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
 
             this.tripInfo = tripInfo;
             title.setText(tripInfo.getTitle());
+            siteUrl.setText(tripInfo.getTripSiteUrl());
             about.setText(tripInfo.getAbout());
 
             initDifficulty();

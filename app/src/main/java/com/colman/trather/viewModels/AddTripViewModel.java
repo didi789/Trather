@@ -37,7 +37,7 @@ public class AddTripViewModel extends AndroidViewModel {
 
     public void selectLocation(GeoPoint point) {
         selectedTripLocation.setValue(point);
-        addTripState.setValue(new AddTripState(null, null, null, null));
+        addTripState.setValue(new AddTripState(null, null,null, null, null));
     }
 
     public LiveData<GeoPoint> getSelectedLocation() {
@@ -46,15 +46,19 @@ public class AddTripViewModel extends AndroidViewModel {
 
     public boolean validateTrip(Trip trip, Uri imageUri) {
         if (trip.getTitle().length() < 3)
-            addTripState.setValue(new AddTripState(R.string.invalid_trip_title, null, null, null));
+            addTripState.setValue(new AddTripState(R.string.invalid_trip_title,null, null, null, null));
         else if (trip.getLocationLat() == 0) {
-            addTripState.setValue(new AddTripState(null, R.string.invalid_trip_location, null, null));
-        } else if (trip.getAbout().length() < 3)
-            addTripState.setValue(new AddTripState(null, null, R.string.about, null));
-        else if (imageUri == null)
-            addTripState.setValue(new AddTripState(null, null, null, R.string.invalid_trip_image));
-        else {
-            addTripState.setValue(new AddTripState(null, null, null, null));
+            addTripState.setValue(new AddTripState(null,null, R.string.invalid_trip_location,null, null));
+        } else if (trip.getAbout().length() < 3) {
+            addTripState.setValue(new AddTripState(null, null,null, R.string.about, null));
+        } else if (imageUri == null) {
+            addTripState.setValue(new AddTripState(null, null, null, null,R.string.invalid_trip_image));
+        } else if(!android.util.Patterns.WEB_URL.matcher(trip.getTripSiteUrl()).matches() ||
+                  trip.getTripSiteUrl() == null ||
+                  trip.getTripSiteUrl().equals("")) {
+            addTripState.setValue(new AddTripState(null, R.string.trip_site_url, null, null,null));
+        } else {
+            addTripState.setValue(new AddTripState(null, null, null,null, null));
             return true;
         }
 
