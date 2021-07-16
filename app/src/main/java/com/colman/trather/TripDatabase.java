@@ -22,6 +22,7 @@ public abstract class TripDatabase extends RoomDatabase {
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     private static volatile TripDatabase INSTANCE;
 
+    // Trip
     public static TripDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (TripDatabase.class) {
