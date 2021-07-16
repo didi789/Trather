@@ -17,7 +17,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.SortLocation;
 import com.colman.trather.models.Trip;
@@ -190,13 +189,11 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
             return false;
         Trip trip = (Trip) marker.getTag();
         Toast.makeText(requireActivity(), Objects.requireNonNull(trip).getAbout(), Toast.LENGTH_SHORT).show();
-        Bundle bundle = new Bundle();
-        bundle.putString(Consts.TRIP_ID, trip.getTripId());
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MapsFragmentDirections.actionMapsFragmentToTripInfo(trip.getTripId()));
         return false;
     }
 
     public void gotoListMode() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_mapsFragment_to_main_screen_list);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MapsFragmentDirections.actionMapsFragmentToMainScreenList());
     }
 }

@@ -142,7 +142,7 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
 
     public void logout() {
         settingsViewModel.logout();
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.splash_screen);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(SettingFragmentDirections.actionSettingsToLogOut());
     }
 
     private void chooseNewPicture() {

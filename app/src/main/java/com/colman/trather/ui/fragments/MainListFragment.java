@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.SortLocation;
 import com.colman.trather.ui.adapters.TripRecyclerViewAdapter;
@@ -159,16 +158,14 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
 
     @Override
     public void onItemClick(View view, int position) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Consts.TRIP_ID, mAdapter.getItem(position).getTripId());
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.trip_info, bundle);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToTripInfo(mAdapter.getItem(position).getTripId()));
     }
 
     public void gotoMapMode() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.list_to_mapsFragment);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToMapsFragment(false));
     }
 
     private void goToAddTrip() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.list_to_add_trip);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip());
     }
 }

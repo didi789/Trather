@@ -45,7 +45,7 @@ public class SplashFragment extends Fragment {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             final FragmentActivity activity = requireActivity();
             if (!activity.isFinishing()) {
-                Navigation.findNavController(activity, R.id.nav_host_fragment).navigate(R.id.sign_in);
+                Navigation.findNavController(activity, R.id.nav_host_fragment).navigate(SplashFragmentDirections.splashToSignIn());
             }
         }, DELAY_MILLIS);
     }

@@ -123,7 +123,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         final String tripId = TripInfoFragmentArgs.fromBundle(getArguments()).getTripId();
         tripInfoViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), tripInfo -> {
             if (tripInfo == null) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_back_to_list);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(TripInfoFragmentDirections.actionBackToList());
             }
 
             this.tripInfo = tripInfo;
@@ -188,9 +188,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         if (uid.equals(SharedPref.getString(Consts.CURRENT_USER_KEY, ""))) {
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(getActionId());
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(Consts.KEY_AUTHOR_UID, uid);
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.user_info_screen, bundle);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(TripInfoFragmentDirections.actionTripInfoToUserInfo(uid));
         }
     }
 

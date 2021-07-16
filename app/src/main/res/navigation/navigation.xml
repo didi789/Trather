@@ -52,7 +52,7 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/list_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            app:destination="@id/maps_fragment" />
         <action
             android:id="@+id/list_to_settings"
             app:destination="@id/settings_screen"
@@ -70,8 +70,15 @@
             android:name="trip_id"
             app:argType="string" />
         <action
-            android:id="@+id/action_trip_info_to_user_infp"
+            android:id="@+id/action_trip_info_to_user_info"
             app:destination="@id/user_info_screen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_trip_info_to_edit_trip"
+            app:destination="@id/add_trip"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -114,45 +121,19 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_pick_location"
-            app:destination="@id/mapsFragment"
+            app:destination="@id/maps_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
-
-
-<!--    <fragment
-        android:id="@+id/take_number"
-        android:name="com.colman.trather.ui.fragments.TakeNumber"
-        android:label="fragment_register"
-        tools:layout="@layout/fragment_take_number">
-        <argument
-            android:name="trip_id"
-            android:defaultValue="-1" />
-        <action
-            android:id="@+id/action_back_trip_info"
-            app:destination="@id/trip_info"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/take_number_to_settings"
-            app:destination="@id/settings_screen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>-->
     <fragment
-        android:id="@+id/mapsFragment"
+        android:id="@+id/maps_fragment"
         android:name="com.colman.trather.ui.fragments.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps">
         <argument
             android:name="pickLocation"
-            android:defaultValue="false"
             app:argType="boolean" />
         <action
             android:id="@+id/action_mapsFragment_to_main_screen_list"
