@@ -74,9 +74,7 @@ public class AddTripFragment extends BaseToolbarFragment {
         isWater.setOnCheckedChangeListener((buttonView, isChecked) -> waterImage.setImageResource(isChecked ? R.drawable.yes_water : R.drawable.no_water));
         waterImage.setOnClickListener(v -> isWater.setChecked(!isWater.isChecked()));
         address.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(Consts.PICK_LOCATION, true);
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_pick_location, bundle);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(AddTripFragmentDirections.actionPickLocation(true));
         });
 
         addTrip.setOnClickListener(v -> {

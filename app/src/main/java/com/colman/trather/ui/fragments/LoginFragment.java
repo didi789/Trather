@@ -39,11 +39,12 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
         if (loginViewModel.isLoggedIn()) {
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.main_screen_list);
+            goToMain();
+            return view;
         }
 
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
         final Button loginButton = view.findViewById(R.id.login);
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading);
 
@@ -65,6 +66,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void goToMain() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.main_screen_list);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(LoginFragmentDirections.actionLogin());
     }
 }
