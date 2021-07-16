@@ -83,7 +83,7 @@ public class AddTripFragment extends BaseToolbarFragment {
             addTripPB.setVisibility(View.VISIBLE);
             addTrip.setEnabled(false);
             String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-            Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
+            Trip trip = new Trip(location, title.getText().toString(), tripSiteUrl.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
             addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
                 addTrip.setEnabled(true);
                 addTripPB.setVisibility(View.GONE);

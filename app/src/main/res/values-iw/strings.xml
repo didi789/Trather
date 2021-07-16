@@ -27,6 +27,7 @@
     <string name="invalid_trip_title">כותרת נסיעה לא חוקית</string>
     <string name="invalid_trip_location">מיקום נסיעה לא חוקי</string>
     <string name="invalid_trip_image">תמונת טיול לא חוקית</string>
+    <string name="invalid_trip_site_url">כתובת אתר לא חוקית</string>
     <string name="dots">…</string>
     <string name="user_info">פרטי משתמש</string>
     <string name="logout">להתנתק</string>
