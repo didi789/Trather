@@ -86,7 +86,8 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
         super.onCreate(savedInstanceState);
         tripViewModel = new ViewModelProvider(requireActivity()).get(TripViewModel.class);
 
-        if (getArguments() != null && getArguments().containsKey(Consts.PICK_LOCATION))
+
+        if (getArguments() != null && MapsFragmentArgs.fromBundle(getArguments()).getPickLocation())
             addTripViewModel = new ViewModelProvider(requireActivity()).get(AddTripViewModel.class);
     }
 

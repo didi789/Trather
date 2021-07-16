@@ -12,43 +12,24 @@
     card_view:cardPreventCornerOverlap="true"
     card_view:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:id="@+id/icon"
             android:layout_width="64dp"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="6dp"
-            android:contentDescription="@null"
-            android:maxWidth="64dp"
             android:src="@drawable/common_google_signin_btn_icon_light" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toStartOf="@id/arrow"
-            android:layout_toEndOf="@id/icon"
             android:gravity="center|start"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
             android:textSize="24sp" />
-
-        <ImageView
-            android:id="@+id/arrow"
-            android:layout_width="64dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="6dp"
-            android:contentDescription="@null"
-            android:padding="12dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_iconmonstr_arrow_24" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

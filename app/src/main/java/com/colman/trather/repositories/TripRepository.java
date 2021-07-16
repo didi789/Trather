@@ -4,7 +4,6 @@ import android.app.Application;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.colman.trather.Consts;
@@ -31,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 public class TripRepository {
     private final TripDao tripDao;
@@ -159,17 +157,18 @@ public class TripRepository {
                     newTrip.put(Consts.KEY_WATER, trip.isWater());
                     newTrip.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
 
-                    TripDatabase.databaseWriteExecutor.execute(() -> {
-                        tripDao.insertTrip(trip);
-                        listener.callback(true);
+
+                    db.collection(Consts.TRIP_COLLECTION).add(newTrip).addOnCompleteListener(t -> {
+                        if (t.isSuccessful()) {
+                            trip.setTripId(t.getResult().getId());
+                            TripDatabase.databaseWriteExecutor.execute(() -> {
+                                tripDao.insertTrip(trip);
+                                listener.callback(true);
+                            });
+                        } else listener.callback(false);
                     });
-                    db.collection(Consts.TRIP_COLLECTION).add(newTrip);
-                } else {
-                    listener.callback(false);
-                }
-            }).addOnFailureListener(e -> {
-                listener.callback(false);
-            });
+                } else listener.callback(false);
+            }).addOnFailureListener(e -> listener.callback(false));
         });
     }
 }
