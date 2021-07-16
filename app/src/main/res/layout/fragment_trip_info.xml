@@ -88,6 +88,16 @@
         app:layout_constraintTop_toBottomOf="@id/icon" />
 
     <TextView
+        android:id="@+id/tripSiteUrl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        android:text=""
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -96,7 +106,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="@color/bg_tint"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/tripSiteUrl" />
 
     <TextView
         android:id="@+id/author"
