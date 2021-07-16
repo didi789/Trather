@@ -33,6 +33,7 @@ public class AddTripFragment extends BaseToolbarFragment {
 
     private AddTripViewModel addTripViewModel;
     private EditText title;
+    private EditText tripSiteUrl;
     private Button address;
     private Button addTrip;
     private EditText about;
@@ -58,6 +59,7 @@ public class AddTripFragment extends BaseToolbarFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
+        tripSiteUrl = view.findViewById(R.id.tripSiteUrl);
         address = view.findViewById(R.id.address);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
@@ -81,7 +83,7 @@ public class AddTripFragment extends BaseToolbarFragment {
             addTripPB.setVisibility(View.VISIBLE);
             addTrip.setEnabled(false);
             String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-            Trip trip = new Trip(location, title.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
+            Trip trip = new Trip(location, title.getText().toString(), tripSiteUrl.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
             addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
                 addTrip.setEnabled(true);
                 addTripPB.setVisibility(View.GONE);

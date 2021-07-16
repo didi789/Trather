@@ -13,12 +13,16 @@ public class AddTripState {
     @IdRes
     @Nullable
     private final Integer aboutError;
+    @IdRes
+    @Nullable
+    private final Integer siteUrlError;
     @Nullable
     @IdRes
     private final Integer imageError;
 
-    public AddTripState(@Nullable Integer titleError, @Nullable Integer locationError, @Nullable Integer aboutError, @Nullable Integer imageError) {
+    public AddTripState(@Nullable Integer titleError, @Nullable Integer siteUrlError, @Nullable Integer locationError, @Nullable Integer aboutError, @Nullable Integer imageError) {
         this.titleError = titleError;
+        this.siteUrlError = siteUrlError;
         this.locationError = locationError;
         this.aboutError = aboutError;
         this.imageError = imageError;
@@ -40,12 +44,16 @@ public class AddTripState {
     }
 
     @Nullable
+    public Integer getSiteUrlError() {
+        return siteUrlError;
+    }
+
+    @Nullable
     public Integer getImageError() {
         return imageError;
     }
 
     public interface AddTripListener {
         void callback(boolean added);
-
     }
 }

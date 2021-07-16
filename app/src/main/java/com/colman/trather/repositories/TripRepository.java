@@ -4,6 +4,7 @@ import android.app.Application;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.colman.trather.Consts;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class TripRepository {
     private final TripDao tripDao;
@@ -67,6 +69,7 @@ public class TripRepository {
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot doc : documents) {
                     final String name = doc.getString(Consts.KEY_TITLE);
+                    final String siteUrl = doc.getString(Consts.KEY_SITE_URL);
                     final String authorUid = doc.getString(Consts.KEY_AUTHOR_UID);
                     final String about = doc.getString(Consts.KEY_ABOUT);
                     final String imgUrl = doc.getString(Consts.KEY_IMG_URL);
@@ -95,7 +98,7 @@ public class TripRepository {
                         tripRating = tripStars / reviewsList.size();
                     }
 
-                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, about, authorUid, imgUrl, tripRating, level, water);
+                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, siteUrl, about, authorUid, imgUrl, tripRating, level, water);
 
                     tripList.add(trip);
 
@@ -148,6 +151,7 @@ public class TripRepository {
                     Map<String, Object> newTrip = new HashMap<>();
 
                     newTrip.put(Consts.KEY_TITLE, trip.getTitle());
+                    newTrip.put(Consts.KEY_SITE_URL, trip.getTripSiteUrl());
                     newTrip.put(Consts.KEY_AUTHOR_UID, trip.getAuthorUid());
                     newTrip.put(Consts.KEY_ABOUT, trip.getAbout());
                     newTrip.put(Consts.KEY_IMG_URL, trip.getImgUrl());

@@ -19,6 +19,7 @@
     <string name="enter_review">Enter text:</string>
     <string name="about">about</string>
     <string name="trip_title">Trip Title</string>
+    <string name="trip_site_url">Site Url</string>
     <string name="trip_difficult_level">Trip difficult level:</string>
     <string name="trip_contains_water">Trip contains water</string>
     <string name="click_to_pick_address">Click to pick address</string>
@@ -26,6 +27,7 @@
     <string name="invalid_trip_title">Invalid trip title</string>
     <string name="invalid_trip_location">Invalid trip location</string>
     <string name="invalid_trip_image">Invalid trip image</string>
+    <string name="invalid_trip_site_url">Invalid trip site url</string>
     <string name="dots">…</string>
     <string name="user_info">User Info</string>
     <string name="logout">Log out</string>

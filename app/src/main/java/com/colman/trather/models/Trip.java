@@ -22,6 +22,8 @@ public class Trip {
     private final double locationLon;
     @ColumnInfo(name = "trip_title")
     private final String title;
+    @ColumnInfo(name = "trip_site_url")
+    private final String tripSiteUrl;
     @ColumnInfo(name = "trip_info")
     private final String about;
     @ColumnInfo(name = "author_uid")
@@ -35,15 +37,16 @@ public class Trip {
     @ColumnInfo(name = "water")
     private final boolean water;
 
-    public Trip(GeoPoint location, String title, String about, String authorUid, double level, boolean water) {
-        this(UUID.randomUUID().toString(), location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, about, authorUid, null, 0, level, water);
+    public Trip(GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double level, boolean water) {
+        this(UUID.randomUUID().toString(), location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water);
     }
 
-    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String about, String authorUid, String imgUrl, double rating, double level, boolean water) {
+    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl, double rating, double level, boolean water) {
         this.tripId = tripId;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
         this.title = title;
+        this.tripSiteUrl = tripSiteUrl;
         this.about = about;
         this.authorUid = authorUid;
         this.imgUrl = imgUrl;
@@ -76,6 +79,8 @@ public class Trip {
         return title;
     }
 
+    public String getTripSiteUrl() { return tripSiteUrl; }
+
     public String getAbout() {
         return about;
     }
@@ -105,13 +110,14 @@ public class Trip {
                 Double.compare(trip.locationLat, locationLat) == 0 &&
                 Double.compare(trip.locationLon, locationLon) == 0 &&
                 Objects.equals(title, trip.title) &&
+                Objects.equals(tripSiteUrl, trip.tripSiteUrl) &&
                 Objects.equals(about, trip.about) &&
                 Objects.equals(imgUrl, trip.imgUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tripId, title, about, imgUrl, locationLat, locationLon);
+        return Objects.hash(tripId, title, tripSiteUrl, about, imgUrl, locationLat, locationLon);
     }
 
     public boolean filter(String s) {

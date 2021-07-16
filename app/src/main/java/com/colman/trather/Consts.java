@@ -9,6 +9,7 @@ public class Consts {
     public static final String KEY_TITLE = "title";
     public static final String KEY_ABOUT = "about";
     public static final String KEY_IMG_URL = "imageUrl";
+    public static final String KEY_SITE_URL = "siteUrl";
     public static final String KEY_LEVEL = "level";
     public static final String KEY_WATER = "water";
     public static final String KEY_ADDRESS = "address";

@@ -19,6 +19,7 @@
     <string name="enter_review">הזן טקסט:</string>
     <string name="about">על אודות</string>
     <string name="trip_title">כותרת טיול</string>
+    <string name="trip_site_url">אתר המסלול</string>
     <string name="trip_difficult_level">רמה קשה לטיול:</string>
     <string name="trip_contains_water">הטיול מכיל מים</string>
     <string name="click_to_pick_address">לחץ כדי לבחור כתובת</string>
@@ -26,6 +27,7 @@
     <string name="invalid_trip_title">כותרת נסיעה לא חוקית</string>
     <string name="invalid_trip_location">מיקום נסיעה לא חוקי</string>
     <string name="invalid_trip_image">תמונת טיול לא חוקית</string>
+    <string name="invalid_trip_site_url">כתובת אתר לא חוקית</string>
     <string name="dots">…</string>
     <string name="user_info">פרטי משתמש</string>
     <string name="logout">להתנתק</string>
