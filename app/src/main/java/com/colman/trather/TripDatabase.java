@@ -16,7 +16,7 @@ import com.colman.trather.models.User;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Trip.class, Review.class, User.class}, version = 2)
+@Database(entities = {Trip.class, Review.class, User.class}, version = 1)
 public abstract class TripDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
