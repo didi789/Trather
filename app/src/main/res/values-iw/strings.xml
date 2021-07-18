@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Trather</string>
     <string name="subtitle">לטייל ביחד!</string>
-    <string name="action_sign_in">להתחבר</string>
+    <string name="action_sign_in">התחברות</string>
     <string name="reviews_title">ביקורות</string>
     <string name="about_version_1_s">אודות: גרסה %1$s</string>
     <string name="add">הוסף</string>
@@ -30,7 +30,7 @@
     <string name="invalid_trip_site_url">כתובת אתר לא חוקית</string>
     <string name="dots">…</string>
     <string name="user_info">פרטי משתמש</string>
-    <string name="logout">להתנתק</string>
+    <string name="logout">התנתקות</string>
     <string name="save">לשמור</string>
     <string name="error_while_adding_trip">שגיאה בעת הוספת נסיעה</string>
     <string name="search">לחפש</string>
