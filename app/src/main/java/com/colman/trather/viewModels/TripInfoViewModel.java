@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 
 import com.colman.trather.Consts;
 import com.colman.trather.models.Review;
@@ -37,24 +36,12 @@ public class TripInfoViewModel extends AndroidViewModel {
         tripLiveData = tripRepository.getTrips();
     }
 
-    public LiveData<List<Review>> getReviewsLiveData() {
-        return reviewsLiveData;
-    }
-
-    public LiveData<List<Trip>> getTripsLiveData() {
-        return tripLiveData;
-    }
-
     public LiveData<Trip> getTripByIdLiveData(String tripId) {
-        return Transformations.switchMap(tripLiveData, id ->
-                tripRepository.getTripById(tripId));
+        return tripRepository.getTripById(tripId);
     }
-
 
     public LiveData<List<Review>> getReviewsByTripIdLiveData(String tripId) {
-        return Transformations.switchMap(reviewsLiveData, reviewList ->
-                reviewRepository.getReviewsById(tripId)
-        );
+        return reviewRepository.getReviewsById(tripId);
     }
 
     public LiveData<User> getUserByUid(String uid) {

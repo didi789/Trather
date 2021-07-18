@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/icon" />
 
     <EditText
-        android:id="@+id/tripSiteUrl"
+        android:id="@+id/trip_site_url"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center"
@@ -72,7 +72,7 @@
         android:text="@string/click_to_pick_address"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tripSiteUrl" />
+        app:layout_constraintTop_toBottomOf="@id/trip_site_url" />
 
     <EditText
         android:id="@+id/about"
@@ -149,6 +149,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/waterLL" />
+
+    <Button
+        android:id="@+id/deleteTrip"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="6dp"
+        android:padding="16dp"
+        android:text="@string/delete_trip"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addTrip" />
 
     <ProgressBar
         android:id="@+id/addTripPB"

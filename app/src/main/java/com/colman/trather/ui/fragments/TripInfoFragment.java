@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
     private TextView authorName;
     private ImageView difficulty;
     private ImageView image;
+    private Button editTrip;
     private ReviewsRecyclerViewAdapter mAdapter;
     private Trip tripInfo = null;
 
@@ -60,11 +62,12 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
-        siteUrl = view.findViewById(R.id.tripSiteUrl);
+        siteUrl = view.findViewById(R.id.trip_site_url);
         navigate = view.findViewById(R.id.navigate);
         water = view.findViewById(R.id.water);
         address = view.findViewById(R.id.address);
         authorName = view.findViewById(R.id.author);
+        editTrip = view.findViewById(R.id.edit_trip);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
         difficulty = view.findViewById(R.id.difficulty);
@@ -131,8 +134,12 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
             siteUrl.setText(tripInfo.getTripSiteUrl());
             about.setText(tripInfo.getAbout());
 
+            if (tripInfo.getAuthorUid().equals(SharedPref.getString(Consts.CURRENT_USER_KEY, "")))
+                editTrip.setVisibility(View.VISIBLE);
+
             initDifficulty();
 
+            editTrip.setOnClickListener(v -> Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(TripInfoFragmentDirections.actionTripInfoToEditTrip(tripInfo.getTripId())));
             water.setImageResource(tripInfo.isWater() ? R.drawable.yes_water : R.drawable.no_water);
             water.setOnClickListener(v -> Toast.makeText(requireActivity(), tripInfo.getTitle() + " " + (tripInfo.isWater() ? getString(R.string.trip_water) : getString(R.string.trip_no_water)), Toast.LENGTH_SHORT).show());
             double locationLat = tripInfo.getLocationLat();

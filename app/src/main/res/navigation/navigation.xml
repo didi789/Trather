@@ -104,6 +104,10 @@
         android:name="com.colman.trather.ui.fragments.AddTripFragment"
         android:label="TripInfo"
         tools:layout="@layout/fragment_add_trip">
+        <argument
+            android:name="trip_id"
+            app:argType="string"
+            app:nullable="true"/>
         <action
             android:id="@+id/action_back_to_list"
             app:destination="@id/main_screen_list"

@@ -28,6 +28,17 @@ public class AddTripViewModel extends AndroidViewModel {
         tripRepository = TripRepository.getInstance(application);
     }
 
+    public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, AddTripState.AddTripListener listener) {
+        if (validateTrip(trip, imageUri))
+            tripRepository.editTrip(trip, imageUri, isImgEdited, listener);
+        else
+            listener.callback(false);
+    }
+
+    public void deleteTrip(Trip editedTrip, AddTripState.AddTripListener listener) {
+        tripRepository.deleteTrip(editedTrip, listener);
+    }
+
     public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
         if (validateTrip(trip, imageUri))
             tripRepository.addTrip(trip, imageUri, listener);
@@ -35,9 +46,13 @@ public class AddTripViewModel extends AndroidViewModel {
             listener.callback(false);
     }
 
+    public LiveData<Trip> getTripByIdLiveData(String tripId) {
+        return tripRepository.getTripById(tripId);
+    }
+
     public void selectLocation(GeoPoint point) {
         selectedTripLocation.setValue(point);
-        addTripState.setValue(new AddTripState(null, null,null, null, null));
+        addTripState.setValue(new AddTripState(null, null, null, null, null));
     }
 
     public LiveData<GeoPoint> getSelectedLocation() {
@@ -64,5 +79,6 @@ public class AddTripViewModel extends AndroidViewModel {
 
         return false;
     }
+
 }
 

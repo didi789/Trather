@@ -166,6 +166,6 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
     }
 
     private void goToAddTrip() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip());
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip(null));
     }
 }

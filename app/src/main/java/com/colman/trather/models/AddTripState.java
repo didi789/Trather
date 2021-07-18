@@ -54,6 +54,6 @@ public class AddTripState {
     }
 
     public interface AddTripListener {
-        void callback(boolean added);
+        void callback(boolean success);
     }
 }
