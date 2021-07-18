@@ -141,9 +141,8 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
             swipeRefreshLayout.setRefreshing(false);
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-
+                mAdapter.setItems(tripList);
+            } else {
             final FragmentActivity activity = requireActivity();
             mFusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
                 if (location != null) {
@@ -153,6 +152,7 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
                 activity.runOnUiThread(() -> mAdapter.setItems(tripList));
             }).addOnFailureListener(e -> activity.runOnUiThread(() -> mAdapter.setItems(tripList))
             ).addOnCanceledListener(() -> activity.runOnUiThread(() -> mAdapter.setItems(tripList)));
+            }
         });
     }
 
