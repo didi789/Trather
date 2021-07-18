@@ -39,4 +39,8 @@
     <string name="trip_water">מכיל מים</string>
     <string name="i_am_here">אני כאן</string>
     <string name="welcome_to_trather">ברוך הבא ל- Trather</string>
+    <string name="edit_trip">עריכת טיול</string>
+    <string name="save_edits">שמירת שינויים</string>
+    <string name="delete_trip">מחיקת טיול</string>
+    <string name="sure_delete_trip">האם אתה בטוח שברצונך למחוק את הטיול?</string>
 </resources>
