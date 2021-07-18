@@ -35,6 +35,8 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Objects;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainListFragment extends BaseToolbarFragment implements TripRecyclerViewAdapter.ItemClickListener {
     private TripRecyclerViewAdapter mAdapter;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -166,6 +168,11 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
     }
 
     private void goToAddTrip() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip(null));
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            new SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE).setContentText(getString(R.string.need_location_create_trip)).show();
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 12);
+        } else
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip(null));
     }
 }

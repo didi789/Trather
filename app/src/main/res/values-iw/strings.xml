@@ -43,4 +43,5 @@
     <string name="save_edits">שמירת שינויים</string>
     <string name="delete_trip">מחיקת טיול</string>
     <string name="sure_delete_trip">האם אתה בטוח שברצונך למחוק את הטיול?</string>
+    <string name="need_location_create_trip">יש לאפשר הרשאות מיקום בכדי ליצור טיול</string>
 </resources>
