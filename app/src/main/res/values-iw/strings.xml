@@ -3,10 +3,10 @@
     <string name="subtitle">לטייל ביחד!</string>
     <string name="action_sign_in">להתחבר</string>
     <string name="reviews_title">ביקורות</string>
-    <string name="about_version_1_s">אודות: + גרסה + %1$s</string>
-    <string name="add">לְהוֹסִיף</string>
-    <string name="vibration">רֶטֶט</string>
-    <string name="sound">נשמע</string>
+    <string name="about_version_1_s">אודות: גרסה %1$s</string>
+    <string name="add">הוסף</string>
+    <string name="vibration">רטט</string>
+    <string name="sound">סאונד</string>
     <string name="notifications">התראות</string>
     <string name="trip_info">מידע</string>
     <string name="add_trip">הוסף טיול</string>
@@ -20,7 +20,7 @@
     <string name="about">על אודות</string>
     <string name="trip_title">כותרת טיול</string>
     <string name="trip_site_url">אתר המסלול</string>
-    <string name="trip_difficult_level">רמה קשה לטיול:</string>
+    <string name="trip_difficult_level">רמה קושי לטיול:</string>
     <string name="trip_contains_water">הטיול מכיל מים</string>
     <string name="click_to_pick_address">לחץ כדי לבחור כתובת</string>
 
