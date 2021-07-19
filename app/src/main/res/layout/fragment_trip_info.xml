@@ -88,7 +88,7 @@
         app:layout_constraintTop_toBottomOf="@id/icon" />
 
     <TextView
-        android:id="@+id/tripSiteUrl"
+        android:id="@+id/trip_site_url"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="8dp"
@@ -106,18 +106,34 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="@color/bg_tint"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tripSiteUrl" />
+        app:layout_constraintTop_toBottomOf="@id/trip_site_url" />
 
-    <TextView
-        android:id="@+id/author"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
+    <LinearLayout
+        android:id="@+id/authorLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:background="@color/bg_tint"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about" />
+        app:layout_constraintTop_toBottomOf="@+id/about">
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_tint"
+            android:gravity="center" />
+
+        <Button
+            android:id="@+id/edit_trip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/edit_trip"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <View
         android:id="@+id/space"
@@ -126,7 +142,7 @@
         android:background="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/author" />
+        app:layout_constraintTop_toBottomOf="@id/authorLL" />
 
     <TextView
         android:id="@+id/title_reviews"

@@ -1,5 +1,6 @@
 package com.colman.trather.ui.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import com.colman.trather.viewModels.AddTripViewModel;
 import com.google.android.material.slider.Slider;
 import com.google.firebase.firestore.GeoPoint;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddTripFragment extends BaseToolbarFragment {
     public static final int PICK_IMAGE = 1;
 
@@ -36,6 +39,7 @@ public class AddTripFragment extends BaseToolbarFragment {
     private EditText tripSiteUrl;
     private Button address;
     private Button addTrip;
+    private Button deleteTrip;
     private EditText about;
     private ImageView image;
     private ImageView imageError;
@@ -46,6 +50,9 @@ public class AddTripFragment extends BaseToolbarFragment {
     private ProgressBar addTripPB;
 
     private Uri imageUri;
+
+    private Trip editedTrip;
+    private boolean isImgEdited;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +66,7 @@ public class AddTripFragment extends BaseToolbarFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         title = view.findViewById(R.id.title);
-        tripSiteUrl = view.findViewById(R.id.tripSiteUrl);
+        tripSiteUrl = view.findViewById(R.id.trip_site_url);
         address = view.findViewById(R.id.address);
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
@@ -67,29 +74,49 @@ public class AddTripFragment extends BaseToolbarFragment {
         isWater = view.findViewById(R.id.water);
         waterImage = view.findViewById(R.id.waterImage);
         addTrip = view.findViewById(R.id.addTrip);
+        deleteTrip = view.findViewById(R.id.deleteTrip);
         addTripPB = view.findViewById(R.id.addTripPB);
         level = view.findViewById(R.id.level);
         image.setOnClickListener(v -> pickImageForTrip());
 
         isWater.setOnCheckedChangeListener((buttonView, isChecked) -> waterImage.setImageResource(isChecked ? R.drawable.yes_water : R.drawable.no_water));
         waterImage.setOnClickListener(v -> isWater.setChecked(!isWater.isChecked()));
-        address.setOnClickListener(v -> {
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(AddTripFragmentDirections.actionPickLocation(true));
-        });
+        address.setOnClickListener(v -> Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(AddTripFragmentDirections.actionPickLocation(true)));
 
+        deleteTrip.setOnClickListener(v -> new SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getString(R.string.delete_trip))
+                .setContentText(getString(R.string.sure_delete_trip))
+                .setCancelButton(getString(R.string.dialog_cancel), Dialog::dismiss)
+                .setConfirmButton(getString(R.string.delete_trip), sweetAlertDialog -> addTripViewModel.deleteTrip(editedTrip, success -> requireActivity().runOnUiThread(() -> {
+                    sweetAlertDialog.dismissWithAnimation();
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(AddTripFragmentDirections.actionBackToList());
+                }))).show());
         addTrip.setOnClickListener(v -> {
             addTripPB.setVisibility(View.VISIBLE);
             addTrip.setEnabled(false);
             String authorUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-            Trip trip = new Trip(location, title.getText().toString(), tripSiteUrl.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
-            addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
-                addTrip.setEnabled(true);
-                addTripPB.setVisibility(View.GONE);
-                if (added)
-                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
-                else
-                    Toast.makeText(getContext(), getString(R.string.error_while_adding_trip), Toast.LENGTH_SHORT).show();
-            }));
+
+            if (editedTrip != null) {
+                Trip trip = new Trip(editedTrip.getTripId(), location, title.getText().toString(), tripSiteUrl.getText().toString(), about.getText().toString(), authorUid, editedTrip.getRating(), level.getValue(), isWater.isChecked());
+                addTripViewModel.editTrip(trip, imageUri, isImgEdited, added -> requireActivity().runOnUiThread(() -> {
+                    addTrip.setEnabled(true);
+                    addTripPB.setVisibility(View.GONE);
+                    if (added)
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
+                    else
+                        Toast.makeText(getContext(), getString(R.string.error_while_adding_trip), Toast.LENGTH_SHORT).show();
+                }));
+            } else {
+                Trip trip = new Trip(location, title.getText().toString(), tripSiteUrl.getText().toString(), about.getText().toString(), authorUid, level.getValue(), isWater.isChecked());
+                addTripViewModel.addTrip(trip, imageUri, added -> requireActivity().runOnUiThread(() -> {
+                    addTrip.setEnabled(true);
+                    addTripPB.setVisibility(View.GONE);
+                    if (added)
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigateUp();
+                    else
+                        Toast.makeText(getContext(), getString(R.string.error_while_adding_trip), Toast.LENGTH_SHORT).show();
+                }));
+            }
         });
 
         addTripViewModel.getSelectedLocation().observe(getViewLifecycleOwner(), point -> {
@@ -144,6 +171,28 @@ public class AddTripFragment extends BaseToolbarFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final String tripId = AddTripFragmentArgs.fromBundle(getArguments()).getTripId();
+
+        if (tripId != null && editedTrip == null) {
+            addTrip.setText(R.string.save_edits);
+            deleteTrip.setVisibility(View.VISIBLE);
+            addTripViewModel.getTripByIdLiveData(tripId).observe(getViewLifecycleOwner(), trip -> {
+                if (trip != null) {
+                    editedTrip = trip;
+
+                    title.setText(editedTrip.getTitle());
+                    tripSiteUrl.setText(editedTrip.getTripSiteUrl());
+                    about.setText(editedTrip.getAbout());
+                    level.setValue((float) editedTrip.getLevel());
+                    isWater.setChecked(editedTrip.isWater());
+                    imageUri = Uri.parse(editedTrip.getImgUrl());
+                    location = new GeoPoint(editedTrip.getLocationLat(), editedTrip.getLocationLon());
+                    address.setText(Utils.getLocationText(location));
+                    Glide.with(requireActivity()).load(imageUri).into(image);
+                }
+            });
+        }
     }
 
     @Override
@@ -152,6 +201,7 @@ public class AddTripFragment extends BaseToolbarFragment {
         if (requestCode == PICK_IMAGE && data != null) {
             imageUri = data.getData();
             imageError.setVisibility(View.GONE);
+            isImgEdited = true;
             Glide.with(requireActivity()).load(imageUri).into(image);
         }
     }

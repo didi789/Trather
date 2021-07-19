@@ -35,6 +35,8 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Objects;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainListFragment extends BaseToolbarFragment implements TripRecyclerViewAdapter.ItemClickListener {
     private TripRecyclerViewAdapter mAdapter;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -141,9 +143,8 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
             swipeRefreshLayout.setRefreshing(false);
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-
+                mAdapter.setItems(tripList);
+            } else {
             final FragmentActivity activity = requireActivity();
             mFusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
                 if (location != null) {
@@ -153,6 +154,7 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
                 activity.runOnUiThread(() -> mAdapter.setItems(tripList));
             }).addOnFailureListener(e -> activity.runOnUiThread(() -> mAdapter.setItems(tripList))
             ).addOnCanceledListener(() -> activity.runOnUiThread(() -> mAdapter.setItems(tripList)));
+            }
         });
     }
 
@@ -166,6 +168,11 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
     }
 
     private void goToAddTrip() {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip());
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            new SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE).setContentText(getString(R.string.need_location_create_trip)).show();
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 12);
+        } else
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(MainListFragmentDirections.listToAddTrip(null));
     }
 }

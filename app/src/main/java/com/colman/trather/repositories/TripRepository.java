@@ -126,18 +126,19 @@ public class TripRepository {
         return tripDao.getTripById(tripId);
     }
 
-    public void deleteTrip(Trip trip) {
-        TripDatabase.databaseWriteExecutor.execute(() -> tripDao.delete(trip));
+    public void deleteTrip(Trip trip, AddTripState.AddTripListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).delete();
+        TripDatabase.databaseWriteExecutor.execute(() -> {
+            tripDao.delete(trip);
+            listener.callback(true);
+        });
     }
 
     public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference riversRef = storageRef.child(Consts.TRIP_COLLECTION + "/" + imageUri.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(imageUri);
-
-        uploadTask.addOnFailureListener(exception -> {
-        }).addOnSuccessListener(taskSnapshot -> {
+        UploadTask uploadTask = getImageUploadTask(imageUri);
+        uploadTask.addOnFailureListener(e -> listener.callback(false)
+        ).addOnSuccessListener(taskSnapshot -> {
             final StorageMetadata metadata = taskSnapshot.getMetadata();
             assert metadata != null;
             final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();
@@ -169,6 +170,58 @@ public class TripRepository {
                     });
                 } else listener.callback(false);
             }).addOnFailureListener(e -> listener.callback(false));
+        });
+    }
+
+    public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, AddTripState.AddTripListener listener) {
+        if (isImgEdited) {
+            UploadTask uploadTask = getImageUploadTask(imageUri);
+            uploadTask.addOnFailureListener(e -> listener.callback(false)
+            ).addOnSuccessListener(taskSnapshot -> {
+                final StorageMetadata metadata = taskSnapshot.getMetadata();
+                assert metadata != null;
+                final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();
+                downloadUri.addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !TextUtils.isEmpty(downloadUri.getResult().toString())) {
+                        trip.setImageUrl(downloadUri.getResult().toString());
+                        updateEditedTrip(trip, listener);
+                    } else listener.callback(false);
+                }).addOnFailureListener(e -> listener.callback(false));
+            });
+        } else {
+            trip.setImageUrl(imageUri.toString());
+            updateEditedTrip(trip, listener);
+        }
+    }
+
+    private UploadTask getImageUploadTask(Uri imageUri) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference riversRef = storageRef.child(Consts.TRIP_COLLECTION + "/" + imageUri.getLastPathSegment());
+        return riversRef.putFile(imageUri);
+    }
+
+    private void updateEditedTrip(Trip trip, AddTripState.AddTripListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> editedTrip = new HashMap<>();
+
+        editedTrip.put(Consts.KEY_TITLE, trip.getTitle());
+        editedTrip.put(Consts.KEY_SITE_URL, trip.getTripSiteUrl());
+        editedTrip.put(Consts.KEY_ABOUT, trip.getAbout());
+        editedTrip.put(Consts.KEY_IMG_URL, trip.getImgUrl());
+        editedTrip.put(Consts.KEY_LEVEL, trip.getLevel());
+        editedTrip.put(Consts.KEY_WATER, trip.isWater());
+        editedTrip.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
+
+
+        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).update(editedTrip).addOnCompleteListener(t -> {
+            if (t.isSuccessful()) {
+                TripDatabase.databaseWriteExecutor.execute(() -> {
+                    tripDao.insertTrip(trip);
+                    listener.callback(true);
+                });
+            } else listener.callback(false);
         });
     }
 }

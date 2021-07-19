@@ -42,6 +42,10 @@ public class Trip {
         this(null, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water);
     }
 
+    public Trip(String tripId, GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double rating, double level, boolean water) {
+        this(tripId, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, rating, level, water);
+    }
+
     public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl, double rating, double level, boolean water) {
         this.tripId = tripId;
         this.locationLat = locationLat;
