@@ -68,9 +68,8 @@ public class AddTripViewModel extends AndroidViewModel {
             addTripState.setValue(new AddTripState(null, null,null, R.string.about, null));
         } else if (imageUri == null) {
             addTripState.setValue(new AddTripState(null, null, null, null,R.string.invalid_trip_image));
-        } else if(!android.util.Patterns.WEB_URL.matcher(trip.getTripSiteUrl()).matches() ||
-                  trip.getTripSiteUrl() == null ||
-                  trip.getTripSiteUrl().equals("")) {
+        } else if(!android.util.Patterns.WEB_URL.matcher(trip.getTripSiteUrl()).matches() &&
+                  !trip.getTripSiteUrl().equals("")) {
             addTripState.setValue(new AddTripState(null, R.string.invalid_trip_site_url, null, null,null));
         } else {
             addTripState.setValue(new AddTripState(null, null, null,null, null));
