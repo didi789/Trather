@@ -12,6 +12,7 @@ public class Consts {
     public static final String KEY_SITE_URL = "siteUrl";
     public static final String KEY_LEVEL = "level";
     public static final String KEY_WATER = "water";
+    public static final String KEY_IS_DELETED = "isDeleted";
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_REVIEWS = "reviews";
     public static final String KEY_AUTHOR_UID = "authorUid";
@@ -24,5 +25,4 @@ public class Consts {
     public static final String VIBRATION = "vibration";
     public static final String SOUND = "sound";
     public static final String NOTIFICATION = "notification";
-    public static final String PICK_LOCATION = "pickLocation";
 }

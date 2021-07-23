@@ -37,16 +37,18 @@ public class Trip {
     private final double level;
     @ColumnInfo(name = "water")
     private final boolean water;
+    @ColumnInfo(name = "isDeleted")
+    private final boolean isDeleted;
 
     public Trip(GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double level, boolean water) {
-        this(null, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water);
+        this(null, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water, false);
     }
 
     public Trip(String tripId, GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double rating, double level, boolean water) {
-        this(tripId, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, rating, level, water);
+        this(tripId, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, rating, level, water, false);
     }
 
-    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl, double rating, double level, boolean water) {
+    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl, double rating, double level, boolean water, boolean isDeleted) {
         this.tripId = tripId;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
@@ -58,6 +60,7 @@ public class Trip {
         this.rating = rating;
         this.level = level;
         this.water = water;
+        this.isDeleted = isDeleted;
     }
 
     public void setTripId(@NonNull String tripId) {
@@ -104,6 +107,10 @@ public class Trip {
 
     public double getLevel() {
         return level;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public boolean isWater() {

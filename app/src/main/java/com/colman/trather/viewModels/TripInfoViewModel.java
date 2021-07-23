@@ -20,20 +20,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class TripInfoViewModel extends AndroidViewModel {
-    private final LiveData<List<Review>> reviewsLiveData;
-    private final LiveData<List<Trip>> tripLiveData;
     private final TripRepository tripRepository;
     private final ReviewRepository reviewRepository;
     private final SettingsRepository settingsRepository;
     private final UserRepository userRepository;
+
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
         tripRepository = TripRepository.getInstance(application);
         reviewRepository = ReviewRepository.getInstance(application);
         userRepository = UserRepository.getInstance(application);
         settingsRepository = new SettingsRepository();
-        reviewsLiveData = reviewRepository.getReviewsLiveData();
-        tripLiveData = tripRepository.getTrips();
     }
 
     public LiveData<Trip> getTripByIdLiveData(String tripId) {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -73,6 +75,17 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         difficulty = view.findViewById(R.id.difficulty);
         ImageView addReview = view.findViewById(R.id.add_review);
 
+        image.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            final AlertDialog dialog = builder.create();
+            View dialogLayout = getLayoutInflater().inflate(R.layout.trip_image_preview, null);
+            final ImageView preview = dialogLayout.findViewById(R.id.image);
+            ((TextView)dialogLayout.findViewById(R.id.title)).setText(tripInfo.getTitle());
+            Glide.with(requireActivity()).load(tripInfo.getImgUrl()).error(R.mipmap.ic_launcher).into(preview);
+            dialog.setView(dialogLayout);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.show();
+        });
         addReview.setOnClickListener(v -> {
             View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.add_review_dialog, null);
             AppCompatRatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
@@ -110,7 +123,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
     }
 
     @Override
-    protected int getActionId() {
+    protected int getSettingsActionId() {
         return R.id.trip_info_to_settings;
     }
 
@@ -193,7 +206,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
 
     private void goToUserInfo(String uid) {
         if (uid.equals(SharedPref.getString(Consts.CURRENT_USER_KEY, ""))) {
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(getActionId());
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(getSettingsActionId());
         } else {
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(TripInfoFragmentDirections.actionTripInfoToUserInfo(uid));
         }

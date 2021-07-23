@@ -34,7 +34,7 @@ public class UserInfoFragment extends BaseToolbarFragment {
     }
 
     @Override
-    protected int getActionId() {
+    protected int getSettingsActionId() {
         return R.id.settings_screen;
     }
 

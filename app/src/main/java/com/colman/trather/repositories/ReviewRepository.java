@@ -13,7 +13,6 @@ import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -65,12 +64,14 @@ public class ReviewRepository {
                     if (!CollectionUtils.isEmpty(reviewsList)) {
                         Map<String, Object> updates = new HashMap<>();
                         for (int i = 0; i < reviewsList.size(); i++) {
-                            final Map<String, Object> reviews = (Map<String, Object>) reviewsList.get(i);
-                            if (reviews != null) {
-                                String author = (String) reviews.get(Consts.KEY_AUTHOR_UID);
-                                String comment = (String) reviews.get(Consts.KEY_COMMENT);
+                            final Map<String, Object> r = (Map<String, Object>) reviewsList.get(i);
+                            if (r != null) {
+                                String author = (String) r.get(Consts.KEY_AUTHOR_UID);
+                                String comment = (String) r.get(Consts.KEY_COMMENT);
+
                                 if (currentUser.equals(author) && review.getComment().equals(comment)) {
-                                    updates.put(Consts.KEY_REVIEWS, FieldValue.arrayRemove(reviewsList.get(i)));
+                                    r.put(Consts.KEY_IS_DELETED, true);
+                                    updates.put(Consts.KEY_REVIEWS, reviewsList);
                                     document.update(updates);
                                     break;
                                 }

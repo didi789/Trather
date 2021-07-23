@@ -128,20 +128,10 @@
 
         <Button
             android:id="@+id/logout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/logout"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/about_version"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/about_version_1_s"
             android:textSize="18sp" />
     </LinearLayout>
 
