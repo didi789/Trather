@@ -119,7 +119,7 @@ public class MapsFragment extends BaseToolbarFragment implements GoogleMap.OnMar
     }
 
     @Override
-    protected int getActionId() {
+    protected int getSettingsActionId() {
         return R.id.map_to_settings;
     }
 

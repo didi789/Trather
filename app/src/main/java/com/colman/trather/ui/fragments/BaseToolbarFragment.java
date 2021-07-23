@@ -53,7 +53,7 @@ public abstract class BaseToolbarFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.settings:
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(getActionId());
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(getSettingsActionId());
                 return true;
 
             case android.R.id.home:
@@ -67,7 +67,7 @@ public abstract class BaseToolbarFragment extends Fragment {
 
     protected abstract int getTitleResourceId();
 
-    protected abstract int getActionId();
+    protected abstract int getSettingsActionId();
 
     protected abstract int getLayoutId();
 

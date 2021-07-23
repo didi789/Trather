@@ -159,7 +159,7 @@ public class AddTripFragment extends BaseToolbarFragment {
     }
 
     @Override
-    protected int getActionId() {
+    protected int getSettingsActionId() {
         return R.id.add_trip_to_settings;
     }
 

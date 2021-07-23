@@ -2,8 +2,7 @@
     <string name="app_name">Trather</string>
     <string name="subtitle">לטייל ביחד!</string>
     <string name="action_sign_in">התחברות</string>
-    <string name="reviews_title">ביקורות</string>
-    <string name="about_version_1_s">אודות: גרסה %1$s</string>
+    <string name="reviews_title">תגובות</string>
     <string name="add">הוסף</string>
     <string name="vibration">רטט</string>
     <string name="sound">סאונד</string>
@@ -15,15 +14,16 @@
     <string name="settings">הגדרות</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
-    <string name="add_review">הוסף ביקורת חדשה</string>
+    <string name="add_review">הוסף תגובה חדשה</string>
+    <string name="edit_review">עריכת תגובה</string>
     <string name="enter_review">הזן טקסט:</string>
-    <string name="about">אודות</string>
+    <string name="about">פרטים</string>
     <string name="trip_title">כותרת טיול</string>
     <string name="trip_site_url">אתר המסלול</string>
     <string name="trip_difficult_level">רמה קושי לטיול:</string>
     <string name="trip_contains_water">הטיול מכיל מים</string>
     <string name="click_to_pick_address">לחץ כדי לבחור כתובת</string>
-
+    <string name="dialog_cancel">ביטול</string>
     <string name="invalid_trip_title">כותרת נסיעה לא חוקית</string>
     <string name="invalid_trip_location">מיקום נסיעה לא חוקי</string>
     <string name="invalid_trip_image">תמונת טיול לא חוקית</string>
@@ -31,7 +31,7 @@
     <string name="dots">…</string>
     <string name="user_info">פרטי משתמש</string>
     <string name="logout">התנתקות</string>
-    <string name="save">לשמור</string>
+    <string name="save">שמירה</string>
     <string name="error_while_adding_trip">שגיאה בעת הוספת נסיעה</string>
     <string name="search">לחפש</string>
     <string name="setting">הגדרה</string>
@@ -44,4 +44,6 @@
     <string name="delete_trip">מחיקת טיול</string>
     <string name="sure_delete_trip">האם אתה בטוח שברצונך למחוק את הטיול?</string>
     <string name="need_location_create_trip">יש לאפשר הרשאות מיקום בכדי ליצור טיול</string>
+    <string name="delete">מחיקה</string>
+    <string name="edit">עריכה</string>
 </resources>

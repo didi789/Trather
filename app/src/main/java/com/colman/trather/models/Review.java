@@ -23,6 +23,7 @@ public class Review {
     private String comment;
     private String profileImgUrl;
     private float stars;
+    private boolean isDeleted;
 
     @Ignore
     public Review(@NonNull String tripId, @NonNull String reviewId, String authorName, String authorUid, String comment, float stars) {
@@ -34,17 +35,23 @@ public class Review {
         this.stars = stars;
     }
 
-    public Review(@NonNull String tripId, @NonNull String reviewId, String authorUid, String comment, float stars) {
+    public Review(@NonNull String tripId, @NonNull String reviewId, String authorUid, String comment, float stars, boolean isDeleted) {
         this.tripId = tripId;
         this.reviewId = reviewId;
         this.authorUid = authorUid;
         this.comment = comment;
         this.stars = stars;
+        this.isDeleted = isDeleted;
     }
 
     @NonNull
     public String getTripId() {
         return tripId;
+    }
+
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public String getReviewId() {

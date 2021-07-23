@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
-import com.colman.trather.BuildConfig;
 import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.services.SharedPref;
@@ -33,7 +32,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
     private TextView email;
     private EditText bio;
     private ProgressBar progressBar;
-    private TextView aboutVersion;
     private SwitchCompat vibration;
     private SwitchCompat sound;
     private SwitchCompat notification;
@@ -49,7 +47,7 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
     }
 
     @Override
-    protected int getActionId() {
+    protected int getSettingsActionId() {
         return R.id.settings_screen;
     }
 
@@ -71,7 +69,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
         final View view = super.onCreateView(inflater, container, savedInstanceState);
         assert view != null;
         progressBar = view.findViewById(R.id.progressbar);
-        aboutVersion = view.findViewById(R.id.about_version);
         Button saveBtn = view.findViewById(R.id.save_config);
         Button logoutBtn = view.findViewById(R.id.logout);
 
@@ -116,7 +113,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
                 progressBar.setVisibility(View.GONE);
             }
         });
-        aboutVersion.setText(getString(R.string.about_version_1_s, BuildConfig.VERSION_NAME));
 
         vibration.setChecked(SharedPref.getBoolean(Consts.VIBRATION, true));
         sound.setChecked(SharedPref.getBoolean(Consts.SOUND, true));

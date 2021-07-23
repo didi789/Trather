@@ -64,55 +64,66 @@ public class TripRepository {
         Task<QuerySnapshot> querySnapshotTask = tripsColl.get();
         querySnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null) {
-                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                for (DocumentSnapshot doc : documents) {
-                    final String name = doc.getString(Consts.KEY_TITLE);
-                    final String siteUrl = doc.getString(Consts.KEY_SITE_URL);
-                    final String authorUid = doc.getString(Consts.KEY_AUTHOR_UID);
-                    final String about = doc.getString(Consts.KEY_ABOUT);
-                    final String imgUrl = doc.getString(Consts.KEY_IMG_URL);
-                    final double level = doc.getDouble(Consts.KEY_LEVEL);
-                    final boolean water = doc.getBoolean(Consts.KEY_WATER);
-                    final GeoPoint address = doc.getGeoPoint(Consts.KEY_ADDRESS);
+                TripDatabase.databaseWriteExecutor.execute(() -> {
+                    List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                    for (DocumentSnapshot doc : documents) {
+                        final String name = doc.getString(Consts.KEY_TITLE);
+                        final String siteUrl = doc.getString(Consts.KEY_SITE_URL);
+                        final String authorUid = doc.getString(Consts.KEY_AUTHOR_UID);
+                        final String about = doc.getString(Consts.KEY_ABOUT);
+                        final String imgUrl = doc.getString(Consts.KEY_IMG_URL);
+                        final double level = doc.getDouble(Consts.KEY_LEVEL);
+                        final boolean water = doc.getBoolean(Consts.KEY_WATER);
+                        final boolean isDeleted = doc.contains(Consts.KEY_IS_DELETED) && doc.getBoolean(Consts.KEY_IS_DELETED);
+                        final GeoPoint address = doc.getGeoPoint(Consts.KEY_ADDRESS);
 
-                    ArrayList reviewsList = (ArrayList) doc.get(Consts.KEY_REVIEWS);
+                        ArrayList reviewsList = (ArrayList) doc.get(Consts.KEY_REVIEWS);
 
-                    double tripStars = 0;
-                    double tripRating = -1;
-                    if (!CollectionUtils.isEmpty(reviewsList)) {
-                        for (int i = 0; i < reviewsList.size(); i++) {
-                            final Map<String, Object> reviews = (Map<String, Object>) reviewsList.get(i);
-                            if (reviews != null) {
-                                String commentAuthorUid = (String) reviews.get(Consts.KEY_AUTHOR_UID);
-                                String comment = (String) reviews.get(Consts.KEY_COMMENT);
-                                String reviewId = (String) reviews.get(Consts.KEY_REVIEW_ID);
-                                float stars = ((Double) reviews.get(Consts.KEY_STARS)).floatValue();
-                                tripStars += stars;
-                                final Review review = new Review(doc.getId(), reviewId, commentAuthorUid, comment, stars);
-                                reviewList.add(review);
+                        double tripStars = 0;
+                        double tripRating = -1;
+                        if (!CollectionUtils.isEmpty(reviewsList)) {
+                            for (int i = 0; i < reviewsList.size(); i++) {
+                                final Map<String, Object> review = (Map<String, Object>) reviewsList.get(i);
+                                if (review != null) {
+                                    String commentAuthorUid = (String) review.get(Consts.KEY_AUTHOR_UID);
+                                    String comment = (String) review.get(Consts.KEY_COMMENT);
+                                    String reviewId = (String) review.get(Consts.KEY_REVIEW_ID);
+                                    boolean isReviewDeleted = review.containsKey(Consts.KEY_IS_DELETED) && (boolean) review.get(Consts.KEY_IS_DELETED);
+
+                                    float stars;
+                                    try {
+                                        stars = ((Double) review.get(Consts.KEY_STARS)).floatValue();
+                                    } catch (Exception e) {
+                                        stars = ((Long) review.get(Consts.KEY_STARS)).floatValue();
+                                    }
+
+                                    tripStars += stars;
+                                    final Review r = new Review(doc.getId(), reviewId, commentAuthorUid, comment, stars, isReviewDeleted);
+                                    if (isReviewDeleted)
+                                        reviewDao.deleteReview(r);
+                                    else
+                                        reviewList.add(r);
+                                }
                             }
+
+                            tripRating = tripStars / reviewsList.size();
                         }
 
-                        tripRating = tripStars / reviewsList.size();
+                        final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, siteUrl, about, authorUid, imgUrl, tripRating, level, water, isDeleted);
+
+                        if (isDeleted)
+                            tripDao.delete(trip);
+                        else
+                            tripList.add(trip);
                     }
 
-                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, siteUrl, about, authorUid, imgUrl, tripRating, level, water);
-
-                    tripList.add(trip);
-
-                }
-
-                insertToDB(tripList, reviewList);
+                    tripDao.insertAll(tripList);
+                    reviewDao.insertAll(reviewList);
+                });
             }
         });
     }
 
-    private void insertToDB(List<Trip> tripList, List<Review> reviewList) {
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            tripDao.insertAll(tripList);
-            reviewDao.insertAll(reviewList);
-        });
-    }
 
     public LiveData<List<Trip>> getTrips() {
         return allTrips;
@@ -128,7 +139,7 @@ public class TripRepository {
 
     public void deleteTrip(Trip trip, AddTripState.AddTripListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).delete();
+        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).update(Consts.KEY_IS_DELETED, true);
         TripDatabase.databaseWriteExecutor.execute(() -> {
             tripDao.delete(trip);
             listener.callback(true);

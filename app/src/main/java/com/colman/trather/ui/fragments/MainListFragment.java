@@ -126,7 +126,7 @@ public class MainListFragment extends BaseToolbarFragment implements TripRecycle
     }
 
     @Override
-    protected int getActionId() {
+    protected int getSettingsActionId() {
         return R.id.list_to_settings;
     }
 
