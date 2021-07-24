@@ -19,6 +19,7 @@
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
         android:contentDescription="@null"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintRight_toRightOf="parent"
@@ -77,34 +78,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/sound"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="@string/sound"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/vibration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="@string/vibration"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sound" />
-
     <Button
-        android:id="@+id/save_config"
+        android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -114,7 +89,7 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vibration" />
+        app:layout_constraintTop_toBottomOf="@+id/notification" />
 
     <LinearLayout
         android:id="@+id/bottom"
@@ -124,7 +99,7 @@
         android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/save_config">
+        app:layout_constraintTop_toBottomOf="@+id/save">
 
         <Button
             android:id="@+id/logout"

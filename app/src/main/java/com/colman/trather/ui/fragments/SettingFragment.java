@@ -32,8 +32,8 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
     private TextView email;
     private EditText bio;
     private ProgressBar progressBar;
-    private SwitchCompat vibration;
-    private SwitchCompat sound;
+    private Button saveBtn;
+    private Button logoutBtn;
     private SwitchCompat notification;
 
     @Override
@@ -69,11 +69,9 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
         final View view = super.onCreateView(inflater, container, savedInstanceState);
         assert view != null;
         progressBar = view.findViewById(R.id.progressbar);
-        Button saveBtn = view.findViewById(R.id.save_config);
-        Button logoutBtn = view.findViewById(R.id.logout);
+        saveBtn = view.findViewById(R.id.save);
+        logoutBtn = view.findViewById(R.id.logout);
 
-        vibration = view.findViewById(R.id.vibration);
-        sound = view.findViewById(R.id.sound);
         notification = view.findViewById(R.id.notification);
         profileImg = view.findViewById(R.id.image);
         fullName = view.findViewById(R.id.full_name);
@@ -107,6 +105,10 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
         });
 
         settingsViewModel.getIsLoading().observe(getViewLifecycleOwner(), loading -> {
+            logoutBtn.setEnabled(!loading);
+            saveBtn.setEnabled(!loading);
+            profileImg.setEnabled(!loading);
+
             if (loading) {
                 progressBar.setVisibility(View.VISIBLE);
             } else {
@@ -114,8 +116,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
             }
         });
 
-        vibration.setChecked(SharedPref.getBoolean(Consts.VIBRATION, true));
-        sound.setChecked(SharedPref.getBoolean(Consts.SOUND, true));
         notification.setChecked(SharedPref.getBoolean(Consts.NOTIFICATION, true));
     }
 
@@ -128,9 +128,8 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
             case R.id.logout:
                 logout();
                 break;
-
-            case R.id.save_config:
-                settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString(), vibration.isChecked(), sound.isChecked(), notification.isChecked());
+            case R.id.save:
+                settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString(), notification.isChecked());
                 requireActivity().onBackPressed();
                 break;
         }

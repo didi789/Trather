@@ -44,7 +44,7 @@ public class SettingsViewModel extends AndroidViewModel {
         return isLoading;
     }
 
-    public void saveClicked(LifecycleOwner viewLifecycleOwner, String fullName, String bio, boolean checked, boolean checked1, boolean checked2) {
+    public void saveClicked(LifecycleOwner viewLifecycleOwner, String fullName, String bio, boolean notification) {
         userMutableLiveData.observe(viewLifecycleOwner, user -> {
             if (user == null) {
                 return;
@@ -56,9 +56,7 @@ public class SettingsViewModel extends AndroidViewModel {
             }
         });
 
-        SharedPref.putBoolean(Consts.VIBRATION, checked);
-        SharedPref.putBoolean(Consts.SOUND, checked1);
-        SharedPref.putBoolean(Consts.NOTIFICATION, checked2);
+        SharedPref.putBoolean(Consts.NOTIFICATION, notification);
     }
 
     public void updateProfileImage(LifecycleOwner viewLifecycleOwner, Uri uri) {

@@ -29,7 +29,7 @@ public class TripRecyclerViewAdapter extends BaseRecyclerViewAdapter<Trip, TripR
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recyclerview_row, parent, false);
+        View view = mInflater.inflate(R.layout.trips_row_item, parent, false);
         return new ViewHolder(view);
     }
 
