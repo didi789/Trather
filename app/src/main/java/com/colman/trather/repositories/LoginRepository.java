@@ -74,6 +74,7 @@ public class LoginRepository {
             saveUserInFirebase(firebaseAuth.getCurrentUser());
             setLoggedInUser(firebaseAuth.getCurrentUser());
         });
+        
         return AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build();
     }
 
