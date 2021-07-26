@@ -12,11 +12,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +86,6 @@ public class ModelFirebase {
     }
     //endregion login
 
-
     //region settings
     public static void loadUser(OnCompleteListener<User> listener) {
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection(Consts.USERS_COLLECTION);
@@ -151,4 +152,31 @@ public class ModelFirebase {
     }
 
     //endregion settings
+
+    //region users
+    public static void loadUsers(OnCompleteListener<ArrayList<User>> listener) {
+        final ArrayList<User> usersList = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersColl = db.collection(Consts.USERS_COLLECTION);
+        Task<QuerySnapshot> querySnapshotTask = usersColl.get();
+        querySnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots != null) {
+                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot doc : documents) {
+                    final String uid = doc.getId();
+                    final String fullName = doc.get(Consts.KEY_FULL_NAME, String.class);
+                    final String email = doc.get(Consts.KEY_EMAIL, String.class);
+                    final String image = doc.get(Consts.KEY_IMG_URL, String.class);
+
+                    final String bio = doc.get(Consts.KEY_BIO, String.class);
+
+                    final User user = new User(uid, image, bio, fullName, email);
+                    usersList.add(user);
+                }
+            }
+            listener.onComplete(usersList);
+        });
+    }
+    //endregion users
 }

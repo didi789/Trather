@@ -7,19 +7,19 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.colman.trather.models.User;
-import com.colman.trather.repositories.UserRepo;
+import com.colman.trather.repositories.UsersRepo;
 
 
 public class UserInfoViewModel extends AndroidViewModel {
-    private final UserRepo userRepository;
+    private final UsersRepo usersRepository;
 
     public UserInfoViewModel(@NonNull Application application) {
         super(application);
-        userRepository = UserRepo.getInstance(application);
+        usersRepository = UsersRepo.getInstance(application);
     }
 
     public LiveData<User> getUserByUid(String uid) {
-        return userRepository.getUserByUid(uid);
+        return usersRepository.getUserByUid(uid);
     }
 }
 

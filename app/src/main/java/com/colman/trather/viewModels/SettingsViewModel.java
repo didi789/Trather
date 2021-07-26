@@ -13,7 +13,7 @@ import com.colman.trather.models.User;
 import com.colman.trather.repositories.LoginRepo;
 import com.colman.trather.repositories.ReviewRepo;
 import com.colman.trather.repositories.SettingsRepo;
-import com.colman.trather.repositories.UserRepo;
+import com.colman.trather.repositories.UsersRepo;
 import com.colman.trather.services.SharedPref;
 
 
@@ -22,7 +22,7 @@ public class SettingsViewModel extends AndroidViewModel {
     private final LiveData<Boolean> isLoading;
     private final SettingsRepo settingsRepository;
     private final ReviewRepo reviewRepository;
-    private final UserRepo userRepository;
+    private final UsersRepo usersRepository;
     private final LoginRepo loginRepository;
 
     public SettingsViewModel(@NonNull Application application) {
@@ -32,7 +32,7 @@ public class SettingsViewModel extends AndroidViewModel {
         isLoading = settingsRepository.isLoading();
         settingsRepository.loadUser();
         reviewRepository = ReviewRepo.getInstance(application);
-        userRepository = UserRepo.getInstance(application);
+        usersRepository = UsersRepo.getInstance(application);
         loginRepository = LoginRepo.getInstance();
     }
 
@@ -51,7 +51,7 @@ public class SettingsViewModel extends AndroidViewModel {
             }
 
             if (!fullName.equals(user.getFullname()) || !bio.equals(user.getBio())) {
-                userRepository.updateProfileData(user.getUid(), fullName, bio);
+                usersRepository.updateProfileData(user.getUid(), fullName, bio);
                 settingsRepository.updateProfileData(fullName, bio);
             }
         });
@@ -67,7 +67,7 @@ public class SettingsViewModel extends AndroidViewModel {
                 return;
             }
             reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getFullname(), user.getUid());
-            userRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
+            usersRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
         });
     }
 

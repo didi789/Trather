@@ -13,7 +13,7 @@ import com.colman.trather.models.User;
 import com.colman.trather.repositories.ReviewRepo;
 import com.colman.trather.repositories.SettingsRepo;
 import com.colman.trather.repositories.TripRepo;
-import com.colman.trather.repositories.UserRepo;
+import com.colman.trather.repositories.UsersRepo;
 import com.colman.trather.services.SharedPref;
 
 import java.util.List;
@@ -23,13 +23,13 @@ public class TripInfoViewModel extends AndroidViewModel {
     private final TripRepo tripRepository;
     private final ReviewRepo reviewRepository;
     private final SettingsRepo settingsRepository;
-    private final UserRepo userRepository;
+    private final UsersRepo usersRepository;
 
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
         tripRepository = TripRepo.getInstance(application);
         reviewRepository = ReviewRepo.getInstance(application);
-        userRepository = UserRepo.getInstance(application);
+        usersRepository = UsersRepo.getInstance(application);
         settingsRepository = new SettingsRepo();
     }
 
@@ -42,7 +42,7 @@ public class TripInfoViewModel extends AndroidViewModel {
     }
 
     public LiveData<User> getUserByUid(String uid) {
-        return userRepository.getUserByUid(uid);
+        return usersRepository.getUserByUid(uid);
     }
 
     public void deleteReview(Review review) {
