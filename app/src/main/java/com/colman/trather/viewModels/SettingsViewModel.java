@@ -19,7 +19,6 @@ import com.colman.trather.services.SharedPref;
 
 public class SettingsViewModel extends AndroidViewModel {
     private final LiveData<User> userMutableLiveData;
-    private final LiveData<Boolean> isLoading;
     private final SettingsRepo settingsRepository;
     private final ReviewsRepo reviewsRepository;
     private final UsersRepo usersRepository;
@@ -29,7 +28,6 @@ public class SettingsViewModel extends AndroidViewModel {
         super(application);
         settingsRepository = new SettingsRepo();
         userMutableLiveData = settingsRepository.getUser();
-        isLoading = settingsRepository.isLoading();
         settingsRepository.loadUser();
         reviewsRepository = ReviewsRepo.getInstance(application);
         usersRepository = UsersRepo.getInstance(application);
@@ -41,7 +39,7 @@ public class SettingsViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> getIsLoading() {
-        return isLoading;
+        return settingsRepository.isLoading();
     }
 
     public void saveClicked(LifecycleOwner viewLifecycleOwner, String fullName, String bio, boolean notification) {
