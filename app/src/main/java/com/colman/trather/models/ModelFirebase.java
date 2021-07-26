@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.colman.trather.Consts;
 import com.colman.trather.TripDatabase;
-import com.colman.trather.services.SharedPref;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.common.util.CollectionUtils;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,7 +19,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -30,13 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.colman.trather.Consts.KEY_BIO;
 import static com.colman.trather.Consts.KEY_EMAIL;
 import static com.colman.trather.Consts.KEY_FULL_NAME;
 import static com.colman.trather.Consts.KEY_IMG_URL;
+import static com.colman.trather.Consts.KEY_IS_DELETED;
 
 public class ModelFirebase {
 
@@ -190,61 +189,30 @@ public class ModelFirebase {
 
     public static void addReview(Review review) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(review.tripId);
-        Task<DocumentSnapshot> documentSnapshotTask = document.get();
-        documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
-            if (queryDocumentSnapshots != null) {
-                Map<String, Object> reviews = new HashMap<>();
-                ArrayList reviewsList = (ArrayList) queryDocumentSnapshots.get(Consts.KEY_REVIEWS);
-                if (CollectionUtils.isEmpty(reviewsList)) {
-                    reviewsList = new ArrayList();
-                }
+        DocumentReference tripReviews = db.collection(Consts.TRIP_COLLECTION).document(review.getTripId()).collection(Consts.KEY_REVIEWS).document(review.getReviewId());
 
-                Map<String, Object> updates = new HashMap<>();
-                updates.put(Consts.KEY_REVIEW_ID, review.getReviewId());
-                updates.put(Consts.KEY_AUTHOR_UID, review.getAuthorUid());
-                updates.put(Consts.KEY_COMMENT, review.getComment());
-                updates.put(Consts.KEY_STARS, review.getStars());
-                reviewsList.add(updates);
+        Map<String, Object> reviewData = new HashMap<>();
+        reviewData.put(Consts.KEY_AUTHOR_UID, review.getAuthorUid());
+        reviewData.put(Consts.KEY_COMMENT, review.getComment());
+        reviewData.put(Consts.KEY_STARS, review.getStars());
+        tripReviews.set(reviewData).addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
 
-                reviews.put(Consts.KEY_REVIEWS, reviewsList);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-                document.set(reviews, SetOptions.merge());
             }
         });
     }
 
     public static void deleteReview(Review review) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            final String currentUser = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
-            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference document = db.collection(Consts.TRIP_COLLECTION).document(review.getTripId());
-            Task<DocumentSnapshot> documentSnapshotTask = document.get();
-            documentSnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
-                if (queryDocumentSnapshots != null) {
-                    ArrayList reviewsList = (ArrayList) queryDocumentSnapshots.get(Consts.KEY_REVIEWS);
-                    if (!CollectionUtils.isEmpty(reviewsList)) {
-                        Map<String, Object> updates = new HashMap<>();
-                        for (int i = 0; i < reviewsList.size(); i++) {
-                            final Map<String, Object> r = (Map<String, Object>) reviewsList.get(i);
-                            if (r != null) {
-                                String author = (String) r.get(Consts.KEY_AUTHOR_UID);
-                                String comment = (String) r.get(Consts.KEY_COMMENT);
-
-                                if (currentUser.equals(author) && review.getComment().equals(comment)) {
-                                    r.put(Consts.KEY_IS_DELETED, true);
-                                    updates.put(Consts.KEY_REVIEWS, reviewsList);
-                                    document.update(updates);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Consts.TRIP_COLLECTION).document(review.tripId).collection(Consts.KEY_REVIEWS).document(review.getReviewId()).update(KEY_IS_DELETED, true);
     }
+
     //endregion reviews
 
     //region trips
@@ -268,7 +236,7 @@ public class ModelFirebase {
                     final boolean isDeleted = doc.contains(Consts.KEY_IS_DELETED) && doc.getBoolean(Consts.KEY_IS_DELETED);
                     final GeoPoint address = doc.getGeoPoint(Consts.KEY_ADDRESS);
 
-                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, siteUrl, about, authorUid, imgUrl, -1, level, water, isDeleted);
+                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, siteUrl, about, authorUid, imgUrl, level, water, isDeleted);
 
                     tripList.add(trip);
                 }

@@ -17,7 +17,7 @@ public class Consts {
     public static final String KEY_REVIEWS = "reviews";
     public static final String KEY_AUTHOR_UID = "authorUid";
     public static final String KEY_COMMENT = "comment";
-    public static final String KEY_REVIEW_ID = "reviewId";
+    public static final String KEY_TRIP_ID = "tripId";
     public static final String USERS_COLLECTION = "users";
     public static final String KEY_FULL_NAME = "fullname";
     public static final String KEY_EMAIL = "email";

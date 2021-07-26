@@ -31,8 +31,6 @@ public class Trip {
     private final String authorUid;
     @ColumnInfo(name = "trip_image_url")
     private String imgUrl;
-    @ColumnInfo(name = "rating")
-    private final double rating;
     @ColumnInfo(name = "level")
     private final double level;
     @ColumnInfo(name = "water")
@@ -41,14 +39,14 @@ public class Trip {
     private final boolean isDeleted;
 
     public Trip(GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double level, boolean water) {
-        this(null, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, 0, level, water, false);
+        this(null, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, level, water, false);
     }
 
-    public Trip(String tripId, GeoPoint location, String title, String tripSiteUrl, String about, String authorUid, double rating, double level, boolean water) {
-        this(tripId, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null, rating, level, water, false);
+    public Trip(String tripId, GeoPoint location, String title, String tripSiteUrl, String about, String authorUid,  double level, boolean water) {
+        this(tripId, location == null ? 0 : location.getLatitude(), location == null ? 0 : location.getLongitude(), title, tripSiteUrl, about, authorUid, null,  level, water, false);
     }
 
-    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl, double rating, double level, boolean water, boolean isDeleted) {
+    public Trip(@NonNull String tripId, double locationLat, double locationLon, String title, String tripSiteUrl, String about, String authorUid, String imgUrl,  double level, boolean water, boolean isDeleted) {
         this.tripId = tripId;
         this.locationLat = locationLat;
         this.locationLon = locationLon;
@@ -57,7 +55,6 @@ public class Trip {
         this.about = about;
         this.authorUid = authorUid;
         this.imgUrl = imgUrl;
-        this.rating = rating;
         this.level = level;
         this.water = water;
         this.isDeleted = isDeleted;
@@ -99,10 +96,6 @@ public class Trip {
 
     public String getImgUrl() {
         return imgUrl;
-    }
-
-    public double getRating() {
-        return rating;
     }
 
     public double getLevel() {
