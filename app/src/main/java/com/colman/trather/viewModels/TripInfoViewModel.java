@@ -38,7 +38,7 @@ public class TripInfoViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Review>> getReviewsByTripIdLiveData(String tripId) {
-        return reviewsRepository.getReviewsById(tripId);
+        return reviewsRepository.getReviewsByTripId(tripId);
     }
 
     public LiveData<User> getUserByUid(String uid) {

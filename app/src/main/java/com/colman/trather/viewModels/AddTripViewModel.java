@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.colman.trather.R;
 import com.colman.trather.models.AddTripState;
+import com.colman.trather.models.ModelFirebase;
 import com.colman.trather.models.Trip;
 import com.colman.trather.repositories.TripRepo;
 import com.google.firebase.firestore.GeoPoint;
@@ -28,22 +29,22 @@ public class AddTripViewModel extends AndroidViewModel {
         tripRepository = TripRepo.getInstance(application);
     }
 
-    public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, AddTripState.AddTripListener listener) {
+    public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, ModelFirebase.OnCompleteListener<Boolean> listener) {
         if (validateTrip(trip, imageUri))
             tripRepository.editTrip(trip, imageUri, isImgEdited, listener);
         else
-            listener.callback(false);
+            listener.onComplete(false);
     }
 
-    public void deleteTrip(Trip editedTrip, AddTripState.AddTripListener listener) {
+    public void deleteTrip(Trip editedTrip, ModelFirebase.OnCompleteListener<Boolean> listener) {
         tripRepository.deleteTrip(editedTrip, listener);
     }
 
-    public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
+    public void addTrip(Trip trip, Uri imageUri, ModelFirebase.OnCompleteListener<Boolean> listener) {
         if (validateTrip(trip, imageUri))
             tripRepository.addTrip(trip, imageUri, listener);
         else
-            listener.callback(false);
+            listener.onComplete(false);
     }
 
     public LiveData<Trip> getTripByIdLiveData(String tripId) {

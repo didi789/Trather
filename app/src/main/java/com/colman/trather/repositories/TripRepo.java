@@ -2,34 +2,19 @@ package com.colman.trather.repositories;
 
 import android.app.Application;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import androidx.lifecycle.LiveData;
 
-import com.colman.trather.Consts;
 import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.ReviewDao;
 import com.colman.trather.dao.TripDao;
-import com.colman.trather.models.AddTripState;
+import com.colman.trather.models.ModelFirebase;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
-import com.google.android.gms.common.util.CollectionUtils;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TripRepo {
     private final TripDao tripDao;
@@ -56,9 +41,17 @@ public class TripRepo {
     }
 
     public void loadTrips() {
+        ModelFirebase.loadTrips(trips -> {
+            TripDatabase.databaseWriteExecutor.execute(() -> {
+                trips.stream().filter(Trip::isDeleted).forEach(tripDao::delete);
+                tripDao.insertAll(trips.stream().filter(t -> !t.isDeleted()).collect(Collectors.toList()));
+            });
+        });
+
+        // TODO move reviews to reviewsRepo + in firebase..
         final List<Trip> tripList = new ArrayList<>();
         final List<Review> reviewList = new ArrayList<>();
-
+/*
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tripsColl = db.collection(Consts.KEY_TRIPS);
         Task<QuerySnapshot> querySnapshotTask = tripsColl.get();
@@ -121,7 +114,7 @@ public class TripRepo {
                     reviewDao.insertAll(reviewList);
                 });
             }
-        });
+        });*/
     }
 
 
@@ -137,102 +130,27 @@ public class TripRepo {
         return tripDao.getTripById(tripId);
     }
 
-    public void deleteTrip(Trip trip, AddTripState.AddTripListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).update(Consts.KEY_IS_DELETED, true);
-        TripDatabase.databaseWriteExecutor.execute(() -> {
-            tripDao.delete(trip);
-            listener.callback(true);
+    public void deleteTrip(Trip trip, ModelFirebase.OnCompleteListener<Boolean> listener) {
+        TripDatabase.databaseWriteExecutor.execute(() -> tripDao.delete(trip));
+        ModelFirebase.deleteTrip(trip, listener);
+    }
+
+    public void addTrip(Trip trip, Uri imageUri, ModelFirebase.OnCompleteListener<Boolean> listener) {
+        ModelFirebase.addTrip(trip, imageUri, tripId -> {
+            if (tripId != null) {
+                trip.setTripId(tripId);
+                TripDatabase.databaseWriteExecutor.execute(() -> tripDao.insertTrip(trip));
+                listener.onComplete(true);
+            } else
+                listener.onComplete(false);
         });
     }
 
-    public void addTrip(Trip trip, Uri imageUri, AddTripState.AddTripListener listener) {
-        UploadTask uploadTask = getImageUploadTask(imageUri);
-        uploadTask.addOnFailureListener(e -> listener.callback(false)
-        ).addOnSuccessListener(taskSnapshot -> {
-            final StorageMetadata metadata = taskSnapshot.getMetadata();
-            assert metadata != null;
-            final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();
-            downloadUri.addOnCompleteListener(task -> {
-                if (task.isSuccessful() && !TextUtils.isEmpty(downloadUri.getResult().toString())) {
-                    trip.setImageUrl(downloadUri.getResult().toString());
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                    Map<String, Object> newTrip = new HashMap<>();
-
-                    newTrip.put(Consts.KEY_TITLE, trip.getTitle());
-                    newTrip.put(Consts.KEY_SITE_URL, trip.getTripSiteUrl());
-                    newTrip.put(Consts.KEY_AUTHOR_UID, trip.getAuthorUid());
-                    newTrip.put(Consts.KEY_ABOUT, trip.getAbout());
-                    newTrip.put(Consts.KEY_IMG_URL, trip.getImgUrl());
-                    newTrip.put(Consts.KEY_LEVEL, trip.getLevel());
-                    newTrip.put(Consts.KEY_WATER, trip.isWater());
-                    newTrip.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
-
-
-                    db.collection(Consts.TRIP_COLLECTION).add(newTrip).addOnCompleteListener(t -> {
-                        if (t.isSuccessful()) {
-                            trip.setTripId(t.getResult().getId());
-                            TripDatabase.databaseWriteExecutor.execute(() -> {
-                                tripDao.insertTrip(trip);
-                                listener.callback(true);
-                            });
-                        } else listener.callback(false);
-                    });
-                } else listener.callback(false);
-            }).addOnFailureListener(e -> listener.callback(false));
-        });
-    }
-
-    public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, AddTripState.AddTripListener listener) {
-        if (isImgEdited) {
-            UploadTask uploadTask = getImageUploadTask(imageUri);
-            uploadTask.addOnFailureListener(e -> listener.callback(false)
-            ).addOnSuccessListener(taskSnapshot -> {
-                final StorageMetadata metadata = taskSnapshot.getMetadata();
-                assert metadata != null;
-                final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();
-                downloadUri.addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !TextUtils.isEmpty(downloadUri.getResult().toString())) {
-                        trip.setImageUrl(downloadUri.getResult().toString());
-                        updateEditedTrip(trip, listener);
-                    } else listener.callback(false);
-                }).addOnFailureListener(e -> listener.callback(false));
-            });
-        } else {
-            trip.setImageUrl(imageUri.toString());
-            updateEditedTrip(trip, listener);
-        }
-    }
-
-    private UploadTask getImageUploadTask(Uri imageUri) {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference riversRef = storageRef.child(Consts.TRIP_COLLECTION + "/" + imageUri.getLastPathSegment());
-        return riversRef.putFile(imageUri);
-    }
-
-    private void updateEditedTrip(Trip trip, AddTripState.AddTripListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String, Object> editedTrip = new HashMap<>();
-
-        editedTrip.put(Consts.KEY_TITLE, trip.getTitle());
-        editedTrip.put(Consts.KEY_SITE_URL, trip.getTripSiteUrl());
-        editedTrip.put(Consts.KEY_ABOUT, trip.getAbout());
-        editedTrip.put(Consts.KEY_IMG_URL, trip.getImgUrl());
-        editedTrip.put(Consts.KEY_LEVEL, trip.getLevel());
-        editedTrip.put(Consts.KEY_WATER, trip.isWater());
-        editedTrip.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
-
-
-        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).update(editedTrip).addOnCompleteListener(t -> {
-            if (t.isSuccessful()) {
-                TripDatabase.databaseWriteExecutor.execute(() -> {
-                    tripDao.insertTrip(trip);
-                    listener.callback(true);
-                });
-            } else listener.callback(false);
+    public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, ModelFirebase.OnCompleteListener<Boolean> listener) {
+        ModelFirebase.editTrip(trip, imageUri, isImgEdited, callback -> {
+            if (callback)
+                TripDatabase.databaseWriteExecutor.execute(() -> tripDao.insertTrip(trip));
+            listener.onComplete(callback);
         });
     }
 }

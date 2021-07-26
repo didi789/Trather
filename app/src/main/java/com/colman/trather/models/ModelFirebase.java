@@ -2,8 +2,10 @@ package com.colman.trather.models;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.colman.trather.Consts;
+import com.colman.trather.TripDatabase;
 import com.colman.trather.services.SharedPref;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.util.CollectionUtils;
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,7 +39,6 @@ import static com.colman.trather.Consts.KEY_FULL_NAME;
 import static com.colman.trather.Consts.KEY_IMG_URL;
 
 public class ModelFirebase {
-
 
     public interface OnCompleteListener<T> {
         void onComplete(T data);
@@ -244,4 +246,125 @@ public class ModelFirebase {
         });
     }
     //endregion reviews
+
+    //region trips
+    public static void loadTrips(OnCompleteListener<ArrayList<Trip>> listener) {
+        final ArrayList<Trip> tripList = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference tripsColl = db.collection(Consts.KEY_TRIPS);
+        Task<QuerySnapshot> querySnapshotTask = tripsColl.get();
+        querySnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots != null) {
+                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot doc : documents) {
+                    final String name = doc.getString(Consts.KEY_TITLE);
+                    final String siteUrl = doc.getString(Consts.KEY_SITE_URL);
+                    final String authorUid = doc.getString(Consts.KEY_AUTHOR_UID);
+                    final String about = doc.getString(Consts.KEY_ABOUT);
+                    final String imgUrl = doc.getString(Consts.KEY_IMG_URL);
+                    final double level = doc.getDouble(Consts.KEY_LEVEL);
+                    final boolean water = doc.getBoolean(Consts.KEY_WATER);
+                    final boolean isDeleted = doc.contains(Consts.KEY_IS_DELETED) && doc.getBoolean(Consts.KEY_IS_DELETED);
+                    final GeoPoint address = doc.getGeoPoint(Consts.KEY_ADDRESS);
+
+                    final Trip trip = new Trip(doc.getId(), address.getLatitude(), address.getLongitude(), name, siteUrl, about, authorUid, imgUrl, -1, level, water, isDeleted);
+
+                    tripList.add(trip);
+                }
+            }
+
+            listener.onComplete(tripList);
+        });
+    }
+
+    public static void deleteTrip(Trip trip, OnCompleteListener<Boolean> listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).update(Consts.KEY_IS_DELETED, true).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
+    }
+
+    public static void addTrip(Trip trip, Uri imageUri, OnCompleteListener<String> listener) {
+        UploadTask uploadTask = getImageUploadTask(imageUri);
+        uploadTask.addOnFailureListener(e -> listener.onComplete(null)
+        ).addOnSuccessListener(taskSnapshot -> {
+            final StorageMetadata metadata = taskSnapshot.getMetadata();
+            assert metadata != null;
+            final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();
+            downloadUri.addOnCompleteListener(task -> {
+                if (task.isSuccessful() && !TextUtils.isEmpty(downloadUri.getResult().toString())) {
+                    trip.setImageUrl(downloadUri.getResult().toString());
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                    Map<String, Object> newTrip = new HashMap<>();
+
+                    newTrip.put(Consts.KEY_TITLE, trip.getTitle());
+                    newTrip.put(Consts.KEY_SITE_URL, trip.getTripSiteUrl());
+                    newTrip.put(Consts.KEY_AUTHOR_UID, trip.getAuthorUid());
+                    newTrip.put(Consts.KEY_ABOUT, trip.getAbout());
+                    newTrip.put(Consts.KEY_IMG_URL, trip.getImgUrl());
+                    newTrip.put(Consts.KEY_LEVEL, trip.getLevel());
+                    newTrip.put(Consts.KEY_WATER, trip.isWater());
+                    newTrip.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
+
+
+                    db.collection(Consts.TRIP_COLLECTION).add(newTrip).addOnCompleteListener(t -> {
+                        if (t.isSuccessful()) {
+                            listener.onComplete(t.getResult().getId());
+                        } else listener.onComplete(null);
+                    });
+                } else listener.onComplete(null);
+            }).addOnFailureListener(e -> listener.onComplete(null));
+        });
+    }
+
+    public static void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, OnCompleteListener<Boolean> listener) {
+        if (isImgEdited) {
+            UploadTask uploadTask = getImageUploadTask(imageUri);
+            uploadTask.addOnFailureListener(e -> listener.onComplete(false)
+            ).addOnSuccessListener(taskSnapshot -> {
+                final StorageMetadata metadata = taskSnapshot.getMetadata();
+                assert metadata != null;
+                final Task<Uri> downloadUri = Objects.requireNonNull(metadata.getReference()).getDownloadUrl();
+                downloadUri.addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !TextUtils.isEmpty(downloadUri.getResult().toString())) {
+                        trip.setImageUrl(downloadUri.getResult().toString());
+                        updateTrip(trip, listener);
+                    } else listener.onComplete(false);
+                }).addOnFailureListener(e -> listener.onComplete(false));
+            });
+        } else {
+            trip.setImageUrl(imageUri.toString());
+            updateTrip(trip, listener);
+        }
+    }
+
+    private static void updateTrip(Trip trip, OnCompleteListener<Boolean> listener) {
+        Map<String, Object> updates = new HashMap<>();
+
+        updates.put(Consts.KEY_TITLE, trip.getTitle());
+        updates.put(Consts.KEY_SITE_URL, trip.getTripSiteUrl());
+        updates.put(Consts.KEY_ABOUT, trip.getAbout());
+        updates.put(Consts.KEY_IMG_URL, trip.getImgUrl());
+        updates.put(Consts.KEY_LEVEL, trip.getLevel());
+        updates.put(Consts.KEY_WATER, trip.isWater());
+        updates.put(Consts.KEY_ADDRESS, new GeoPoint(trip.getLocationLat(), trip.getLocationLon()));
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Consts.TRIP_COLLECTION).document(trip.getTripId()).update(updates).addOnCompleteListener(t -> {
+            if (t.isSuccessful()) {
+                TripDatabase.databaseWriteExecutor.execute(() -> {
+                    listener.onComplete(true);
+                });
+            } else listener.onComplete(false);
+        });
+    }
+
+
+    private static UploadTask getImageUploadTask(Uri imageUri) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference riversRef = storageRef.child(Consts.TRIP_COLLECTION + "/" + imageUri.getLastPathSegment());
+        return riversRef.putFile(imageUri);
+    }
+    //endregion trips
 }

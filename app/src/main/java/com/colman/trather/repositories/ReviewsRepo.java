@@ -29,7 +29,7 @@ public class ReviewsRepo {
         reviewDao = database.reviewDao();
     }
 
-    public LiveData<List<Review>> getReviewsById(String tripId) {
+    public LiveData<List<Review>> getReviewsByTripId(String tripId) {
         return reviewDao.getReviewsByTripId(tripId);
     }
 
@@ -39,7 +39,6 @@ public class ReviewsRepo {
     }
 
     public void addReview(Review review) {
-
         ModelFirebase.addReview(review);
         TripDatabase.databaseWriteExecutor.execute(() -> reviewDao.insertReview(review));
     }
