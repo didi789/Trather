@@ -1,14 +1,11 @@
 package com.colman.trather.repositories;
 
 import android.app.Application;
-
 import androidx.lifecycle.LiveData;
-
 import com.colman.trather.TripDatabase;
 import com.colman.trather.dao.UserDao;
 import com.colman.trather.models.ModelFirebase;
 import com.colman.trather.models.User;
-
 import java.util.List;
 
 

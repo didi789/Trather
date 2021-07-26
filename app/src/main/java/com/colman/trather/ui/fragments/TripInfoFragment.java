@@ -33,6 +33,7 @@ import com.colman.trather.services.Utils;
 import com.colman.trather.ui.adapters.BaseRecyclerViewAdapter;
 import com.colman.trather.ui.adapters.ReviewsRecyclerViewAdapter;
 import com.colman.trather.viewModels.TripInfoViewModel;
+import com.colman.trather.viewModels.UserInfoViewModel;
 import com.google.firebase.firestore.GeoPoint;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -109,7 +110,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         address.setOnClickListener(this::startNavigation);
         RecyclerView recyclerViewReview = view.findViewById(R.id.reviews_recyclerview);
         recyclerViewReview.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new ReviewsRecyclerViewAdapter(getContext());
+        mAdapter = new ReviewsRecyclerViewAdapter(getContext(), new ViewModelProvider(requireActivity()).get(UserInfoViewModel.class));
         mAdapter.setDeleteButtonClickListener(this);
         mAdapter.setClickListener(this);
         recyclerViewReview.setAdapter(mAdapter);
