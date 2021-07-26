@@ -11,11 +11,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.colman.trather.R;
 import com.colman.trather.models.AddTripState;
 import com.colman.trather.models.Trip;
-import com.colman.trather.repositories.TripRepository;
+import com.colman.trather.repositories.TripRepo;
 import com.google.firebase.firestore.GeoPoint;
 
 public class AddTripViewModel extends AndroidViewModel {
-    private final TripRepository tripRepository;
+    private final TripRepo tripRepository;
     private final MutableLiveData<AddTripState> addTripState = new MutableLiveData<>();
     private final MutableLiveData<GeoPoint> selectedTripLocation = new MutableLiveData<>();
 
@@ -25,7 +25,7 @@ public class AddTripViewModel extends AndroidViewModel {
 
     public AddTripViewModel(@NonNull Application application) {
         super(application);
-        tripRepository = TripRepository.getInstance(application);
+        tripRepository = TripRepo.getInstance(application);
     }
 
     public void editTrip(Trip trip, Uri imageUri, boolean isImgEdited, AddTripState.AddTripListener listener) {

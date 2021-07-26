@@ -1,11 +1,8 @@
-package com.colman.trather.repositories;
+package com.colman.trather.models;
 
 import android.content.Intent;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.colman.trather.Consts;
-import com.colman.trather.services.SharedPref;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,51 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Class that requests authentication and user information from the remote data source and
- * maintains an in-memory cache of login status and user credentials information.
- */
-public class LoginRepository {
+public class ModelFirebase {
 
-    private static LoginRepository mInstance;
-    private final MutableLiveData<FirebaseUser> user = new MutableLiveData<>(null);
 
-    private LoginRepository() {
+    public interface OnCompleteListener<T> {
+        void onComplete(T data);
     }
 
-    public static LoginRepository getInstance() {
-        if (mInstance == null) {
-            mInstance = new LoginRepository();
-        }
-
-        return mInstance;
-    }
-
-    public boolean isLoggedIn() {
-        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            setLoggedInUser(currentUser);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public MutableLiveData<FirebaseUser> getUser() {
-        return user;
-    }
-
-    private void setLoggedInUser(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            SharedPref.putString(Consts.CURRENT_USER_KEY, currentUser.getUid());
-        } else {
-            SharedPref.removeKey(Consts.CURRENT_USER_KEY);
-        }
-
-        this.user.setValue(currentUser);
-    }
-
-    public Intent login() {
+    //region login
+    public static Intent getLoginIntent(OnCompleteListener<String> listener) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -72,13 +33,13 @@ public class LoginRepository {
 
         FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
             saveUserInFirebase(firebaseAuth.getCurrentUser());
-            setLoggedInUser(firebaseAuth.getCurrentUser());
+            listener.onComplete(firebaseAuth.getCurrentUser() != null ? firebaseAuth.getCurrentUser().getUid() : null);
         });
         
         return AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build();
     }
 
-    private void saveUserInFirebase(FirebaseUser currentUser) {
+    public static void saveUserInFirebase(FirebaseUser currentUser) {
         if (currentUser != null) {
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -100,9 +61,13 @@ public class LoginRepository {
         }
     }
 
-    public void logout() {
-        SharedPref.removeKey(Consts.CURRENT_USER_KEY);
+
+    public static void signOut() {
         FirebaseAuth.getInstance().signOut();
-        this.user.setValue(null);
     }
+
+    public static String getUserUid() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null ? FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
+    }
+    //endregion login
 }

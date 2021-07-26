@@ -40,18 +40,14 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        if (loginViewModel.isLoggedIn()) {
-            goToMain();
-            return view;
-        }
 
         final Button loginButton = view.findViewById(R.id.login);
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading);
 
-        loginViewModel.getCurrentUser().observe(getViewLifecycleOwner(), firebaseUser -> {
+        loginViewModel.isLoggedIn().observe(getViewLifecycleOwner(), isLoggedIn -> {
             loadingProgressBar.setVisibility(View.GONE);
 
-            if (firebaseUser != null) {
+            if (isLoggedIn) {
                 goToMain();
             }
         });

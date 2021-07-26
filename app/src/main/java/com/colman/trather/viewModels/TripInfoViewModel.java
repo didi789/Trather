@@ -10,27 +10,27 @@ import com.colman.trather.Consts;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
 import com.colman.trather.models.User;
-import com.colman.trather.repositories.ReviewRepository;
-import com.colman.trather.repositories.SettingsRepository;
-import com.colman.trather.repositories.TripRepository;
-import com.colman.trather.repositories.UserRepository;
+import com.colman.trather.repositories.ReviewRepo;
+import com.colman.trather.repositories.SettingsRepo;
+import com.colman.trather.repositories.TripRepo;
+import com.colman.trather.repositories.UserRepo;
 import com.colman.trather.services.SharedPref;
 
 import java.util.List;
 import java.util.UUID;
 
 public class TripInfoViewModel extends AndroidViewModel {
-    private final TripRepository tripRepository;
-    private final ReviewRepository reviewRepository;
-    private final SettingsRepository settingsRepository;
-    private final UserRepository userRepository;
+    private final TripRepo tripRepository;
+    private final ReviewRepo reviewRepository;
+    private final SettingsRepo settingsRepository;
+    private final UserRepo userRepository;
 
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
-        tripRepository = TripRepository.getInstance(application);
-        reviewRepository = ReviewRepository.getInstance(application);
-        userRepository = UserRepository.getInstance(application);
-        settingsRepository = new SettingsRepository();
+        tripRepository = TripRepo.getInstance(application);
+        reviewRepository = ReviewRepo.getInstance(application);
+        userRepository = UserRepo.getInstance(application);
+        settingsRepository = new SettingsRepo();
     }
 
     public LiveData<Trip> getTripByIdLiveData(String tripId) {

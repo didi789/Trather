@@ -18,20 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserRepository {
+public class UserRepo {
     private final UserDao userDao;
     private final LiveData<List<User>> allUsers;
-    private static UserRepository mInstance;
+    private static UserRepo mInstance;
 
-    public static UserRepository getInstance(Application application) {
+    public static UserRepo getInstance(Application application) {
         if (mInstance == null) {
-            mInstance = new UserRepository(application);
+            mInstance = new UserRepo(application);
         }
 
         return mInstance;
     }
 
-    private UserRepository(Application application) {
+    private UserRepo(Application application) {
         TripDatabase database = TripDatabase.getDatabase(application);
         userDao = database.usersDao();
         allUsers = userDao.getAll();

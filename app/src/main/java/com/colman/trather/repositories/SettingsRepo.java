@@ -29,22 +29,21 @@ import static com.colman.trather.Consts.KEY_EMAIL;
 import static com.colman.trather.Consts.KEY_FULL_NAME;
 import static com.colman.trather.Consts.KEY_IMG_URL;
 
-public class SettingsRepository {
+public class SettingsRepo {
     public static final String TAG = "SettingsRepository";
     private final String userUid;
     private final MutableLiveData<User> user = new MutableLiveData<>(null);
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final CollectionReference usersCollection;
 
-    public SettingsRepository() {
+    public SettingsRepo() {
         userUid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         usersCollection = FirebaseFirestore.getInstance().collection(Consts.USERS_COLLECTION);
     }
 
     public void loadUser() {
         isLoading.setValue(true);
-        DocumentReference document = usersCollection.document(userUid);
-        document.get().addOnSuccessListener(documentSnapshot -> {
+        usersCollection.document(userUid).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 String imageUrl = documentSnapshot.getString(KEY_IMG_URL);
                 String fullName = documentSnapshot.getString(KEY_FULL_NAME);

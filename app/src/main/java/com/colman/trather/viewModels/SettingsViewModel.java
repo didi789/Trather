@@ -10,30 +10,30 @@ import androidx.lifecycle.LiveData;
 
 import com.colman.trather.Consts;
 import com.colman.trather.models.User;
-import com.colman.trather.repositories.LoginRepository;
-import com.colman.trather.repositories.ReviewRepository;
-import com.colman.trather.repositories.SettingsRepository;
-import com.colman.trather.repositories.UserRepository;
+import com.colman.trather.repositories.LoginRepo;
+import com.colman.trather.repositories.ReviewRepo;
+import com.colman.trather.repositories.SettingsRepo;
+import com.colman.trather.repositories.UserRepo;
 import com.colman.trather.services.SharedPref;
 
 
 public class SettingsViewModel extends AndroidViewModel {
     private final LiveData<User> userMutableLiveData;
     private final LiveData<Boolean> isLoading;
-    private final SettingsRepository settingsRepository;
-    private final ReviewRepository reviewRepository;
-    private final UserRepository userRepository;
-    private final LoginRepository loginRepository;
+    private final SettingsRepo settingsRepository;
+    private final ReviewRepo reviewRepository;
+    private final UserRepo userRepository;
+    private final LoginRepo loginRepository;
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
-        settingsRepository = new SettingsRepository();
+        settingsRepository = new SettingsRepo();
         userMutableLiveData = settingsRepository.getUser();
         isLoading = settingsRepository.isLoading();
         settingsRepository.loadUser();
-        reviewRepository = ReviewRepository.getInstance(application);
-        userRepository = UserRepository.getInstance(application);
-        loginRepository = LoginRepository.getInstance();
+        reviewRepository = ReviewRepo.getInstance(application);
+        userRepository = UserRepo.getInstance(application);
+        loginRepository = LoginRepo.getInstance();
     }
 
     public LiveData<User> getUserMutableLiveData() {

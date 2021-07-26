@@ -31,22 +31,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class TripRepository {
+public class TripRepo {
     private final TripDao tripDao;
     private final ReviewDao reviewDao;
     private final LiveData<List<Trip>> allTrips;
 
-    private static TripRepository mInstance;
+    private static TripRepo mInstance;
 
-    public static TripRepository getInstance(Application application) {
+    public static TripRepo getInstance(Application application) {
         if (mInstance == null) {
-            mInstance = new TripRepository(application);
+            mInstance = new TripRepo(application);
         }
 
         return mInstance;
     }
 
-    private TripRepository(Application application) {
+    private TripRepo(Application application) {
         TripDatabase database = TripDatabase.getDatabase(application);
         tripDao = database.tripDao();
         reviewDao = database.reviewDao();

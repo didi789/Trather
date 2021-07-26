@@ -23,21 +23,21 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ReviewRepository {
+public class ReviewRepo {
     private final ReviewDao reviewDao;
     private final LiveData<List<Review>> allReviews;
 
-    private static ReviewRepository mInstance;
+    private static ReviewRepo mInstance;
 
-    public static ReviewRepository getInstance(Application application) {
+    public static ReviewRepo getInstance(Application application) {
         if (mInstance == null) {
-            mInstance = new ReviewRepository(application);
+            mInstance = new ReviewRepo(application);
         }
 
         return mInstance;
     }
 
-    private ReviewRepository(Application application) {
+    private ReviewRepo(Application application) {
         TripDatabase database = TripDatabase.getDatabase(application);
         reviewDao = database.reviewDao();
         allReviews = reviewDao.getAllReviews();
