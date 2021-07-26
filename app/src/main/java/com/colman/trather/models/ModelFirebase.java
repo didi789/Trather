@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import com.colman.trather.Consts;
 import com.colman.trather.TripDatabase;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -187,6 +184,35 @@ public class ModelFirebase {
 
     //region reviews
 
+    public static void loadReviewsByTripId(String tripId, OnCompleteListener<ArrayList<Review>> listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference tripReviews = db.collection(Consts.TRIP_COLLECTION).document(tripId).collection(Consts.KEY_REVIEWS);
+        Task<QuerySnapshot> querySnapshotTask = tripReviews.get();
+        querySnapshotTask.addOnSuccessListener(queryDocumentSnapshots -> {
+            ArrayList<Review> reviews = new ArrayList<>();
+            if (queryDocumentSnapshots != null) {
+                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot doc : documents) {
+                    String commentAuthorUid = doc.getString(Consts.KEY_AUTHOR_UID);
+                    String comment = doc.getString(Consts.KEY_COMMENT);
+                    final boolean isDeleted = doc.contains(Consts.KEY_IS_DELETED) && doc.getBoolean(Consts.KEY_IS_DELETED);
+
+                    float stars;
+                    try {
+                        stars = doc.getDouble(Consts.KEY_STARS).floatValue();
+                    } catch (Exception e) {
+                        stars = doc.getLong(Consts.KEY_STARS).floatValue();
+                    }
+
+                    final Review r = new Review(tripId, doc.getId(), commentAuthorUid, comment, stars, isDeleted);
+                    reviews.add(r);
+                }
+            }
+
+            listener.onComplete(reviews);
+        }).addOnFailureListener(e -> listener.onComplete(new ArrayList<>()));
+    }
+
     public static void addReview(Review review) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference tripReviews = db.collection(Consts.TRIP_COLLECTION).document(review.getTripId()).collection(Consts.KEY_REVIEWS).document(review.getReviewId());
@@ -195,17 +221,7 @@ public class ModelFirebase {
         reviewData.put(Consts.KEY_AUTHOR_UID, review.getAuthorUid());
         reviewData.put(Consts.KEY_COMMENT, review.getComment());
         reviewData.put(Consts.KEY_STARS, review.getStars());
-        tripReviews.set(reviewData).addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
+        tripReviews.set(reviewData);
     }
 
     public static void deleteReview(Review review) {
