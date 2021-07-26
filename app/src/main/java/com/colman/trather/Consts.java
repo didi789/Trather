@@ -1,7 +1,6 @@
 package com.colman.trather;
 
 public class Consts {
-    public static final String TRIP_ID = "trip_id";
     public static final String CURRENT_USER_KEY = "currentUser";
     public static final String TRIP_COLLECTION = "trips";
     public static final String KEY_STARS = "stars";
