@@ -17,19 +17,19 @@ import com.colman.trather.Consts;
 import com.colman.trather.R;
 import com.colman.trather.models.Review;
 import com.colman.trather.services.SharedPref;
-import com.colman.trather.viewModels.UserInfoViewModel;
+import com.colman.trather.viewModels.TripInfoViewModel;
 
 
 public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, ReviewsRecyclerViewAdapter.ViewHolder> {
     private final String currentUserUid;
     private ItemDeleteListener deleteButtonClickListener;
     private final Context context;
-    private UserInfoViewModel mUserInfoViewModel;
+    private TripInfoViewModel mTripInfoViewModel;
 
-    public ReviewsRecyclerViewAdapter(Context context, UserInfoViewModel userInfoViewModel) {
+    public ReviewsRecyclerViewAdapter(Context context, TripInfoViewModel tripInfoViewModel) {
         super(context);
         this.context = context;
-        mUserInfoViewModel = userInfoViewModel;
+        mTripInfoViewModel = tripInfoViewModel;
 
         currentUserUid = SharedPref.getString(Consts.CURRENT_USER_KEY, "");
     }
@@ -51,7 +51,7 @@ public class ReviewsRecyclerViewAdapter extends BaseRecyclerViewAdapter<Review, 
             Glide.with(context).load(profileImgUrl).error(R.mipmap.ic_launcher).into(holder.profile);
             holder.author.setText(review.getAuthorName());
         } else {
-            mUserInfoViewModel.getUserByUid(review.getAuthorUid()).observe((LifecycleOwner) context, user -> {
+            mTripInfoViewModel.getUserByUid(review.getAuthorUid()).observe((LifecycleOwner) context, user -> {
                 if (user != null) {
                     review.setAuthorName(user.getFullname());
                     review.setProfileImgUrl(user.getImageUrl());
