@@ -10,7 +10,7 @@ import com.colman.trather.Consts;
 import com.colman.trather.models.Review;
 import com.colman.trather.models.Trip;
 import com.colman.trather.models.User;
-import com.colman.trather.repositories.ReviewRepo;
+import com.colman.trather.repositories.ReviewsRepo;
 import com.colman.trather.repositories.SettingsRepo;
 import com.colman.trather.repositories.TripRepo;
 import com.colman.trather.repositories.UsersRepo;
@@ -21,14 +21,14 @@ import java.util.UUID;
 
 public class TripInfoViewModel extends AndroidViewModel {
     private final TripRepo tripRepository;
-    private final ReviewRepo reviewRepository;
+    private final ReviewsRepo reviewsRepository;
     private final SettingsRepo settingsRepository;
     private final UsersRepo usersRepository;
 
     public TripInfoViewModel(@NonNull Application application) {
         super(application);
         tripRepository = TripRepo.getInstance(application);
-        reviewRepository = ReviewRepo.getInstance(application);
+        reviewsRepository = ReviewsRepo.getInstance(application);
         usersRepository = UsersRepo.getInstance(application);
         settingsRepository = new SettingsRepo();
     }
@@ -38,7 +38,7 @@ public class TripInfoViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Review>> getReviewsByTripIdLiveData(String tripId) {
-        return reviewRepository.getReviewsById(tripId);
+        return reviewsRepository.getReviewsById(tripId);
     }
 
     public LiveData<User> getUserByUid(String uid) {
@@ -46,7 +46,7 @@ public class TripInfoViewModel extends AndroidViewModel {
     }
 
     public void deleteReview(Review review) {
-        reviewRepository.deleteReview(review);
+        reviewsRepository.deleteReview(review);
     }
 
     public void addReview(Trip trip, String review, float stars) {
@@ -56,7 +56,7 @@ public class TripInfoViewModel extends AndroidViewModel {
             fullName = settingsRepository.getUser().getValue().getFullname();
 
         final Review r = new Review(trip.getTripId(), UUID.randomUUID().toString(), fullName, currentUserUid, review, stars);
-        reviewRepository.addReview(r);
+        reviewsRepository.addReview(r);
     }
 }
 

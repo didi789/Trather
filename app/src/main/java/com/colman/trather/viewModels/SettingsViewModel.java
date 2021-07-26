@@ -11,7 +11,7 @@ import androidx.lifecycle.LiveData;
 import com.colman.trather.Consts;
 import com.colman.trather.models.User;
 import com.colman.trather.repositories.LoginRepo;
-import com.colman.trather.repositories.ReviewRepo;
+import com.colman.trather.repositories.ReviewsRepo;
 import com.colman.trather.repositories.SettingsRepo;
 import com.colman.trather.repositories.UsersRepo;
 import com.colman.trather.services.SharedPref;
@@ -21,7 +21,7 @@ public class SettingsViewModel extends AndroidViewModel {
     private final LiveData<User> userMutableLiveData;
     private final LiveData<Boolean> isLoading;
     private final SettingsRepo settingsRepository;
-    private final ReviewRepo reviewRepository;
+    private final ReviewsRepo reviewsRepository;
     private final UsersRepo usersRepository;
     private final LoginRepo loginRepository;
 
@@ -31,7 +31,7 @@ public class SettingsViewModel extends AndroidViewModel {
         userMutableLiveData = settingsRepository.getUser();
         isLoading = settingsRepository.isLoading();
         settingsRepository.loadUser();
-        reviewRepository = ReviewRepo.getInstance(application);
+        reviewsRepository = ReviewsRepo.getInstance(application);
         usersRepository = UsersRepo.getInstance(application);
         loginRepository = LoginRepo.getInstance();
     }
@@ -66,7 +66,7 @@ public class SettingsViewModel extends AndroidViewModel {
             if (user == null) {
                 return;
             }
-            reviewRepository.updateAllMyProfileImage(user.getImageUrl(), user.getFullname(), user.getUid());
+            reviewsRepository.updateAllMyProfileImage(user.getImageUrl(), user.getFullname(), user.getUid());
             usersRepository.updateAllMyProfileImage(user.getImageUrl(), user.getUid());
         });
     }
