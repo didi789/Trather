@@ -18,7 +18,10 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.colman.trather.R;
+import com.colman.trather.models.User;
 import com.colman.trather.viewModels.SettingsViewModel;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SettingFragment extends BaseToolbarFragment implements View.OnClickListener {
     public static final int PICK_IMAGE = 1;
@@ -31,6 +34,7 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
     private ProgressBar progressBar;
     private Button saveBtn;
     private Button logoutBtn;
+    private User user;
 
     @Override
     protected boolean shouldAddSettingIcon() {
@@ -89,6 +93,8 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
                 return;
             }
 
+            this.user = user;
+
             email.setText(user.getEmail());
             bio.setText(user.getBio() == null ? "" : user.getBio());
             fullName.setText(user.getFullname() == null ? "" : user.getFullname());
@@ -122,8 +128,12 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
                 logout();
                 break;
             case R.id.save:
-                settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString());
-                requireActivity().onBackPressed();
+                settingsViewModel.saveClicked(user, fullName.getText().toString(), bio.getText().toString(), result -> {
+                    if (result) {
+                        new SweetAlertDialog(requireContext(), SweetAlertDialog.SUCCESS_TYPE).setTitleText(getString(R.string.success)).setContentText(getString(R.string.data_saved)).show();
+                    }
+
+                });
                 break;
         }
     }
@@ -144,7 +154,12 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && data != null) {
-            settingsViewModel.updateProfileImage(getViewLifecycleOwner(), data.getData());
+            settingsViewModel.updateProfileImage(user, data.getData(), result -> {
+                if (result) {
+                    new SweetAlertDialog(requireContext(), SweetAlertDialog.SUCCESS_TYPE).setTitleText(getString(R.string.success)).setContentText(getString(R.string.data_saved)).show();
+                } else
+                    new SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE).setTitleText(getString(R.string.error)).setContentText(getString(R.string.error_please_try_again)).show();
+            });
         }
     }
 }

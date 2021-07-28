@@ -1,6 +1,7 @@
 package com.colman.trather.models;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -17,6 +18,7 @@ public class Review {
     @NonNull
     public String reviewId;
     @NonNull
+    @ColumnInfo(index = true)
     public String tripId;
     private String authorUid;
     private String authorName;

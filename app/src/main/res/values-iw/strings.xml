@@ -45,4 +45,8 @@
     <string name="need_location_create_trip">יש לאפשר הרשאות מיקום בכדי ליצור טיול</string>
     <string name="delete">מחיקה</string>
     <string name="edit">עריכה</string>
+    <string name="success">הצלחה</string>
+    <string name="data_saved">המידע נשמר בהצלחה</string>
+    <string name="error">שגיאה</string>
+    <string name="error_please_try_again">התרחשה שגיאה, נא נסה מאוחר יותר</string>
 </resources>

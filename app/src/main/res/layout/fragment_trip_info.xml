@@ -144,9 +144,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/authorLL" />
 
+    <RatingBar
+        android:id="@+id/reviews_rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:text="@string/reviews_title"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_reviews" />
+
     <TextView
         android:id="@+id/title_reviews"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
         android:gravity="center_horizontal"
@@ -178,5 +191,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_reviews" />
+        app:layout_constraintTop_toBottomOf="@id/reviews_rating" />
 </androidx.constraintlayout.widget.ConstraintLayout>

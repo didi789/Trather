@@ -52,14 +52,18 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/list_to_mapsFragment"
-            app:destination="@id/maps_fragment" />
-        <action
-            android:id="@+id/list_to_settings"
-            app:destination="@id/settings_screen"
+            app:destination="@id/maps_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/list_to_settings"
+            app:destination="@id/settings_screen"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/trip_info"
@@ -93,10 +97,10 @@
         <action
             android:id="@+id/trip_info_to_settings"
             app:destination="@id/settings_screen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
 
     <fragment
@@ -119,10 +123,10 @@
         <action
             android:id="@+id/add_trip_to_settings"
             app:destination="@id/settings_screen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_pick_location"
             app:destination="@id/maps_fragment"
@@ -156,37 +160,16 @@
         <action
             android:id="@+id/map_to_settings"
             app:destination="@id/settings_screen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/settings_screen"
         android:name="com.colman.trather.ui.fragments.SettingFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
-        <action
-            android:id="@+id/action_settings_to_main_screen_list"
-            app:destination="@id/main_screen_list"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_settings_to_map_screen"
-            app:destination="@id/main_screen_list"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_settings_to_trip_info"
-            app:destination="@id/trip_info"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_settings_to_log_out"
             app:destination="@id/splash_screen"

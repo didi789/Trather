@@ -34,9 +34,10 @@ public class SettingsRepo {
         return isLoading;
     }
 
-    public void updateProfileImage(Uri uri) {
+    public void updateProfileImage(Uri uri, ModelFirebase.OnCompleteListener<Boolean> listener) {
         isLoading.setValue(true);
         ModelFirebase.updateProfileImage(uri, profileImageNewUrl -> {
+            listener.onComplete(profileImageNewUrl != null);
             if (profileImageNewUrl != null) {
                 User newUser = user.getValue();
                 Objects.requireNonNull(newUser).setImageUrl(profileImageNewUrl);
@@ -46,7 +47,8 @@ public class SettingsRepo {
         });
     }
 
-    public void updateProfileData(String fullName, String bio) {
+    public void updateProfileData(String fullName, String bio, ModelFirebase.OnCompleteListener<Boolean> listener) {
+        isLoading.setValue(true);
         ModelFirebase.updateProfileData(fullName, bio, result -> {
             if (result) {
                 User newUser = user.getValue();
@@ -55,6 +57,7 @@ public class SettingsRepo {
                 user.setValue(newUser);
             }
 
+            listener.onComplete(true);
             isLoading.setValue(false);
         });
     }

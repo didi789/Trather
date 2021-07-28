@@ -45,4 +45,8 @@
     <string name="edit_review">Edit Review</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="success">Success</string>
+    <string name="data_saved">data saved successfully</string>
+    <string name="error_please_try_again">Error, please try again later</string>
+    <string name="error">Error</string>
 </resources>

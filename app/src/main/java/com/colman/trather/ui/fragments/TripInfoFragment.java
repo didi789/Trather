@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
     private ImageView difficulty;
     private ImageView image;
     private Button editTrip;
+    private RatingBar reviewsRating;
     private ReviewsRecyclerViewAdapter mAdapter;
     private Trip tripInfo = null;
 
@@ -73,6 +75,7 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
         about = view.findViewById(R.id.about);
         image = view.findViewById(R.id.icon);
         difficulty = view.findViewById(R.id.difficulty);
+        reviewsRating = view.findViewById(R.id.reviews_rating);
         ImageView addReview = view.findViewById(R.id.add_review);
 
         image.setOnClickListener(v -> {
@@ -169,7 +172,11 @@ public class TripInfoFragment extends BaseToolbarFragment implements BaseRecycle
             });
         });
 
-        tripInfoViewModel.getReviewsByTripIdLiveData(tripId).observe(getViewLifecycleOwner(), reviewList -> mAdapter.setItems(reviewList));
+        tripInfoViewModel.getReviewsByTripIdLiveData(tripId).observe(getViewLifecycleOwner(), reviews -> {
+            reviewsRating.setVisibility(reviews.size() > 0 ? View.VISIBLE : View.GONE);
+            reviewsRating.setRating((float) reviews.stream().mapToDouble(Review::getStars).average().orElse(0.0));
+            mAdapter.setItems(reviews);
+        });
     }
 
     private void initDifficulty() {
