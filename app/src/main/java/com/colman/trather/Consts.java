@@ -20,5 +20,4 @@ public class Consts {
     public static final String KEY_FULL_NAME = "fullname";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
-    public static final String NOTIFICATION = "notification";
 }

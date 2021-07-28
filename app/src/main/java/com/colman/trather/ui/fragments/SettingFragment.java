@@ -13,14 +13,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
-import com.colman.trather.Consts;
 import com.colman.trather.R;
-import com.colman.trather.services.SharedPref;
 import com.colman.trather.viewModels.SettingsViewModel;
 
 public class SettingFragment extends BaseToolbarFragment implements View.OnClickListener {
@@ -34,7 +31,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
     private ProgressBar progressBar;
     private Button saveBtn;
     private Button logoutBtn;
-    private SwitchCompat notification;
 
     @Override
     protected boolean shouldAddSettingIcon() {
@@ -72,7 +68,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
         saveBtn = view.findViewById(R.id.save);
         logoutBtn = view.findViewById(R.id.logout);
 
-        notification = view.findViewById(R.id.notification);
         profileImg = view.findViewById(R.id.image);
         fullName = view.findViewById(R.id.full_name);
         bio = view.findViewById(R.id.bio_text);
@@ -115,8 +110,6 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
                 progressBar.setVisibility(View.GONE);
             }
         });
-
-        notification.setChecked(SharedPref.getBoolean(Consts.NOTIFICATION, true));
     }
 
     @Override
@@ -129,7 +122,7 @@ public class SettingFragment extends BaseToolbarFragment implements View.OnClick
                 logout();
                 break;
             case R.id.save:
-                settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString(), notification.isChecked());
+                settingsViewModel.saveClicked(getViewLifecycleOwner(), fullName.getText().toString(), bio.getText().toString());
                 requireActivity().onBackPressed();
                 break;
         }

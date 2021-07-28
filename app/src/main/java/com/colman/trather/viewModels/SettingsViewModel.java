@@ -8,13 +8,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
-import com.colman.trather.Consts;
 import com.colman.trather.models.User;
 import com.colman.trather.repositories.LoginRepo;
 import com.colman.trather.repositories.ReviewsRepo;
 import com.colman.trather.repositories.SettingsRepo;
 import com.colman.trather.repositories.UsersRepo;
-import com.colman.trather.services.SharedPref;
 
 
 public class SettingsViewModel extends AndroidViewModel {
@@ -42,7 +40,7 @@ public class SettingsViewModel extends AndroidViewModel {
         return settingsRepository.isLoading();
     }
 
-    public void saveClicked(LifecycleOwner viewLifecycleOwner, String fullName, String bio, boolean notification) {
+    public void saveClicked(LifecycleOwner viewLifecycleOwner, String fullName, String bio) {
         userMutableLiveData.observe(viewLifecycleOwner, user -> {
             if (user == null) {
                 return;
@@ -53,8 +51,6 @@ public class SettingsViewModel extends AndroidViewModel {
                 settingsRepository.updateProfileData(fullName, bio);
             }
         });
-
-        SharedPref.putBoolean(Consts.NOTIFICATION, notification);
     }
 
     public void updateProfileImage(LifecycleOwner viewLifecycleOwner, Uri uri) {
